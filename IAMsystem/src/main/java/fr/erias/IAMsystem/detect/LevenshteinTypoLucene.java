@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
@@ -125,6 +126,14 @@ public class LevenshteinTypoLucene implements Synonym {
 	 */
 	private void addUnmatched(String token) {
 		unmatched.add(token);
+	}
+	
+	/**
+	 * Add a set of unmatched terms - words that won't be matched or we don't want to be matched
+	 * @param tokensSet A set of tokens
+	 */
+	public void addUnmatched(Set<String> tokensSet) {
+		unmatched.addAll(tokensSet);
 	}
 	
 	/**
