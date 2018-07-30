@@ -15,7 +15,6 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,8 +42,8 @@ public class IndexBigramLucene {
 	public static void IndexLuceneUniqueTokensBigram(HashMap<String,String> uniqueTokensBigram, File indexFolder, String concatenatedField, String bigramField) throws IOException {
 		// Indexing in Lucene
 		logger.info("Indexing Terminology...");
-		Directory directory = FSDirectory.open(indexFolder);
-		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_47, null);
+		Directory directory = FSDirectory.open(indexFolder.toPath());
+		IndexWriterConfig config = new IndexWriterConfig();
 		config.setOpenMode(OpenMode.CREATE);    //config.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		IndexWriter iwriter = new IndexWriter(directory, config);
 		int counter = 0;

@@ -17,7 +17,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.apache.lucene.util.Version;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,7 +32,7 @@ public class SearchIndex {
 	/**
 	 * By default a stopword analyzer without stopwords
 	 */
-	private Analyzer analyzer = new StopAnalyzer(Version.LUCENE_47) ;
+	private Analyzer analyzer = new StopAnalyzer() ;
 	private Directory directory = null;
     private IndexSearcher isearcher = null;
 	
@@ -43,7 +42,7 @@ public class SearchIndex {
      * @throws IOException If the folder is not found
      */
     public SearchIndex(File indexFolder) throws IOException{
-    	directory = FSDirectory.open(indexFolder);
+    	directory = FSDirectory.open(indexFolder.toPath());
     	IndexReader ireader = DirectoryReader.open(directory);
     	isearcher = new IndexSearcher(ireader);
     }
@@ -82,7 +81,7 @@ public class SearchIndex {
      */
     public Query searchTerm (String term, String fieldName) throws IOException, ParseException {
     	logger.debug("Preparing query to search index term : " + term + " in fieldName : " + fieldName);
-	    QueryParser parser = new QueryParser(Version.LUCENE_47, fieldName, analyzer);
+	    QueryParser parser = new QueryParser(fieldName, analyzer);
 	    Query query = null;
 	    query = parser.parse(term);
 		return query;
