@@ -128,7 +128,7 @@ public class DetectDictionaryEntry {
 
 	/**
 	 * Get dictionary entries detected
-	 * @return A set of dictionary entries detected stored in a {@link CandidateTerm}
+	 * @return A set of dictionary entries detected stored in a {@link CTcode}
 	 */
 	public TreeSet<CTcode> getCTcode(){
 		return(candidateTermsCode);

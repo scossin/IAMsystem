@@ -39,7 +39,7 @@ public class NormalizeTerminology {
 	
 	/**
 	 * Normalize the labels of a terminology
-	 * @param CSVfileToNormalize A file to normalize
+	 * @param csvLineHandler A {@link CSVlineHandler} instance
 	 * @param outputFile The outputFile
 	 * @param header Does the CSV file has a header ?
 	 * @throws IOException File is not found
@@ -58,7 +58,6 @@ public class NormalizeTerminology {
 	/**
 	 * Starts normalizing the labels of a File
 	 * @param inputFile The inputFile
-	 * @param csvLineHandler a {@link CSVlineHandler} : explain how each line will be processed 
 	 * @throws IOException  File is not found
 	 * @throws InvalidCSV Incompatible CSV format (if a problem occur with number of columns)
 	 * @throws ProcessSentenceException An error occurs in the normalization process 

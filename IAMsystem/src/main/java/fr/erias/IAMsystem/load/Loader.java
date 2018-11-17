@@ -23,7 +23,7 @@ import fr.erias.IAMsystem.tree.TokenTree;
  *
  */
 public class Loader {
-	
+
 	final static Logger logger = LoggerFactory.getLogger(Loader.class);
 
 	/**
@@ -50,11 +50,14 @@ public class Loader {
 		br.close();
 		return(uniqueTokens);
 	}
-	
+
 	/**
-	 * Get unique TokenBigram to index in Lucene in order to detect typo
-	 * @return A map between the collapse form and the uncollapse form (ex "<meningoencephalite, meningo encephalite>")
-	 * @throws IOException if files can't be found
+	 * @param stopwords a {@link Stopwords} instance
+	 * @param fileCSV a CSV file
+	 * @param sep the separator of the CSV file (comma, tab...)
+	 * @param colLibNormal the ith column of the CSV file corresponding to the normalize label to index
+	 * @return A map between the collapse form and the uncollapse form (ex "meningoencephalite, meningo encephalite")
+	 * @throws IOException Unfound File
 	 */
 	public static HashMap<String,String> getUniqueTokenBigram(Stopwords stopwords, File fileCSV, String sep, int colLibNormal) throws IOException{
 		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
@@ -89,7 +92,7 @@ public class Loader {
 		br.close();
 		return(uniqueTokens);
 	}
-	
+
 	/**
 	 * Remove stopwords in an array of tokens
 	 * @param tokensArray an array of tokens (string) that may contain stopwords
@@ -112,11 +115,11 @@ public class Loader {
 				tokensArray.length - numberOfStopwords);
 		return(newTokensArray);
 	}
-	
+
 	/**
 	 * Get a tree datastructure of the terminology given a CSV file containing normalized labels
 	 * @param fileCSV a CSV containing a column with normalized labels
-	 * @param stopwordsFile a file containing a list of stopword ; one by line
+	 * @param stopwords a file containing a list of stopword ; one by line
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the code (or uri) of the term
@@ -149,7 +152,7 @@ public class Loader {
 		logger.info("tokenTreeSet0 size : " + tokenTreeSet0.getAvailableTokens().size());
 		return(tokenTreeSet0);
 	}
-	
+
 	/**
 	 * Get a {@link TokenizerNormalizer} 
 	 * @return The tokenizerNormalizer

@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 
 /**
- * I created this class because I needed to implement my own method of "contains" in a HashSet<String[]> <br>
+ * I created this class because I needed to implement my own method of "contains" in a HashSet of String[]<br>
  * I didn't override the method "contains" but created a new one "containsArray"
  * @author Cossin Sebastien
  *

@@ -35,7 +35,6 @@ public class SetTokenTree {
 
 	/**
 	 * Construct an empty SetTokenTree. 
-	 * @link{addTokenTree}
 	 */
 	public SetTokenTree() {
 		
@@ -147,7 +146,7 @@ public class SetTokenTree {
 	 * Get a {@link SetTokenTree} for a String array of tokens.
 	 * We go deeper in the tree according to the length of the array
 	 * @param tokensArray
-	 * @return a @link{SetTokenTree}
+	 * @return a {@link SetTokenTree}
 	 */
 	public SetTokenTree getSetTokenTree(String[] tokensArray) {
 		logger.debug("\t \t getSetTokenTree by tokensArray");
@@ -164,7 +163,7 @@ public class SetTokenTree {
 	/**
 	 * Get a {@link SetTokenTree} for multiple  arrays of string (containing tokens).
 	 * For example, we may want all childs of "avc" and all childs of {"accident","vasculaire","cerebral"}
-	 * @param A HashSet of arrays of string 
+	 * @param synonyms A HashSet of arrays of string 
 	 * @return a @link{SetTokenTree}
 	 */
 	public SetTokenTree getSetTokenTree(HashSet<String[]> synonyms) {

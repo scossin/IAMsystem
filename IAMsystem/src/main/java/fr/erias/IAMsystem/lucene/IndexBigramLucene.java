@@ -33,7 +33,7 @@ public class IndexBigramLucene {
 	/**
 	 * Get unique TokenBigram to index in Lucene in order to detect typo
 	 * 
-	 * @param uniqueTokensBigram A map between the collapse form and the uncollapse form (ex "<meningoencephalite, meningo encephalite>"). Use {@link Loader}
+	 * @param uniqueTokensBigram A map between the collapse form and the uncollapse form (ex "meningoencephalite, meningo encephalite"). Use {@link Loader}
 	 * @param indexFolder Path to create Lucene Index
 	 * @param concatenatedField The name of the Lucene that contains the concatenated form (ex : "meningoencephalite"
 	 * @param bigramField The name of the Lucene field that contains the bigram form (ex : "meningo encephalite")

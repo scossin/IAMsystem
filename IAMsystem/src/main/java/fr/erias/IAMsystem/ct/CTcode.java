@@ -3,7 +3,7 @@ package fr.erias.IAMsystem.ct;
 import org.json.JSONObject;
 
 /**
- * Just a {@link CandidateTerm} with a code/uri associated
+ * Just a {@link CT} with a code/uri associated
  * @author Cossin Sebastien
  *
  */
@@ -27,7 +27,7 @@ public class CTcode extends CT {
 	
 	/**
 	 * Create a new candidateTerm with a code associated to it
-	 * @param candidateTerm A {@link CandidateTerm}
+	 * @param candidateTerm A {@link CT}
 	 * @param code The candidateTerm comes from a terminology, it must have a code or uri
 	 */
 	public CTcode(CT candidateTerm, String code) {
@@ -36,7 +36,7 @@ public class CTcode extends CT {
 	}
 	
 	/**
-	 * Get the code of the {@link CandidateTerm}
+	 * Get the code of the {@link CT}
 	 * @return the code / uri associated to this candidateTerm in a terminology
 	 */
 	public String getCode() {
