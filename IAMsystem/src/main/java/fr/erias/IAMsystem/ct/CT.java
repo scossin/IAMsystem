@@ -88,7 +88,7 @@ public class CT implements Comparable<CT> {
 	 * @param sep A separator
 	 * @return Concatenated String
 	 */
-	private String arrayToString(String[] anArray, char sep){
+	public static String arrayToString(String[] anArray, char sep){
 		StringBuilder strBuilder = new StringBuilder();
 		for (int i = 0; i < anArray.length; i++) {
 		  if (i != 0) {

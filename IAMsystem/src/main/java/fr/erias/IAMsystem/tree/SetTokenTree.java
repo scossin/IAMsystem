@@ -31,7 +31,7 @@ public class SetTokenTree {
 	 * The next tokens are stored in mapTokenTree 
 	 * and for the term "cancer" itself (no child), its code is stored here. So we know the token "cancer" has code "xx"
 	 */
-	private HashSet<String> codes = new HashSet<String>();
+	private HashSet<TokenTree> previousTokenTrees = new HashSet<TokenTree>();
 
 	/**
 	 * Construct an empty SetTokenTree. 
@@ -98,7 +98,7 @@ public class SetTokenTree {
 		for (String[] synonyme : synonyms) {
 			SetTokenTree tempSetTokenTree = getSetTokenTree(synonyme);
 			int sizeMapToken = tempSetTokenTree.getMapTokenTree().size();
-			int sizeCodes = tempSetTokenTree.getCodes().size();
+			int sizeCodes = tempSetTokenTree.getPreviousTokenTrees().size();
 			// if sizeMapToken is not 0 it means we didn't reach the maximum depth of the tree
 			// if sizeMapToken is 0, we may have reach the maximum depth, we may have one code
 			// if code is 0, it means we are not in the tree anymore
@@ -127,7 +127,7 @@ public class SetTokenTree {
 				if (tokenTreeChild != null) {
 					newSetTokenTree.addTokenTree(tokenTreeChild); // if no child, no further entry available	
 				} else {
-					newSetTokenTree.addCode(tokenTree.getCode()); // if no child, adds the codes	
+					newSetTokenTree.addPreviousTokenTree(tokenTree); // if no child, adds the previous tokenTree	
 				}
 			}
 		}
@@ -138,8 +138,8 @@ public class SetTokenTree {
 	 * Add a code to the hashSet of codes
 	 * @param code a code or URI
 	 */
-	private void addCode(String code) {
-		codes.add(code);
+	private void addPreviousTokenTree(TokenTree previousTokenTree) {
+		previousTokenTrees.add(previousTokenTree);
 	}
 	
 	/**
@@ -177,8 +177,8 @@ public class SetTokenTree {
 				}
 			}
 			logger.debug("newSetTokenTreeSize : " + newSetTokenTree.getMapTokenTree().size());
-			newSetTokenTree.getCodes().addAll(tempSetTokenTree.getCodes());
-			logger.debug("number of codes tempSetTokenTree : " + tempSetTokenTree.getCodes().size());
+			newSetTokenTree.getPreviousTokenTrees().addAll(tempSetTokenTree.getPreviousTokenTrees());
+			logger.debug("number of codes tempSetTokenTree : " + tempSetTokenTree.getPreviousTokenTrees().size());
 		}
 		return(newSetTokenTree);
 	}
@@ -205,23 +205,42 @@ public class SetTokenTree {
 	 * If we reach a node ({@link TokenTree}) that has no child, its code is available in this set
 	 * @return A HashSet of codes available
 	 */
-	public HashSet<String> getCodes(){
-		return(codes);
+	public HashSet<TokenTree> getPreviousTokenTrees(){
+		return(previousTokenTrees);
 	}
 	
 	/**
-	 * Retrieve only one code of {@link getCodes}. A term may have one or many codes (e.g only one)
-	 * @return A string of a code (uri) of one {@link TokenTree}
+	 * Retrieve only one {@link TokenTree}
+	 * @return one {@link TokenTree} or null if empty
 	 */
-	public String getOneCode() {
-		if (codes.isEmpty()) {
+	public TokenTree getOneTokenTree() {
+		if (previousTokenTrees.isEmpty()) {
 			return(null);
 		}
-		if (codes.size() != 1) {
+		if (previousTokenTrees.size() != 1) {
 			logger.debug("warning ! multiples codes available !");
 		}
-		for (String code : codes) {
-			return(code);
+		for (TokenTree tokenTree : previousTokenTrees) {
+			return(tokenTree);
+		}
+		return(null);
+	}
+	
+	/**
+	 * Retrieve only one code in {@link getOneTokenTree}. A term may have one or many codes (e.g only one)
+	 * Deprecated, use {@link getOneTokenTree} to retrieve a code
+	 * @return A string of a code (uri) of one {@link TokenTree}
+	 */
+	@Deprecated
+	 public String getOneCode() {
+		if (previousTokenTrees.isEmpty()) {
+			return(null);
+		}
+		if (previousTokenTrees.size() != 1) {
+			logger.debug("warning ! multiples codes available !");
+		}
+		for (TokenTree tokenTree : previousTokenTrees) {
+			return(tokenTree.getCode());
 		}
 		return(null);
 	}

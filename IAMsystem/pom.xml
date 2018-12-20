@@ -4,14 +4,12 @@
 
 	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>IAMsystem</name>
-	<description>
-	This is a general purpose annotation tool that uses a dictionary-based approach. The dictionary is stored in a tree datastructure.
-	Description of the system can be found in the following paper : "Cossin S, Jouhet V, Mougin F, Diallo G and Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. CEUR-WS. Septembre 2018" 
-	</description>
+	<description>This is a general purpose annotation tool that uses a dictionary-based approach. The dictionary is stored in a tree datastructure.
+	Description of the system can be found in the following paper : &quot;Cossin S, Jouhet V, Mougin F, Diallo G and Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. CEUR-WS. September 2018&quot;</description>
 
 	<url>https://github.com/scossin/IAMsystem</url>
 	<licenses>
@@ -81,7 +79,7 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-queryparser</artifactId>
-			<version>7.0.1</version>
+			<version>7.1.0</version>
 		</dependency>
 
 
@@ -89,13 +87,13 @@
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-analyzers-common</artifactId>
-			<version>7.0.1</version>
+			<version>7.1.0</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.apache.lucene</groupId>
 			<artifactId>lucene-core</artifactId>
-			<version>7.0.1</version>
+			<version>7.1.0</version>
 		</dependency>
 
 		<!-- Brat output. See : https://github.com/yfpeng/pengyifan-brat -->

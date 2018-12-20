@@ -58,4 +58,8 @@ public class StopwordsImpl implements Stopwords {
 		logger.info("stopwords size : " + stopwordsSet.size());
 		br.close();
 	}
+	
+	public void addStopwords(String stopword) {
+		stopwordsSet.add(stopword);
+	}
 }

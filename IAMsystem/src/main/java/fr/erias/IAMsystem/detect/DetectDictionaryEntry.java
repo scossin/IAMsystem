@@ -1,14 +1,20 @@
 package fr.erias.IAMsystem.detect;
 
 import java.io.IOException;
+import java.util.AbstractMap;
+import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.TreeSet;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
@@ -24,7 +30,7 @@ import fr.erias.IAMsystem.tree.TokenTree;
  */
 public class DetectDictionaryEntry {
 
-	final static Logger logger = LoggerFactory.getLogger(DetectDictionaryEntry.class);
+	protected final static Logger logger = LoggerFactory.getLogger(DetectDictionaryEntry.class);
 
 	/**
 	 * dictionary entry found = a {@link CandidateTerm} with a code
@@ -34,7 +40,7 @@ public class DetectDictionaryEntry {
 	/**
 	 * The initial terminology in a tree datastructure
 	 */
-	private SetTokenTree setTokenTree = null;
+	protected SetTokenTree setTokenTree = null;
 
 	/**
 	 * The current location in the tree - the algorithm explores the tree
@@ -42,31 +48,14 @@ public class DetectDictionaryEntry {
 	private SetTokenTree tempSetTokenTree = null;
 
 	/**
-	 * The current candidate - an array of tokens
-	 * Initialization : array of 50 tokens maximum ! No dictionary entry can have more than 50 tokens 
-	 * Improvement : set to the max depth of the tree
-	 */
-	private String[] candidateTokensArray = new String[50];
-
-	/**
-	 * Current number of tokens 
-	 */
-	private int candidateTokenLength = 0;
-
-	/**
-	 * The algorithm is currently checking a candidate
-	 */
-	private boolean currentCandidate = false;
-
-	/**
 	 * A set of synonyms (typos and abbreviations) for the current tokens
 	 */
 	private HashSet<String[]> currentSynonyms = new HashSet<String[]>();
 
 	/**
-	 * If the current token is found in the dictionary
+	 * Handle how candidate term are found - keep track of codes, length...
 	 */
-	private boolean currentFound = false;
+	private MonitorCandidates monitorCandidates = new MonitorCandidates();
 
 	/**
 	 * the ith token currently analyzed
@@ -111,17 +100,22 @@ public class DetectDictionaryEntry {
 		// normalize, tokenize and detect :
 		tokenizerNormalizer.tokenize(sentence);
 		String[] tokensArray = tokenizerNormalizer.getTokens();
+		logger.debug(tokensArray.length + " tokens");
 		while (currentI != tokensArray.length) {
-			logger.debug(" i : " + currentI);
+			logger.debug("current index: " + currentI);
 			String token =  tokensArray[currentI];
-			logger.debug("token = " + token);
-			setCurrentSynonyms(); // search synonyms (abbreviations, typos...)
-			setCurrentCandidate();
+			logger.debug("current token: " + token);
+			setCurrentSynonyms(token); // search synonyms (abbreviations, typos...)
+			if (monitorCandidates.isCurrentFound()) {
+				changeTreeLocation(token);
+			} else {
+				setCurrentCandidate(token);
+			}
 			this.currentI = currentI + 1;
 		}
-		
+
 		// for the last token when the end of the sentence is reached
-		if (currentCandidate) { // if the algorithm is currently exploring a candidate term :
+		if (monitorCandidates.isCurrentCandidate()) { // if the algorithm is currently exploring a candidate term :
 			addCandidateTerm();
 		}
 	}
@@ -138,35 +132,30 @@ public class DetectDictionaryEntry {
 	 * Re-initialize the algorithm for the next candidateTerm
 	 */
 	private void reset() {
-		this.candidateTokensArray = new String[50]; // empty the array of tokens
-		this.candidateTokenLength = 0; // Number of current tokens in the current candidate
-		this.currentCandidate = false; // the algorithm is not checking a current candidate
+		this.monitorCandidates = new MonitorCandidates(); // will handle a new candidate term
 		this.tempSetTokenTree = this.setTokenTree; // the current location of the algorithm in the tree 
 	}
 
-	
+
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
 	 * @throws IOException Error with the Lucene Index
 	 * @throws ParseException Error with the Lucene Index
 	 */
-	private void setCurrentSynonyms() throws IOException, ParseException {
-		String token = getCurrentToken();
-		logger.debug(" token : " + token);
-
-		// perfect match :
-		currentFound = tempSetTokenTree.containToken(token); 
-
+	private void setCurrentSynonyms(String token) throws IOException, ParseException {
 		// find synonyms (typos and abbreviations) :
 		currentSynonyms = new HashSet<String[]>(); // reinitializing synonyms
-		// add the token to currentSynonyms (will be used later)
+
+		// add the current token to currentSynonyms (will be used later)
 		String[] tokenInArray = {token};
 		currentSynonyms.add(tokenInArray);
-		
+		// find synonyms: 
 		for (Synonym synonym : synonyms) {
 			currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
 		}
-		
+
+		// if found by perfect match :
+		boolean currentFound = tempSetTokenTree.containToken(token); 
 		// if not found by perfect match, is it found with synonyms ?
 		if (currentFound) {
 			logger.debug(" \t token found by perfect match");
@@ -178,89 +167,49 @@ public class DetectDictionaryEntry {
 				logger.debug(" \t token not found at all");
 			}
 		}
+		monitorCandidates.setCurrentFound(currentFound);
 	}
 
+	/**
+	 * When a term is available in the tree, make a step deeper and change the current location
+	 * @param token an available token at the current location
+	 */
+	private void changeTreeLocation(String token) {
+		// add the token to the array of tokens :
+		monitorCandidates.addToken(token, tempSetTokenTree); // important! : tempSetTokenTree is passed here before modification below: (to keep track of previous tempSetToken with codes)
+		// the algorithm change its current location in the tree : 
+		tempSetTokenTree = tempSetTokenTree.getSetTokenTree(currentSynonyms); // currentSynonyms may contain : token (perfect match), abbreviations and corrected typos
+		logger.debug("size of tempSetTokens : " + tempSetTokenTree.getMapTokenTree().size());
+	}
 	/**
 	 * Add a dictionary entry
 	 * @throws IOException
 	 * @throws ParseException
 	 * @throws UnfoundTokenInSentence
 	 */
-	private void setCurrentCandidate() throws IOException, ParseException, UnfoundTokenInSentence {
-		logger.debug("setCurrentCandidate function");
-		// case token is found
-		if (currentFound) { 
-			// add the token
-			logger.debug(" \t token found");
-			// the algorithm change its current location in the tree : 
-			tempSetTokenTree = tempSetTokenTree.getSetTokenTree(currentSynonyms); // currentSynonyms may contain : token (perfect match), abbreviations and corrected typos
-			logger.debug("size of tempSetTokens : " + tempSetTokenTree.getMapTokenTree().size());
-			// add the token to the array of tokens :
-			candidateTokensArray[candidateTokenLength] = tokenizerNormalizer.getTokens()[currentI];
-			candidateTokenLength = candidateTokenLength + 1 ; // a new token was added, add 1
-			// the algorithm is currently exploring the tree to find a dictionary entry
-			currentCandidate = true;
+	private void setCurrentCandidate(String token) throws IOException, ParseException, UnfoundTokenInSentence {
+		// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
+		if (!monitorCandidates.isCurrentCandidate()) {
+			logger.debug("\t not a currentCandidate, go to next token");
+			return; // 
 		}
 
-		// case token is not found
-		else {
-			logger.debug(" \t token not found");
-			
-			// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
-			if (!currentCandidate) {
-				return; // 
-			}
-			
-			// case exploring the tree :
-			
-			    // case stopwords : add and continue 
-			if (tokenizerNormalizer.getNormalizerTerm().isStopWord((getCurrentToken()))) {
-				logger.debug(" \t stopword detected");
-				// add the stopword to the array of tokens :
-				candidateTokensArray[candidateTokenLength] = tokenizerNormalizer.getTokens()[currentI];
-				candidateTokenLength = candidateTokenLength + 1 ;
-				return;
-			}
-			
-			// case end of a candidate term : 
-
-			logger.debug(" \t adding CandidateTerm");
-			addCandidateTerm();
-			
-			// reset the algorithm to detect the next candidate term : 
-			reset();
-			// restart with the current token at the root of the tree 
-			this.currentI = this.currentI - 1; 
+		// case stopwords : add and continue 
+		if (tokenizerNormalizer.getNormalizerTerm().isStopWord(token)) {
+			logger.debug(" \t stopword detected");
+			// add the stopword to the array of tokens :
+			monitorCandidates.addToken(token);
+			return;
 		}
-	}
 
-	/**
-	 * @return The current token to analyze
-	 */
-	private String getCurrentToken() {
-		return(tokenizerNormalizer.getTokens()[currentI]);
-	}
+		// case end of a candidate term : 
+		logger.debug("\t it's a current candidate, add it");
+		addCandidateTerm();
 
-	/**
-	 * Get one code for an array of tokens. The algorithm will search into the tree this sequence of tokens <br>
-	 * A code is saved each time a sequence is matched in the tree
-	 * @param candidateTokensArray A sequence of tokens in an array of String. First index = root of the tree
-	 * @return null if no code is found for any sequence (one to the number of tokens given)
-	 */
-	public String getPreviousCode(String[] candidateTokensArray) {
-		String code = null;
-		SetTokenTree tempTokenTree = this.setTokenTree;
-		for (String candidate : candidateTokensArray) {
-			logger.debug("candidate : " + candidate);
-			tempTokenTree = tempTokenTree.getSetTokenTree(candidate);
-			logger.debug("number of possibilities : " + tempTokenTree.getMapTokenTree().size());
-			String codetemp = tempTokenTree.getOneCode();
-			if (codetemp != null) {
-				logger.debug("The following code was detected for " + candidate + ": " + codetemp);
-				code = codetemp;
-			}
-		}
-		return(code);
+		// reset the algorithm to detect the next candidate term : 
+		reset();
+		// restart with the current token at the root of the tree 
+		this.currentI = this.currentI - 1; 
 	}
 
 	/**
@@ -268,84 +217,177 @@ public class DetectDictionaryEntry {
 	 * @throws UnfoundTokenInSentence 
 	 */
 	private void addCandidateTerm() throws UnfoundTokenInSentence {
-
 		// current position 
-		int iter = currentI ;
-
-		// initialization is 50
-		// current candidateTokensArray goes from 0 to the candidateToken length
-		candidateTokensArray = Arrays.copyOfRange(candidateTokensArray, 0, 
-				candidateTokenLength);
-
-		// debugging purpose only
-		for (String candidate : candidateTokensArray) {
-			logger.debug("candidate : " + candidate);
-		}
-
+		// last token can be a stopword. We need to remove it : 
 
 		// is a code associated to this candidateTerm ?
-		String code = tempSetTokenTree.getOneCode();
-		if (code == null) {
-			// code is null but previous tokens of this candidateTerm may have a code
-			// for Example : Abces chambre anterieure oeil gauche ; abces has a code, but abces chambre doesn't
-			// so we go back to abces
-			logger.debug("code is null : ");
-			logger.debug("Trying with previous code : ");
-
-			// if no previous token
-			if (!tempSetTokenTree.getMapTokenTree().values().iterator().hasNext()) {
-				logger.debug("no previous token, code is null again");
-				return;
-			}
-
-			// retrieve the previous tokens and search, for each previous sequence, a code 
-			TokenTree oneTokenTree = tempSetTokenTree.getMapTokenTree().values().iterator().next().iterator().next();
-			logger.debug("depth : " + oneTokenTree.getDepth());
-			logger.debug("token : " + oneTokenTree.getToken());
-			code = getPreviousCode(oneTokenTree.getPreviousTokens());
-			if (code == null) {
-				logger.debug("code is null again");
-				this.currentI = (currentI - candidateTokenLength) + 1 ; // i => i + 1 ; without the first token
-				return; // return
-			} else {
-				logger.debug("a previous code was found");
-				this.currentI = (currentI - candidateTokenLength) + 1 ; // i => i + 1 ; without the first token
-			}
-			// restart after the first token of this candidate
+		monitorCandidates.setLastTokenTree(tempSetTokenTree);
+		TokenTree oneTokenTree = monitorCandidates.getLastTokenTree();
+		if (oneTokenTree == null) {
+			logger.debug("no previous token, code is null again");
+			this.currentI = (currentI - monitorCandidates.getCandidateTokensList().size()) + 1 ; // i => i + 1 ; without the first token
+			return;
 		}
+		logger.debug("code was found");
 
-		// A code is found ! 
-		logger.debug("code is : " + code);
-		int numberOfTokens2remove = 0 ; // last token can be a stopword. We need to remove it : 
-		for (int y = candidateTokenLength -1; y>0;y--) {
-			String lastToken = candidateTokensArray[y];
-			if (tokenizerNormalizer.getNormalizerTerm().isStopWord(lastToken)){
-				logger.debug("last token is a stopword : " + lastToken);
-				numberOfTokens2remove = numberOfTokens2remove + 1;
-			} else {
-				break;
-			}
-		}
-
-		candidateTokensArray = Arrays.copyOfRange(candidateTokensArray, 0, 
-				candidateTokenLength - numberOfTokens2remove);
-
+		String[] candidateTokensArray = monitorCandidates.getCandidateTokenArray(tokenizerNormalizer);
 		for (String candidate : candidateTokensArray) {
 			logger.debug("new candidate is " + candidate);
 		}
 
 		// startPosition and endPosition in the sentence :
-		int tokenStartPosition = iter - candidateTokenLength;
+		int tokenStartPosition = currentI - monitorCandidates.getCandidateTokensList().size();
+		int numberOfTokensRemoved = monitorCandidates.getCandidateTokensList().size() - candidateTokensArray.length;
+		int tokenEndPosition = currentI-(numberOfTokensRemoved + 1) ; //-1 : previous one
 		int startPosition = tokenizerNormalizer.getTokenStartEndInSentence()[tokenStartPosition][0];
-		int endPosition = tokenizerNormalizer.getTokenStartEndInSentence()[iter-(numberOfTokens2remove + 1 )][1]; // -1 : previous one
+		int endPosition = tokenizerNormalizer.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 		String candidateTermString = tokenizerNormalizer.getNormalizerTerm().getOriginalSentence().substring(startPosition, endPosition + 1); 
+
+		String code =  oneTokenTree.getCode();
+		String label = CT.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
+		logger.debug("code is : " + code);
 
 		logger.debug("CandidateTermString : " + candidateTermString);
 		CTcode candidateTerm = new CTcode(candidateTermString, 
 				candidateTokensArray, 
 				startPosition, 
 				endPosition,
-				code);
+				code,
+				label);
 		candidateTermsCode.add(candidateTerm);
+
+		// this.currentI = (currentI - monitorCandidates.getCandidateTokensArray().size()) + 1 ; // i => i + 1 ; without the first token
+	}
+}
+
+/**
+ * A private class to keep track of everything when search for a candidate term in the tree
+ * @author cossin
+ *
+ */
+class MonitorCandidates{
+	/**
+	 * If the current token is found in the dictionary
+	 */
+	private boolean currentFound = false;
+
+	/**
+	 * The algorithm is currently checking a candidate (we are deeper in the tree)
+	 */
+	private boolean currentCandidate = false;
+
+	/**
+	 * Sometimes we need to go backward, as we go deeper in the tree, if no code is found, we go up to find a previous code
+	 * lastTokenTree saves the last {@link TokenTree} or null if no code was found so far
+	 */
+	private TokenTree lastTokenTree = null;
+	int lastTokenTreePosition = 0; // why not simply use the depth ? because => 
+	// term "avc" is length 1 but "accident vasculaire cerebral" is depth 3 in the tree ; depth in the tree is not equal to the candidateTokensArray length
+
+	/**
+	 * The current candidate : an array of tokens
+	 */
+	private ArrayList<String> candidateTokensList = new ArrayList<String>();
+
+	/**
+	 * add a token 
+	 * @param token save a token that was found in the current tree (could be a stopword too)
+	 */
+	public void addToken(String token) {
+		candidateTokensList.add(token);
+		currentCandidate = true;
+	}
+
+	/**
+	 * 
+	 * @param token a token that was found in the current tree
+	 * @param tempSetTokenTree the state of the tree BEFORE adding the current token (to save previous code)
+	 */
+	public void addToken(String token, SetTokenTree tempSetTokenTree) {
+		currentCandidate = true;
+		setLastTokenTree(tempSetTokenTree);
+		candidateTokensList.add(token); // NB ++ : after to setLastTokenTree
+	}
+
+	/**
+	 * Keep track of the path when we go deeper in the tree
+	 * @param tempSetTokenTree Search in the tempSetTokenTree a code to save for backward search if finally no code is found
+	 */
+	public void setLastTokenTree(SetTokenTree tempSetTokenTree) {
+		if (tempSetTokenTree.getPreviousTokenTrees().size() != 0) {
+			TokenTree oneTokenTree = tempSetTokenTree.getOneTokenTree();
+			this.lastTokenTree = oneTokenTree;
+			this.lastTokenTreePosition = candidateTokensList.size();
+		}
+	}
+
+	/**
+	 * Get all the tokens to be saved
+	 * @param tokenizerNormalizer to check if the last tokens are stopwords or not
+	 * @return An array of candidateToken
+	 */
+	public String[] getCandidateTokenArray(TokenizerNormalizer tokenizerNormalizer) {
+		// sometimes we must go backward to retrieve a code
+		ArrayList<String> tempCandidateTokenList = null;
+		if (candidateTokensList.size()!= lastTokenTreePosition) {
+			DetectDictionaryEntry.logger.debug("Removing some tokens because we need to go backward");
+			tempCandidateTokenList = new ArrayList<String>(candidateTokensList.subList(0,lastTokenTreePosition));
+		} else {
+			tempCandidateTokenList = candidateTokensList; // if not, it's just equal to candidateTokensList
+		}
+		
+		// number of stopwords to remove:
+		int numberOfTokens2remove = 0;
+		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
+			String lastToken = tempCandidateTokenList.get(y);
+			if (tokenizerNormalizer.getNormalizerTerm().isStopWord(lastToken)){
+				DetectDictionaryEntry.logger.debug("last token is a stopword : " + lastToken);
+				numberOfTokens2remove = numberOfTokens2remove + 1;
+			} else {
+				break;
+			}
+		}
+		String[] tokensArray = tempCandidateTokenList.toArray(new String[0]);
+		tokensArray = Arrays.copyOfRange(tokensArray, 0, tokensArray.length - numberOfTokens2remove);
+		return(tokensArray);
+	}
+
+	/**
+	 * 
+	 * @return the last TokenTree or null if no code so far
+	 */
+	public TokenTree getLastTokenTree() {
+		return(lastTokenTree);
+	}
+
+	/**
+	 * 
+	 * @return If the current token is found in the dictionary
+	 */
+	public boolean isCurrentFound() {
+		return currentFound;
+	}
+
+	public void setCurrentFound(boolean currentFound) {
+		this.currentFound = currentFound;
+	}
+
+	/**
+	 * @return true if the algorithm is currently checking a candidate (we are deeper in the tree)
+	 */
+	public boolean isCurrentCandidate() {
+		return currentCandidate;
+	}
+
+	public void setCurrentCandidate(boolean currentCandidate) {
+		this.currentCandidate = currentCandidate;
+	}
+
+	public ArrayList<String> getCandidateTokensList() {
+		return candidateTokensList;
+	}
+
+	public void setCandidateTokensArray(ArrayList<String> candidateTokensArray) {
+		this.candidateTokensList = candidateTokensArray;
 	}
 }

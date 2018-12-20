@@ -116,7 +116,7 @@ public class DetectionTest {
 		// only one match : 
 		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
 		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
-		assertEquals(CTdetected.getCandidateTerm(), "abces de la chambre");
+		assertEquals(CTdetected.getCandidateTerm(), "abces");
 		assertEquals(CTdetected.getCode(), "X1"); // the abces code
 	}
 }

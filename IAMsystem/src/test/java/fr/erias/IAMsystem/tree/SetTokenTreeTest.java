@@ -114,7 +114,7 @@ public class SetTokenTreeTest {
 		assertEquals(afterAccident.getAvailableTokens().size(), 0);
 		
 		// but we have one code ! 
-		assertEquals(afterAccident.getCodes().size(), 1);
+		assertEquals(afterAccident.getPreviousTokenTrees().size(), 1);
 		
 		// and this code is I63
 		assertEquals(afterAccident.getOneCode(), "I63");

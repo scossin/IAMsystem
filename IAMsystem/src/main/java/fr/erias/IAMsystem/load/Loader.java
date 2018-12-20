@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,6 +40,30 @@ public class Loader {
 		HashSet<String> uniqueTokens = new HashSet<String>();
 		BufferedReader br = null;
 		br = new BufferedReader(new FileReader(fileCSV));
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String libNormal = columns[colLibNormal];
+			String[] tokens = TokenizerNormalizer.tokenizeAlphaNum(libNormal);
+			for (String token : tokens) {
+				uniqueTokens.add(token);
+			}
+		}
+		br.close();
+		return(uniqueTokens);
+	}
+	
+	/**
+	 * Tokenize all the terms and keep a set of unique token
+	 * @param in An inputstream of a CSV file
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
+	 * @return a set of unique tokens in the vocabulary
+	 * @throws IOException if the file can't be found
+	 */
+	public static HashSet<String> getUniqueToken(InputStream in, String sep, int colLibNormal) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+		HashSet<String> uniqueTokens = new HashSet<String>();
 		String line = null;
 		while ((line = br.readLine()) != null) {
 			String[] columns = line.split(sep);
@@ -152,9 +178,150 @@ public class Loader {
 		logger.info("tokenTreeSet0 size : " + tokenTreeSet0.getAvailableTokens().size());
 		return(tokenTreeSet0);
 	}
+	
+	/**
+	 * Get a tree datastructure of the terminology given a CSV file containing normalized labels
+	 * @param in The inputstream of a CSV file
+	 * @param stopwords a file containing a list of stopword ; one by line
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
+	 * @param colCode the ith column containing the code (or uri) of the term
+	 * @return A tree datastructure of the terminology
+	 * @throws IOException File not found
+	 */
+	public static SetTokenTree loadTokenTree(InputStream in, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		//File file = new File(classLoader.getResource(fileName).getFile());
+		SetTokenTree tokenTreeSet0 = new SetTokenTree();
+		String line = null;
+		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String libNormal = columns[colLibNormal];
+			if (stopwords.isStopWord(libNormal)) {
+				continue;
+			}
+			String code = columns[colCode];
+			String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(libNormal);
+			tokensArray = removeStopWords(stopwords, tokensArray);
+			if (tokensArray.length == 0) {
+				continue;
+			}
+			TokenTree tokenTree = new TokenTree(null,tokensArray, code);
+			tokenTreeSet0.addTokenTree(tokenTree);
+		}
+		br.close();
+		logger.info("tokenTreeSet0 size : " + tokenTreeSet0.getAvailableTokens().size());
+		return(tokenTreeSet0);
+	}
+	
+	
+	/**
+	 * Tokenize all the terms and keep a set of unique token. <br>
+	 * The difference with {@link Loader#getUniqueTokenBigram(Stopwords, File, String, int)} is we just ignore bigram concatenation
+	 * @param stopwords a {@link Stopwords} instance
+	 * @param fileCSV a CSV file
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
+	 * @return a set of unique tokens in the vocabulary
+	 * @throws IOException if the file can't be found
+	 */
+	public static HashMap<String,String> getUniqueToken2index(Stopwords stopwords,File fileCSV, String sep, int colLibNormal) throws IOException{
+		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
+		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
+		BufferedReader br = null;
+		br = new BufferedReader(new FileReader(fileCSV));
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String libNormal = columns[colLibNormal];
+			if (tokenizerNormalizer.getNormalizerTerm().isStopWord(libNormal)) {
+				continue;
+			}
+			String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(libNormal);
+			tokensArray = Loader.removeStopWords(stopwords, tokensArray);
+			for (String token : tokensArray) {
+				if (token.length() < 5) { // we won't search for a typo index if the word is less than 5 characters
+					continue;
+				}
+				uniqueTokens.put(token, token);
+			}
+		}
+		br.close();
+		return(uniqueTokens);
+	}
+	
+	
+	/**
+	 * 
+	 * @param tokenTreeSet0 A previous {@link SetTokenTree} or an empty one
+	 * @param fileCSV a CSV file
+	 * @param stopwords an instance of {@link Stopwords}
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
+	 * @param colCode the ith column containing the terminology code
+	 * @throws IOException If the file is not found
+	 */
+	public static void loadTokenTree(SetTokenTree tokenTreeSet0, File fileCSV, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		//File file = new File(classLoader.getResource(fileName).getFile());
+		BufferedReader br = null;
+		br = new BufferedReader(new FileReader(fileCSV));
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String libNormal = columns[colLibNormal];
+			if (stopwords.isStopWord(libNormal)) {
+				continue;
+			}
+			String code = columns[colCode];
+			String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(libNormal);
+			tokensArray = Loader.removeStopWords(stopwords, tokensArray);
+			if (tokensArray.length == 0) {
+				continue;
+			}
+			TokenTree tokenTree = new TokenTree(null,tokensArray, code);
+			tokenTreeSet0.addTokenTree(tokenTree);
+		}
+		br.close();
+	}
+	
+	/**
+	 * 
+	 * @param tokenTreeSet0 A previous {@link SetTokenTree} or an empty one
+	 * @param in The inputstream of the CSV file
+	 * @param stopwords an instance of {@link Stopwords}
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
+	 * @param colCode the ith column containing the terminology code
+	 * @throws IOException If the file is not found
+	 */
+	public static void loadTokenTree(SetTokenTree tokenTreeSet0, InputStream in, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+		//File file = new File(classLoader.getResource(fileName).getFile());
+		String line = null;
+		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String libNormal = columns[colLibNormal];
+			if (stopwords.isStopWord(libNormal)) {
+				continue;
+			}
+			String code = columns[colCode];
+			String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(libNormal);
+			tokensArray = Loader.removeStopWords(stopwords, tokensArray);
+			if (tokensArray.length == 0) {
+				continue;
+			}
+			TokenTree tokenTree = new TokenTree(null,tokensArray, code);
+			tokenTreeSet0.addTokenTree(tokenTree);
+		}
+		br.close();
+	}
 
 	/**
 	 * Get a {@link TokenizerNormalizer} 
+	 * @param stopwords an instance of {@link Stopwords}
 	 * @return The tokenizerNormalizer
 	 */
 	public static TokenizerNormalizer getTokenizerNormalizer(Stopwords stopwords){

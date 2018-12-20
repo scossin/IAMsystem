@@ -10,6 +10,7 @@ import org.json.JSONObject;
 public class CTcode extends CT {
 
 	private String code ;
+	private String label;
 	
 	/**
 	 * Create a new candidateTerm with a code associated to it
@@ -18,11 +19,13 @@ public class CTcode extends CT {
 	 * @param startPosition The start position of this candidate term in the sentence
 	 * @param endPosition The end position of this candidate term in the sentence
 	 * @param code the candidateTerm comes from a terminology, it must have a code or uri
+	 * @param label the candidateTerm comes from a terminology, it must have a label
 	 */
 	public CTcode(String candidateTermString, String[] candidateTokensArray, 
-			int startPosition, int endPosition, String code) {
+			int startPosition, int endPosition, String code, String label) {
 		super(candidateTermString, candidateTokensArray, startPosition, endPosition);
 		this.code = code;
+		this.label = label;
 	}
 	
 	/**
@@ -44,6 +47,14 @@ public class CTcode extends CT {
 	}
 	
 	/**
+	 * Get the label of the {@link CT}
+	 * @return the label associated to this candidateTerm in a terminology
+	 */
+	public String getLabel() {
+		return(label);
+	}
+	
+	/**
 	 * Export a candidateTerm to a JsonObject
 	 * @return a JSON object representing this candidateTerm
 	 */
@@ -54,6 +65,7 @@ public class CTcode extends CT {
 		json.put("start", getStartPosition());
 		json.put("end", getEndPosition());
 		json.put("code", getCode());
+		json.put("dictLabel", getLabel());
 		return(json);
 	}
 }
