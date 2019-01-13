@@ -23,8 +23,6 @@ import fr.erias.IAMsystem.load.Loader;
 /**
  * Create a Lucene Index to detect typos
  * 
- * DON T FORGET TO PUT THE INDEX IN THE RESSOURCE FOLDER !!
- * 
  * @author Cossin Sebastien (cossin.sebastien@gmail.com)
  *
  */

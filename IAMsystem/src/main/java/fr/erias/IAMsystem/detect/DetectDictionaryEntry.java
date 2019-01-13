@@ -1,19 +1,11 @@
 package fr.erias.IAMsystem.detect;
 
-import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.TreeSet;
-
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
@@ -68,7 +60,7 @@ public class DetectDictionaryEntry {
 	private TokenizerNormalizer tokenizerNormalizer;
 
 	/**
-	 * Set of abbreviations
+	 * Set of synonyms: abbreviations, typos...
 	 */
 	private HashSet<Synonym> synonyms = new HashSet<Synonym>();
 
@@ -77,21 +69,28 @@ public class DetectDictionaryEntry {
 	 * @param setTokenTree A terminology stored in a tree datastructure. See {@link SetTokenTree}
 	 * @param tokenizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link Synonym}
-	 * @throws IOException
 	 */
-	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizer, HashSet<Synonym> synonyms) throws IOException {
+	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizer, HashSet<Synonym> synonyms) {
 		this.setTokenTree = setTokenTree;
 		this.tempSetTokenTree = setTokenTree;
 		this.tokenizerNormalizer = tokenizer ;
 		this.synonyms = synonyms;
 	}
+	
+	/**
+	 * Add a way to detect synonym of a token (abbreviation, normalized token, typo...) See {@link Synonym}
+	 * @param synonym A {@link Synonym} instance
+	 */
+	public void addSynonym(Synonym synonym) {
+		synonyms.add(synonym);
+	}
 
 	/**
 	 * Initialize a new sentence
 	 * @param sentence The sentence to analyze
-	 * @throws UnfoundTokenInSentence 
+	 * @throws UnfoundTokenInSentence The offsets of the token can't be found
 	 */
-	public void detectCandidateTerm(String sentence) throws IOException, ParseException, UnfoundTokenInSentence {
+	public void detectCandidateTerm(String sentence) throws UnfoundTokenInSentence {
 		// re-initialize :
 		this.currentI = 0;
 		candidateTermsCode.clear();
@@ -139,10 +138,8 @@ public class DetectDictionaryEntry {
 
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
-	 * @throws IOException Error with the Lucene Index
-	 * @throws ParseException Error with the Lucene Index
 	 */
-	private void setCurrentSynonyms(String token) throws IOException, ParseException {
+	private void setCurrentSynonyms(String token) {
 		// find synonyms (typos and abbreviations) :
 		currentSynonyms = new HashSet<String[]>(); // reinitializing synonyms
 
@@ -183,11 +180,9 @@ public class DetectDictionaryEntry {
 	}
 	/**
 	 * Add a dictionary entry
-	 * @throws IOException
-	 * @throws ParseException
 	 * @throws UnfoundTokenInSentence
 	 */
-	private void setCurrentCandidate(String token) throws IOException, ParseException, UnfoundTokenInSentence {
+	private void setCurrentCandidate(String token) throws UnfoundTokenInSentence {
 		// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
 		if (!monitorCandidates.isCurrentCandidate()) {
 			logger.debug("\t not a currentCandidate, go to next token");

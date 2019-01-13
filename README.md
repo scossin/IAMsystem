@@ -9,7 +9,7 @@ It stores your dictionary in a tree data structure and can detect abbreviations 
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>0.0.1</version>
+	<version>0.1.0</version>
 </dependency>
 ```
 

@@ -144,8 +144,8 @@ public class SetTokenTree {
 	
 	/**
 	 * Get a {@link SetTokenTree} for a String array of tokens.
-	 * We go deeper in the tree according to the length of the array
-	 * @param tokensArray
+	 * We go deeper in the tree for each token in the arrary
+	 * @param tokensArray an array of tokens. 
 	 * @return a {@link SetTokenTree}
 	 */
 	public SetTokenTree getSetTokenTree(String[] tokensArray) {

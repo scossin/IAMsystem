@@ -93,8 +93,8 @@ public class BratOutputTest {
 		}
 		
 		HashSet<String> expectedBratLines = new HashSet<String>();
-		expectedBratLines.add("T031	disease 0 32	Insuf.            cardiaqu aigue");
-		expectedBratLines.add("T3651	disease 36 52	AVC hémorragiQUE");
+		expectedBratLines.add("T1	disease 0 32	Insuf.            cardiaqu aigue");
+		expectedBratLines.add("T2	disease 36 52	AVC hémorragiQUE");
 		
 		for (CTbrat ct : setCTbrat) {
 			assertTrue(expectedBratLines.contains(ct.getBratEntity().toString()));

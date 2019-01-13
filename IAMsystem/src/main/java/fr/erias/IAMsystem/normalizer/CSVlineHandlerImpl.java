@@ -1,7 +1,5 @@
 package fr.erias.IAMsystem.normalizer;
 
-import java.io.IOException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,28 +16,27 @@ import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 public class CSVlineHandlerImpl implements CSVlineHandler {
 
 	final static Logger logger = LoggerFactory.getLogger(CSVlineHandlerImpl.class);
-	
+
 	private TokenizerNormalizer tokenizerNormalizer;
-	
+
 	private short positionOfLabelInColumn;
-	
+
 	private String sep;
-	
+
 	private String normalizedLine ;
-	
+
 	/**
 	 * Create an instance to normalize a terminology in a CSV format
 	 * @param stopwords An instance of {@link Stopwords}
 	 * @param sep CSV column separator
 	 * @param positionOfLabelInColumn the position of the column containing the label to normalise
-	 * @throws IOException 
 	 */
-	public CSVlineHandlerImpl (Stopwords stopwords, String sep, short positionOfLabelInColumn) throws IOException {
+	public CSVlineHandlerImpl (Stopwords stopwords, String sep, short positionOfLabelInColumn) {
 		this.sep = sep;
 		this.positionOfLabelInColumn = positionOfLabelInColumn;
 		this.tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
 	}
-	
+
 	/**
 	 * See the interface
 	 */
@@ -48,30 +45,21 @@ public class CSVlineHandlerImpl implements CSVlineHandler {
 		if (columns.length < positionOfLabelInColumn) {
 			throw new InvalidCSV(logger,"Unexpected number of columns at line");
 		}
-		
+
 		// the term to process
 		String label = columns[positionOfLabelInColumn];
-		
-		// remove first and last quote
-		label = label.replaceAll("^\"", "");
-		label = label.replaceAll("\"$", "");
-		
+
 		StringBuilder sb = new StringBuilder();
 		sb.append(line);
-		
+
 		// normalizedTerm :
-		tokenizerNormalizer.tokenizeWithoutEndStart(label);
-		String normalizedTerm = tokenizerNormalizer.getNormalizerTerm().getNormalizedSentence();
-		if (normalizedTerm.equals("")) {
-			normalizedTerm = "nothingRemains";
-			logger.info(label + " \t is a stopword - nothing remains of this label");
-		}
+		String normalizedTerm = tokenizerNormalizer.normalizeLabel(label);
 		sb.append(sep);
 		sb.append(normalizedTerm);
 		sb.append("\n");
 		this.normalizedLine = sb.toString();
 	}
-	
+
 	/**
 	 * See the interface
 	 */

@@ -42,11 +42,9 @@ public class NormalizeTerminology {
 	 * @param csvLineHandler A {@link CSVlineHandler} instance
 	 * @param outputFile The outputFile
 	 * @param header Does the CSV file has a header ?
-	 * @throws IOException File is not found
-	 * @throws ProcessSentenceException 
-	 * @throws InvalidCSV 
+	 * @throws IOException File not found and can't create a new file
 	 */
-	public NormalizeTerminology(File outputFile, boolean header, CSVlineHandler csvLineHandler) throws IOException, InvalidCSV, ProcessSentenceException{
+	public NormalizeTerminology(File outputFile, boolean header, CSVlineHandler csvLineHandler) throws IOException {
 		this.outputFile = outputFile;
 		if (!outputFile.exists()) {
 			outputFile.createNewFile();

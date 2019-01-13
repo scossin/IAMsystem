@@ -16,7 +16,12 @@ import fr.erias.IAMsystem.ct.CT;
  *
  */
 public class CTbrat extends CT {
-
+	
+	/**
+	 * 
+	 */
+	public static int idNumber = 1;
+	
 	/**
 	 * "The entities section defines the types for the things that can be marked in text as types"
 	 */
@@ -40,25 +45,35 @@ public class CTbrat extends CT {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * "The entities section defines the types for the things that can be marked in text as types"
+	 * @return the bratType
 	 */
 	public String getType() {
 		return(bratType);
 	}
 	
 	/**
-	 * Get a BratEntity
-	 * @return A BratEntity that can be exported to a ann File
+	 * Get a {@link BratEntity} 
+	 * The idNumber of the annotation is incremented for each BratEntity retrieves with this method <br> 
+	 * To reset the idNumber (for a new document), use the {@link #resetIdNumber}
+	 * @return A BratEntity can be exported to a ann File
 	 */
 	public BratEntity getBratEntity () {
 		BratEntity bratEntity = new BratEntity();
-		String id = "T" + Integer.toString(getStartPosition()) + Integer.toString(getEndPosition());
+		String id = "T" + idNumber;
 		bratEntity.addSpan(getStartPosition(),getEndPosition() + 1); // important + 1 for Brat
 		bratEntity.setId(id);
 		bratEntity.setText(getCandidateTermString());
 		bratEntity.setType(this.bratType);
+		idNumber += 1;
 		return bratEntity;
+	}
+	
+	/**
+	 * reset the idNumber for a new document. 
+	 */
+	public static void resetIdNumber() {
+		idNumber = 1;
 	}
 	
 	/**
