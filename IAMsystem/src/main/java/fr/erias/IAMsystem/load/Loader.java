@@ -145,7 +145,7 @@ public class Loader {
 	/**
 	 * Get a tree datastructure of the terminology given a CSV file containing normalized labels
 	 * @param fileCSV a CSV containing a column with normalized labels
-	 * @param stopwords a file containing a list of stopword ; one by line
+	 * @param stopwords A {@link Stopwords} instance
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the code (or uri) of the term

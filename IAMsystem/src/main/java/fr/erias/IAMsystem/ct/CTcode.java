@@ -4,13 +4,17 @@ import org.json.JSONObject;
 
 /**
  * Just a {@link CT} with a code/uri associated
+ * 
  * @author Cossin Sebastien
  *
  */
 public class CTcode extends CT {
 
 	private String code ;
+	
 	private String label;
+	
+	private String termino = "";
 	
 	/**
 	 * Create a new candidateTerm with a code associated to it
@@ -66,6 +70,23 @@ public class CTcode extends CT {
 		json.put("end", getEndPosition());
 		json.put("code", getCode());
 		json.put("dictLabel", getLabel());
+		json.put("termino", termino);
 		return(json);
+	}
+
+	/**
+	 * 
+	 * @return the name of the terminology
+	 */
+	public String getTermino() {
+		return termino;
+	}
+
+	/**
+	 * Set the name of the terminology
+	 * @param termino name of the terminology
+	 */
+	public void setTermino(String termino) {
+		this.termino = termino;
 	}
 }
