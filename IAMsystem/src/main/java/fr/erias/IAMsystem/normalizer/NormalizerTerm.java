@@ -83,7 +83,7 @@ public class NormalizerTerm implements NormalizerInterface {
 			logger.info("sentence of " + sentence.length() + " : \n " + sentence);
 			String sentenceWithoutAccents = NormalizerInterface.flattenToAscii(sentence);
 			logger.info("sentence without accents :" + sentenceWithoutAccents.length() + " : \n " + sentenceWithoutAccents);
-			String sentenceWithoutPuncutations = NormalizerInterface.removePunctuation(sentenceWithoutAccents);
+			String sentenceWithoutPuncutations = NormalizerInterface.removeSomePunctuation(sentenceWithoutAccents);
 			logger.info("sentence without punctuation :" + sentenceWithoutPuncutations.length() + " : \n " + sentenceWithoutPuncutations);
 			MyExceptions.logException(logger, e);
 			e.printStackTrace();
@@ -105,4 +105,8 @@ public class NormalizerTerm implements NormalizerInterface {
 		return;
 	}
 
+	@Override
+	public void addStopwords(String token) {
+		this.stopwords.addStopwords(token);
+	}
 }

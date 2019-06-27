@@ -13,5 +13,10 @@ public interface Stopwords {
 	 * @return true if it's a stopword
 	 */
 	public boolean isStopWord(String token);
-	
+
+	/**
+	 * Add a term or a token to a list of stopword
+	 * @param token a stopword
+	 */
+	public void addStopwords(String token);
 }

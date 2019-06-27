@@ -4,6 +4,17 @@ import java.text.Normalizer;
 
 public interface NormalizerInterface {
 	
+	/**
+	 * Add a token to the list of stopword
+	 * @param token a token to add
+	 */
+	public void addStopwords(String token);
+	
+	/**
+	 * 
+	 * @param token Check if this token is a stopword
+	 * @return true if the token is a stopword
+	 */
 	public boolean isStopWord(String token);
 	
 	/**
@@ -30,7 +41,7 @@ public interface NormalizerInterface {
 	 * @param sentence a sentence to remove punctuation
 	 * @return The sentence with punctuation replace by white space
 	 */
-	public static String removePunctuation(String sentence) {
+	public static String removeSomePunctuation(String sentence) {
 		String output = sentence.replaceAll("[^A-Za-z0-9µ]", " "); // µ in µg
 		return(output);
 	}
@@ -47,7 +58,7 @@ public interface NormalizerInterface {
 		normalizedSentence = flattenToAscii(sentence); //.replaceAll("[^\\p{ASCII}]", "");
 		
 		// remove 
-		normalizedSentence = removePunctuation(normalizedSentence); // µ in µg
+		normalizedSentence = removeSomePunctuation(normalizedSentence); // µ in µg
 
 		// lowercase
 		normalizedSentence = normalizedSentence.toLowerCase();

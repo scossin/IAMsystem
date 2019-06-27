@@ -19,7 +19,7 @@ public class NormalizerTermTest {
 	@Test
     public void removePunctuationTest() {
 		String label = "a;-?test.";
-		String normalizedLabel = NormalizerInterface.removePunctuation(label);
+		String normalizedLabel = NormalizerInterface.removeSomePunctuation(label);
 		String expectedNormalizedLabel = "a   test ";
 		assertEquals(normalizedLabel, expectedNormalizedLabel);
     }

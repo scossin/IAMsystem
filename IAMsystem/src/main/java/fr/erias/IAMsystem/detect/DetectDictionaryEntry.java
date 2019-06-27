@@ -253,6 +253,23 @@ public class DetectDictionaryEntry {
 
 		// this.currentI = (currentI - monitorCandidates.getCandidateTokensArray().size()) + 1 ; // i => i + 1 ; without the first token
 	}
+	
+	
+	/**
+	 * Get the terminology
+	 * @return the {@link SetTokenTree} containing the terminology
+	 */
+	public SetTokenTree getSetTokenTree() {
+		return(this.setTokenTree);
+	}
+	
+	/**
+	 * Set of synonyms: abbreviations, typos...
+	 * @return a set of {@link Synonym} that will search an alternative for each token
+	 */
+	public HashSet<Synonym> getSynonyms (){
+		return(this.synonyms);
+	}
 }
 
 /**
