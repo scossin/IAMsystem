@@ -50,7 +50,10 @@ public class LevenshteinTypoLucene implements Synonym {
 	 */
 	private HashMap<String, HashSet<String[]>> matched = new HashMap<String, HashSet<String[]>>();
 	
-	
+	/**
+	 * Ignore term less than a minimum number of character
+	 */
+	private int minNcharTerm = 5;
 	
 	/**
 	 * Constructor 
@@ -86,8 +89,8 @@ public class LevenshteinTypoLucene implements Synonym {
 		// return this : exact term and typos in term
 		HashSetStringArray synonyms = new HashSetStringArray(); // A customized HashSet of array
 
-		// don't search anything if less than 4 characters (to avoid noise)
-		if (term.length()<5) { 
+		// don't search anything if less than the edit distance (default 5)
+		if (term.length()<this.minNcharTerm) { 
 			return(synonyms);
 		}
 
@@ -143,6 +146,22 @@ public class LevenshteinTypoLucene implements Synonym {
 	 */
 	private void addMatched(String token, HashSet<String[]> synonyms) {
 		matched.put(token, synonyms);
+	}
+	
+	/**
+	 * Ignore term less than a minimum number of character
+	 * @param minNcharTerm number of character
+	 */
+	public void setMinNcharTerm(int minNcharTerm) {
+		this.minNcharTerm = minNcharTerm;
+	}
+	
+	/**
+	 * Ignore term less than a minimum number of character 
+	 * @return minimum number of character
+	 */
+	public int getMinNcharTerm () {
+		return(this.minNcharTerm);
 	}
 	
 	@Override
