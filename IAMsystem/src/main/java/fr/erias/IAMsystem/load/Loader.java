@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.normalizer.NormalizerTerm;
-import fr.erias.IAMsystem.normalizer.Stopwords;
+import fr.erias.IAMsystem.normalizer.IStopwords;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -78,14 +78,14 @@ public class Loader {
 	}
 
 	/**
-	 * @param stopwords a {@link Stopwords} instance
+	 * @param stopwords a {@link IStopwords} instance
 	 * @param fileCSV a CSV file
 	 * @param sep the separator of the CSV file (comma, tab...)
 	 * @param colLibNormal the ith column of the CSV file corresponding to the normalize label to index
 	 * @return A map between the collapse form and the uncollapse form (ex "meningoencephalite, meningo encephalite")
 	 * @throws IOException Unfound File
 	 */
-	public static HashMap<String,String> getUniqueTokenBigram(Stopwords stopwords, File fileCSV, String sep, int colLibNormal) throws IOException{
+	public static HashMap<String,String> getUniqueTokenBigram(IStopwords stopwords, File fileCSV, String sep, int colLibNormal) throws IOException{
 		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
 		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
 		BufferedReader br = null;
@@ -122,10 +122,10 @@ public class Loader {
 	/**
 	 * Remove stopwords in an array of tokens
 	 * @param tokensArray an array of tokens (string) that may contain stopwords
-	 * @param stopwords : a {@link Stopwords} instance
+	 * @param stopwords : a {@link IStopwords} instance
 	 * @return an array of tokens without stopwords
 	 */
-	public static String[] removeStopWords(Stopwords stopwords, String[] tokensArray){
+	public static String[] removeStopWords(IStopwords stopwords, String[] tokensArray){
 		String[] newTokensArray = new String[tokensArray.length];
 		int numberOfStopwords = 0;
 		for (int i = 0 ; i<tokensArray.length; i++) {
@@ -145,14 +145,14 @@ public class Loader {
 	/**
 	 * Get a tree datastructure of the terminology given a CSV file containing normalized labels
 	 * @param fileCSV a CSV containing a column with normalized labels
-	 * @param stopwords A {@link Stopwords} instance
+	 * @param stopwords A {@link IStopwords} instance
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the code (or uri) of the term
 	 * @return A tree datastructure of the terminology
 	 * @throws IOException File not found
 	 */
-	public static SetTokenTree loadTokenTree(File fileCSV, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+	public static SetTokenTree loadTokenTree(File fileCSV, IStopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
 		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		//File file = new File(classLoader.getResource(fileName).getFile());
 		SetTokenTree tokenTreeSet0 = new SetTokenTree();
@@ -189,7 +189,7 @@ public class Loader {
 	 * @return A tree datastructure of the terminology
 	 * @throws IOException File not found
 	 */
-	public static SetTokenTree loadTokenTree(InputStream in, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+	public static SetTokenTree loadTokenTree(InputStream in, IStopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
 		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		//File file = new File(classLoader.getResource(fileName).getFile());
 		SetTokenTree tokenTreeSet0 = new SetTokenTree();
@@ -218,15 +218,15 @@ public class Loader {
 	
 	/**
 	 * Tokenize all the terms and keep a set of unique token. <br>
-	 * The difference with {@link Loader#getUniqueTokenBigram(Stopwords, File, String, int)} is we just ignore bigram concatenation
-	 * @param stopwords a {@link Stopwords} instance
+	 * The difference with {@link Loader#getUniqueTokenBigram(IStopwords, File, String, int)} is we just ignore bigram concatenation
+	 * @param stopwords a {@link IStopwords} instance
 	 * @param fileCSV a CSV file
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @return a set of unique tokens in the vocabulary
 	 * @throws IOException if the file can't be found
 	 */
-	public static HashMap<String,String> getUniqueToken2index(Stopwords stopwords,File fileCSV, String sep, int colLibNormal) throws IOException{
+	public static HashMap<String,String> getUniqueToken2index(IStopwords stopwords,File fileCSV, String sep, int colLibNormal) throws IOException{
 		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
 		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
 		BufferedReader br = null;
@@ -256,13 +256,13 @@ public class Loader {
 	 * 
 	 * @param tokenTreeSet0 A previous {@link SetTokenTree} or an empty one
 	 * @param fileCSV a CSV file
-	 * @param stopwords an instance of {@link Stopwords}
+	 * @param stopwords an instance of {@link IStopwords}
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
 	 * @throws IOException If the file is not found
 	 */
-	public static void loadTokenTree(SetTokenTree tokenTreeSet0, File fileCSV, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+	public static void loadTokenTree(SetTokenTree tokenTreeSet0, File fileCSV, IStopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
 		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		//File file = new File(classLoader.getResource(fileName).getFile());
 		BufferedReader br = null;
@@ -290,13 +290,13 @@ public class Loader {
 	 * 
 	 * @param tokenTreeSet0 A previous {@link SetTokenTree} or an empty one
 	 * @param in The inputstream of the CSV file
-	 * @param stopwords an instance of {@link Stopwords}
+	 * @param stopwords an instance of {@link IStopwords}
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLibNormal the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
 	 * @throws IOException If the file is not found
 	 */
-	public static void loadTokenTree(SetTokenTree tokenTreeSet0, InputStream in, Stopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
+	public static void loadTokenTree(SetTokenTree tokenTreeSet0, InputStream in, IStopwords stopwords, String sep, int colLibNormal, int colCode) throws IOException {
 		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
 		//File file = new File(classLoader.getResource(fileName).getFile());
 		String line = null;
@@ -321,10 +321,10 @@ public class Loader {
 
 	/**
 	 * Get a {@link TokenizerNormalizer} 
-	 * @param stopwords an instance of {@link Stopwords}
+	 * @param stopwords an instance of {@link IStopwords}
 	 * @return The tokenizerNormalizer
 	 */
-	public static TokenizerNormalizer getTokenizerNormalizer(Stopwords stopwords){
+	public static TokenizerNormalizer getTokenizerNormalizer(IStopwords stopwords){
 		NormalizerTerm normalizerTerm = new NormalizerTerm(stopwords);
 		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm);
 		return(tokenizerNormalizer);

@@ -5,7 +5,7 @@ package fr.erias.IAMsystem.normalizer;
  * @author Cossin Sebastien
  *
  */
-public interface Stopwords {
+public interface IStopwords {
 	
 	/**
 	 * Is this term or token a stopword ?

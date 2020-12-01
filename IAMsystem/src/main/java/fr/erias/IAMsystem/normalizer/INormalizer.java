@@ -4,38 +4,13 @@ import java.text.Normalizer;
 
 public interface INormalizer {
 	
-	/**
-	 * Add a token to the list of stopword
-	 * @param token a token to add
-	 */
-	public void addStopwords(String token);
-	
-	/**
-	 * 
-	 * @param token Check if this token is a stopword
-	 * @return true if the token is a stopword
-	 */
-	public boolean isStopWord(String token);
-	
-	/**
-	 * Normalize sentence or term
-	 * @param sentence a term or sentence to normalize
-	 */
-	public void setSentence(String sentence);
-	
+
 	/**
 	 * 
 	 * @return The sentence after normalization
 	 */
 	public String getNormalizedSentence();
 	
-	/**
-	 * @return The original sentence
-	 */
-	public String getOriginalSentence();
-	
-	
-
 	/**
 	 * Remove any character that is not "A-Za-z0-9µ" by a white space
 	 * @param sentence a sentence to remove punctuation

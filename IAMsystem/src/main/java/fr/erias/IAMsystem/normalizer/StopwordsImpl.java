@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
  * @author Cossin Sebastien (cossin.sebastien@gmail.com)
  *
  */
-public class StopwordsImpl implements Stopwords {
+public class StopwordsImpl implements IStopwords {
 
 	final static Logger logger = LoggerFactory.getLogger(StopwordsImpl.class);
 	

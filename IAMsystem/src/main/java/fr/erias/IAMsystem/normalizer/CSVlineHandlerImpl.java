@@ -27,11 +27,11 @@ public class CSVlineHandlerImpl implements CSVlineHandler {
 
 	/**
 	 * Create an instance to normalize a terminology in a CSV format
-	 * @param stopwords An instance of {@link Stopwords}
+	 * @param stopwords An instance of {@link IStopwords}
 	 * @param sep CSV column separator
 	 * @param positionOfLabelInColumn the position of the column containing the label to normalise
 	 */
-	public CSVlineHandlerImpl (Stopwords stopwords, String sep, short positionOfLabelInColumn) {
+	public CSVlineHandlerImpl (IStopwords stopwords, String sep, short positionOfLabelInColumn) {
 		this.sep = sep;
 		this.positionOfLabelInColumn = positionOfLabelInColumn;
 		this.tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);

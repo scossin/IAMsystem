@@ -28,13 +28,13 @@ public class NormalizerTerm implements INormalizer {
 	/**
 	 * Stopwords to exclude during normalization
 	 */
-	private Stopwords stopwords ;
+	private IStopwords stopwords ;
 	
 	/**
 	 * Constructor 
 	 * @param stopwords a class containing stopwords
 	 */
-	public NormalizerTerm(Stopwords stopwords) {
+	public NormalizerTerm(IStopwords stopwords) {
 		this.stopwords = stopwords;
 	}
 	
@@ -60,11 +60,15 @@ public class NormalizerTerm implements INormalizer {
 	 * 
 	 * @return the stopwords instance of the normalizerTerm
 	 */
-	public Stopwords getStopwords() {
+	public IStopwords getStopwords() {
 		return(stopwords);
 	}
 	
-	@Override
+	/**
+	 * 
+	 * @param token Check if this token is a stopword
+	 * @return true if the token is a stopword
+	 */
 	public boolean isStopWord(String token) {
 		return stopwords.isStopWord(token);
 	}
@@ -105,7 +109,10 @@ public class NormalizerTerm implements INormalizer {
 		return;
 	}
 
-	@Override
+	/**
+	 * Add a token to the list of stopword
+	 * @param token a token to add
+	 */
 	public void addStopwords(String token) {
 		this.stopwords.addStopwords(token);
 	}
