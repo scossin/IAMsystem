@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
+import fr.erias.IAMsystem.tokenizer.TNoutput;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -60,6 +61,11 @@ public class DetectDictionaryEntry {
 	private TokenizerNormalizer tokenizerNormalizer;
 
 	/**
+	 * Tokenizer normalized output
+	 */
+	private TNoutput tnoutput ;
+	
+	/**
 	 * Set of synonyms: abbreviations, typos...
 	 */
 	private HashSet<Synonym> synonyms = new HashSet<Synonym>();
@@ -97,8 +103,8 @@ public class DetectDictionaryEntry {
 		reset();
 
 		// normalize, tokenize and detect :
-		tokenizerNormalizer.tokenize(sentence);
-		String[] tokensArray = tokenizerNormalizer.getTokens();
+		this.tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
+		String[] tokensArray = tnoutput.getTokens();
 		logger.debug(tokensArray.length + " tokens");
 		while (currentI != tokensArray.length) {
 			logger.debug("current index: " + currentI);
@@ -190,7 +196,7 @@ public class DetectDictionaryEntry {
 		}
 
 		// case stopwords : add and continue 
-		if (tokenizerNormalizer.getNormalizerTerm().isStopWord(token)) {
+		if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(token)) {
 			logger.debug(" \t stopword detected");
 			// add the stopword to the array of tokens :
 			monitorCandidates.addToken(token);
@@ -234,9 +240,9 @@ public class DetectDictionaryEntry {
 		int tokenStartPosition = currentI - monitorCandidates.getCandidateTokensList().size();
 		int numberOfTokensRemoved = monitorCandidates.getCandidateTokensList().size() - candidateTokensArray.length;
 		int tokenEndPosition = currentI-(numberOfTokensRemoved + 1) ; //-1 : previous one
-		int startPosition = tokenizerNormalizer.getTokenStartEndInSentence()[tokenStartPosition][0];
-		int endPosition = tokenizerNormalizer.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
-		String candidateTermString = tokenizerNormalizer.getNormalizerTerm().getOriginalSentence().substring(startPosition, endPosition + 1); 
+		int startPosition = this.tnoutput.getTokenStartEndInSentence()[tokenStartPosition][0];
+		int endPosition = this.tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
+		String candidateTermString = this.tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
 
 		String code =  oneTokenTree.getCode();
 		String label = CT.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
@@ -352,7 +358,7 @@ class MonitorCandidates{
 		int numberOfTokens2remove = 0;
 		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
 			String lastToken = tempCandidateTokenList.get(y);
-			if (tokenizerNormalizer.getNormalizerTerm().isStopWord(lastToken)){
+			if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(lastToken)){
 				DetectDictionaryEntry.logger.debug("last token is a stopword : " + lastToken);
 				numberOfTokens2remove = numberOfTokens2remove + 1;
 			} else {
