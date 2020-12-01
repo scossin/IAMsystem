@@ -75,7 +75,7 @@ public class TNoutput {
 		return tokensArray;
 	}
 
-	public int[][] getTokenStartEndInSentence() throws UnfoundTokenInSentence {
+	public int[][] getTokenStartEndInSentence() {
 		return(tokenStartEndInSentence);
 	}
 }
