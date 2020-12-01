@@ -120,5 +120,14 @@ public class DetectionTest {
 		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
 		assertEquals(CTdetected.getCandidateTerm(), "abces");
 		assertEquals(CTdetected.getCode(), "X1"); // the abces code
+		
+		// detection with stopwords: 
+		sentence = "Abcès chambre implantable"; // must find abces de la chambre implantable
+		detectDictionaryEntry.detectCandidateTerm(sentence);
+		// only one match : 
+		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
+		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		assertEquals(CTdetected.getCandidateTermString(), sentence);
+		assertEquals(CTdetected.getCode(), "X10"); // the "abces de la chambre implantable" code
 	}
 }
