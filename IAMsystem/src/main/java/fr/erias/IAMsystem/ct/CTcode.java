@@ -16,6 +16,10 @@ public class CTcode extends CT {
 	
 	private String termino = "";
 	
+	private int tokenStartPosition;
+	
+	private int tokenEndPosition;
+	
 	/**
 	 * Create a new candidateTerm with a code associated to it
 	 * @param candidateTermString The candidate term string as it is in the sentence
@@ -26,10 +30,13 @@ public class CTcode extends CT {
 	 * @param label the candidateTerm comes from a terminology, it must have a label
 	 */
 	public CTcode(String candidateTermString, String[] candidateTokensArray, 
-			int startPosition, int endPosition, String code, String label) {
+			int startPosition, int endPosition, String code, String label, 
+			int tokenStartPosition, int tokenEndPosition) {
 		super(candidateTermString, candidateTokensArray, startPosition, endPosition);
 		this.code = code;
 		this.label = label;
+		this.tokenStartPosition = tokenStartPosition;
+		this.tokenEndPosition = tokenEndPosition;
 	}
 	
 	/**
@@ -71,7 +78,17 @@ public class CTcode extends CT {
 		json.put("code", getCode());
 		json.put("dictLabel", getLabel());
 		json.put("termino", termino);
+		json.put("tokenStartPosition", getTokenStartPosition());
+		json.put("tokenEndPosition", getTokenEndPosition());
 		return(json);
+	}
+	
+	public int getTokenStartPosition() {
+		return(this.tokenStartPosition);
+	}
+	
+	public int getTokenEndPosition() {
+		return(this.tokenEndPosition);
 	}
 
 	/**

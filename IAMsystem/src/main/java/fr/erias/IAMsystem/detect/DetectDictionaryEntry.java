@@ -133,6 +133,14 @@ public class DetectDictionaryEntry {
 	public TreeSet<CTcode> getCTcode(){
 		return(candidateTermsCode);
 	}
+	
+	/**
+	 * Retrieve tokenizer normalizer output
+	 * @return
+	 */
+	public TNoutput getTNoutput() {
+		return(this.tnoutput);
+	}
 
 	/**
 	 * Re-initialize the algorithm for the next candidateTerm
@@ -248,14 +256,16 @@ public class DetectDictionaryEntry {
 		String code =  oneTokenTree.getCode();
 		String label = CT.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
 		logger.debug("code is : " + code);
-
+		
 		logger.debug("CandidateTermString : " + candidateTermString);
 		CTcode candidateTerm = new CTcode(candidateTermString, 
 				candidateTokensArray, 
 				startPosition, 
 				endPosition,
 				code,
-				label);
+				label,
+				tokenStartPosition,
+				tokenEndPosition);
 		candidateTermsCode.add(candidateTerm);
 
 		// this.currentI = (currentI - monitorCandidates.getCandidateTokensArray().size()) + 1 ; // i => i + 1 ; without the first token
