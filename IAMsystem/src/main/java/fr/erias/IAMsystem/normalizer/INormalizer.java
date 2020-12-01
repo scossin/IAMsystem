@@ -4,12 +4,15 @@ import java.text.Normalizer;
 
 public interface INormalizer {
 	
-
 	/**
-	 * 
-	 * @return The sentence after normalization
+	 * @return Normalize a sentence
 	 */
-	public String getNormalizedSentence();
+	public String getNormalizedSentence(String sentence);
+	
+	/**
+	 * @return the stopwords instance of the normalizerTerm
+	 */
+	public IStopwords getStopwords();
 	
 	/**
 	 * Remove any character that is not "A-Za-z0-9µ" by a white space
