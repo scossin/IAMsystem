@@ -99,7 +99,7 @@ public class Loader {
 		while ((line = br.readLine()) != null) {
 			String[] columns = line.split(sep);
 			String libNormal = columns[colLibNormal];
-			if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(libNormal)) {
+			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(libNormal)) {
 				continue;
 			}
 			String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(libNormal);
@@ -243,7 +243,7 @@ public class Loader {
 		while ((line = br.readLine()) != null) {
 			String[] columns = line.split(sep);
 			String libNormal = columns[colLibNormal];
-			if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(libNormal)) {
+			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(libNormal)) {
 				continue;
 			}
 			String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(libNormal);

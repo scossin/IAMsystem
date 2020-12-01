@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -58,7 +59,7 @@ public class DetectDictionaryEntry {
 	/**
 	 * Normalization and tokenization of the sentence
 	 */
-	private TokenizerNormalizer tokenizerNormalizer;
+	private ITokenizerNormalizer tokenizerNormalizer;
 
 	/**
 	 * Tokenizer normalized output
@@ -196,7 +197,7 @@ public class DetectDictionaryEntry {
 		}
 
 		// case stopwords : add and continue 
-		if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(token)) {
+		if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(token)) {
 			logger.debug(" \t stopword detected");
 			// add the stopword to the array of tokens :
 			monitorCandidates.addToken(token);
@@ -344,7 +345,7 @@ class MonitorCandidates{
 	 * @param tokenizerNormalizer to check if the last tokens are stopwords or not
 	 * @return An array of candidateToken
 	 */
-	public String[] getCandidateTokenArray(TokenizerNormalizer tokenizerNormalizer) {
+	public String[] getCandidateTokenArray(ITokenizerNormalizer tokenizerNormalizer) {
 		// sometimes we must go backward to retrieve a code
 		ArrayList<String> tempCandidateTokenList = null;
 		if (candidateTokensList.size()!= lastTokenTreePosition) {
@@ -358,7 +359,7 @@ class MonitorCandidates{
 		int numberOfTokens2remove = 0;
 		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
 			String lastToken = tempCandidateTokenList.get(y);
-			if (tokenizerNormalizer.getNormalizerTerm().getStopwords().isStopWord(lastToken)){
+			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(lastToken)){
 				DetectDictionaryEntry.logger.debug("last token is a stopword : " + lastToken);
 				numberOfTokens2remove = numberOfTokens2remove + 1;
 			} else {

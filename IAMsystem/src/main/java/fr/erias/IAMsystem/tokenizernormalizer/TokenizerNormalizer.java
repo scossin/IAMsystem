@@ -15,7 +15,7 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
  * @author Cossin Sebastien
  *
  */
-public class TokenizerNormalizer {
+public class TokenizerNormalizer implements ITokenizerNormalizer {
 
 	final static Logger logger = LoggerFactory.getLogger(TokenizerNormalizer.class);
 
@@ -132,7 +132,7 @@ public class TokenizerNormalizer {
 	 * Get the normalizer
 	 * @return {@link INormalizer}
 	 */
-	public INormalizer getNormalizerTerm() {
+	public INormalizer getNormalizer() {
 		return(normalizerTerm);
 	}
 	

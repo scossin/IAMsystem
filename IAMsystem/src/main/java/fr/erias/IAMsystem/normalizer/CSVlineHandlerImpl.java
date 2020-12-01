@@ -58,9 +58,9 @@ public class CSVlineHandlerImpl implements CSVlineHandler {
 		// remove first and last quote
 		label = label.replaceAll("^\"", "");
 		label = label.replaceAll("\"$", "");
-		String normalizedTerm = this.tokenizerNormalizer.getNormalizerTerm().getNormalizedSentence(label);
+		String normalizedTerm = this.tokenizerNormalizer.getNormalizer().getNormalizedSentence(label);
 		String[] tokensArray = this.tokenizerNormalizer.getTokenizer().tokenize(normalizedTerm);
-		String[] newTokensArray = Loader.removeStopWords(this.tokenizerNormalizer.getNormalizerTerm().getStopwords(), tokensArray);
+		String[] newTokensArray = Loader.removeStopWords(this.tokenizerNormalizer.getNormalizer().getStopwords(), tokensArray);
 		normalizedTerm = CT.arrayToString(newTokensArray, " ".charAt(0));
 		normalizedTerm = normalizedTerm.trim();
 		if (normalizedTerm.equals("")) {
