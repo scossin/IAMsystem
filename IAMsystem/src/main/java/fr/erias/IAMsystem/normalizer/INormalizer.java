@@ -2,7 +2,7 @@ package fr.erias.IAMsystem.normalizer;
 
 import java.text.Normalizer;
 
-public interface NormalizerInterface {
+public interface INormalizer {
 	
 	/**
 	 * Add a token to the list of stopword

@@ -11,7 +11,7 @@ import fr.erias.IAMsystem.exceptions.MyExceptions;
  * @author Cossin Sebastien
  *
  */
-public class NormalizerTerm implements NormalizerInterface {
+public class NormalizerTerm implements INormalizer {
 
 	final static Logger logger = LoggerFactory.getLogger(NormalizerTerm.class);
 	
@@ -76,14 +76,14 @@ public class NormalizerTerm implements NormalizerInterface {
 	public void setSentence(String sentence) {
 		this.originalSentence = sentence;
 		try {
-			this.normalizedSentence = NormalizerInterface.normalizedSentence(sentence);
+			this.normalizedSentence = INormalizer.normalizedSentence(sentence);
 			checkUnchangedLength(this.normalizedSentence);
 		} catch (InvalidSentenceLength e) {
 			logger.info("Something went wrong during normalization");
 			logger.info("sentence of " + sentence.length() + " : \n " + sentence);
-			String sentenceWithoutAccents = NormalizerInterface.flattenToAscii(sentence);
+			String sentenceWithoutAccents = INormalizer.flattenToAscii(sentence);
 			logger.info("sentence without accents :" + sentenceWithoutAccents.length() + " : \n " + sentenceWithoutAccents);
-			String sentenceWithoutPuncutations = NormalizerInterface.removeSomePunctuation(sentenceWithoutAccents);
+			String sentenceWithoutPuncutations = INormalizer.removeSomePunctuation(sentenceWithoutAccents);
 			logger.info("sentence without punctuation :" + sentenceWithoutPuncutations.length() + " : \n " + sentenceWithoutPuncutations);
 			MyExceptions.logException(logger, e);
 			e.printStackTrace();

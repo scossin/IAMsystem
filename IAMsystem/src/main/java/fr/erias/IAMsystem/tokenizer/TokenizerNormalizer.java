@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.normalizer.NormalizerInterface;
+import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.NormalizerTerm;
 
 /**
@@ -24,7 +24,7 @@ public class TokenizerNormalizer {
 	/**
 	 * A class to normalize a term
 	 */
-	private NormalizerInterface normalizerTerm ;
+	private INormalizer normalizerTerm ;
 
 	/**
 	 * Array of token after tokenization and normalization
@@ -51,7 +51,7 @@ public class TokenizerNormalizer {
 	 * Constructor
 	 * @param normalizerTerm A normalizer instance to normalize terms or sentences
 	 */
-	public TokenizerNormalizer(NormalizerInterface normalizerTerm) {
+	public TokenizerNormalizer(INormalizer normalizerTerm) {
 		this.normalizerTerm = normalizerTerm;
 	}
 
@@ -136,7 +136,7 @@ public class TokenizerNormalizer {
 		TokenizerNormalizer.pattern = pattern;
 	}
 
-	public NormalizerInterface getNormalizerTerm() {
+	public INormalizer getNormalizerTerm() {
 		return(normalizerTerm);
 	}
 
