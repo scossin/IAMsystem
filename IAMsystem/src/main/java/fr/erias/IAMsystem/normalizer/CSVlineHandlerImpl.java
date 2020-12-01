@@ -7,7 +7,7 @@ import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.exceptions.InvalidCSV;
 import fr.erias.IAMsystem.exceptions.ProcessSentenceException;
 import fr.erias.IAMsystem.load.Loader;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 /**
  * An instance to normalize a terminology in a CSV format

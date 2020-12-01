@@ -13,7 +13,7 @@ import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 

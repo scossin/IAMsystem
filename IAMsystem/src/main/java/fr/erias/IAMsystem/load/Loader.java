@@ -17,7 +17,7 @@ import fr.erias.IAMsystem.normalizer.IStopwords;
 import fr.erias.IAMsystem.normalizer.NormalizerTerm;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 

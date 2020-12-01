@@ -7,8 +7,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.load.Loader;
-import fr.erias.IAMsystem.tokenizer.TNoutput;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 public class TokenizerNormalizerTest {
 	

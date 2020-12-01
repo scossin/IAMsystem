@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.tokenizer;
+package fr.erias.IAMsystem.tokenizernormalizer;
 
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 

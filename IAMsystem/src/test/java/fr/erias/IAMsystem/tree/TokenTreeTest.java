@@ -8,7 +8,7 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.TokenTree;
 
 public class TokenTreeTest {

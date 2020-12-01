@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.tokenizer.TNoutput;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 

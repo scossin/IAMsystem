@@ -10,7 +10,7 @@ import java.util.Set;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
-import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 

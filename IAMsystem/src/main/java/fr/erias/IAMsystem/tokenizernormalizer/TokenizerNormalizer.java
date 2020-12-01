@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.tokenizer;
+package fr.erias.IAMsystem.tokenizernormalizer;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,6 +8,7 @@ import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.NormalizerTerm;
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
  * A class that tokenizes and normalizes a sentence
