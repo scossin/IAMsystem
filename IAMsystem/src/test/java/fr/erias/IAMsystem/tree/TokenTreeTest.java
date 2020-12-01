@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.TokenTree;
 
@@ -15,7 +16,8 @@ public class TokenTreeTest {
 	@Test
     public void tokenTreeTest() {
 		String term = "avc sylvien droit";
-		String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		Tokenizer tokenizer = new Tokenizer();
+		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		
 		// first token is "avc" : 
@@ -42,7 +44,8 @@ public class TokenTreeTest {
 	@Test
     public void previousCodeTest() {
 		String term = "avc sylvien droit";
-		String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		Tokenizer tokenizer = new Tokenizer();
+		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		
 		// the last token has the code
@@ -56,7 +59,7 @@ public class TokenTreeTest {
 		
 		// with only one term : 
 		term = "avc";
-		tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		tokensArray = tokenizer.tokenize(term);
 		tokenTree = new TokenTree(null,tokensArray,"I63");
 		tokens = tokenTree.getCurrentAndPreviousTokens();
 		assertTrue(Arrays.equals(tokens, tokensArray));

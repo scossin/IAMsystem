@@ -7,6 +7,7 @@ import java.io.IOException;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.load.Loader;
+import fr.erias.IAMsystem.tokenizer.TNoutput;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 
 public class TokenizerNormalizerTest {
@@ -16,14 +17,14 @@ public class TokenizerNormalizerTest {
 		String label = "Insuf. cardio-Vasculaire";
 		StopwordsImpl stopwords = new StopwordsImpl();
 		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
-		tokenizerNormalizer.tokenize(label);
-		String[] tokens =  tokenizerNormalizer.getTokens();
+		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(label);
+		String[] tokens =  tnoutput.getTokens();
 		assertEquals(tokens.length, 3);
 		assertEquals(tokens[0], "insuf");
 		assertEquals(tokens[1], "cardio");
 		assertEquals(tokens[2], "vasculaire");
 		
-		String[] tokensOriginal = tokenizerNormalizer.getTokensArrayOriginal();
+		String[] tokensOriginal = tnoutput.getTokensArrayOriginal();
 		assertEquals(tokensOriginal.length, 3);
 		assertEquals(tokensOriginal[0], "Insuf");
 		assertEquals(tokensOriginal[1], "cardio");

@@ -12,6 +12,7 @@ import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -22,19 +23,20 @@ public class DetectionBackwardTest {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
 		String term = "saignement";
-		String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		Tokenizer tokenizer = new Tokenizer();
+		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"X1");
 		setTokenTree.addTokenTree(tokenTree);
 		
 		// second term of the terminology
 		term = "saignement abondants de la menopause";
-		tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		tokensArray = tokenizer.tokenize(term);
 		tokenTree = new TokenTree(null,tokensArray,"X2");
 		setTokenTree.addTokenTree(tokenTree);
 		
 		// second term of the terminology
 		term = "saignement abondants de la menopause suite à un traitement anticoagulant";
-		tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		tokensArray = tokenizer.tokenize(term);
 		tokenTree = new TokenTree(null,tokensArray,"X3");
 		setTokenTree.addTokenTree(tokenTree);
 		

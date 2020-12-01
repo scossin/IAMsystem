@@ -117,26 +117,6 @@ public class TokenizerNormalizer {
 		return(tokensArray);
 	}
 
-
-	/**
-	 * Tokenize and normalize each token, return the normalized label
-	 * @param label a label to normalize
-	 * @return the normalized label
-	 */
-	public String normalizeLabel(String label) {
-		// remove first and last quote
-		label = label.replaceAll("^\"", "");
-		label = label.replaceAll("\"$", "");
-		// normalizedTerm :
-		String[] tokensArray = tokenizeWithoutEndStart(label);
-		String normalizedTerm = this.normalizerTerm.getNormalizedSentence(label);
-		if (normalizedTerm.equals("")) {
-			normalizedTerm = "nothingRemains";
-			logger.info(label + " \t is a stopword - nothing remains of this label");
-		}
-		return(normalizedTerm);
-	}
-
 	/************************************* Setters ****************************************/
 
 	/**

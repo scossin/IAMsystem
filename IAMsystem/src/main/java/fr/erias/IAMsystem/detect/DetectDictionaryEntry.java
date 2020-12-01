@@ -63,7 +63,7 @@ public class DetectDictionaryEntry {
 	/**
 	 * Tokenizer normalized output
 	 */
-	private TNoutput tnoutput ;
+	private TNoutput tnoutput;
 	
 	/**
 	 * Set of synonyms: abbreviations, typos...

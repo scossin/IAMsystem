@@ -15,6 +15,7 @@ import fr.erias.IAMsystem.detect.Synonym;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -24,13 +25,14 @@ public class BratOutputTest {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
 		String term = "avc sylvien droit";
-		String[] tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		Tokenizer tokenizer = new Tokenizer();
+		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		setTokenTree.addTokenTree(tokenTree);
 
 		// second term of the terminology
 		term = "insuffisance cardiaque aigue";
-		tokensArray = TokenizerNormalizer.tokenizeAlphaNum(term);
+		tokensArray = tokenizer.tokenize(term);
 		tokenTree = new TokenTree(null,tokensArray,"I50");
 		setTokenTree.addTokenTree(tokenTree);
 		
