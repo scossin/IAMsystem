@@ -1,20 +1,17 @@
 package fr.erias.IAMsystem.tokenizer;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.exceptions.InvalidSentenceLength;
+import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.NormalizerTerm;
 
 /**
  * A class that tokenizes and normalizes a sentence
- *  * @author Cossin Sebastien
+ * @author Cossin Sebastien
  *
  */
 public class TokenizerNormalizer {
@@ -25,77 +22,99 @@ public class TokenizerNormalizer {
 	 * A class to normalize a term
 	 */
 	private INormalizer normalizerTerm ;
-
+	
 	/**
-	 * Array of token after tokenization and normalization
+	 * A class to tokenize
 	 */
-	private String[] tokensArray;
+	private ITokenizer tokenizer ;
 
-	/**
-	 * Array of token without normalization
-	 */
-	private String[] tokensArrayOriginal;
-
-	/**
-	 * For each token, the start and the end offset in the sentence
-	 */
-	private int[][] tokenStartEndInSentence ;
-
-	/**
-	 * Default pattern : token with alphanumeric or numbers
-	 */
-	private static String pattern = "[0-9]+|[a-z]+";
-
-
+	
+	/***************************** GETTERS ********************************/
+	
 	/**
 	 * Constructor
 	 * @param normalizerTerm A normalizer instance to normalize terms or sentences
 	 */
-	public TokenizerNormalizer(INormalizer normalizerTerm) {
+	public TokenizerNormalizer(INormalizer normalizerTerm, ITokenizer tokenizer) {
 		this.normalizerTerm = normalizerTerm;
+		this.tokenizer = tokenizer;
+	}
+	
+	/**
+	 * Normalize and tokenize a sentence
+	 * The normalization doesn't change the sentence length
+	 * @param sentence a term or sentence to normalize
+	 */
+	public TNoutput tokenizeNormalize(String sentence) {
+		String originalSentence = sentence;
+		String normalizedSentence = this.normalizerTerm.getNormalizedSentence(sentence);
+		// check it doesn't change the sentence length
+		try {
+			this.checkUnchangedLength(originalSentence, normalizedSentence);
+		} catch (InvalidSentenceLength e) {
+			logger.info("Something went wrong during normalization");
+			logger.info("sentence of " + sentence.length() + " : \n " + sentence);
+			String sentenceWithoutAccents = INormalizer.flattenToAscii(sentence);
+			logger.info("sentence without accents :" + sentenceWithoutAccents.length() + " : \n " + sentenceWithoutAccents);
+			String sentenceWithoutPuncutations = INormalizer.removeSomePunctuation(sentenceWithoutAccents);
+			logger.info("sentence without punctuation :" + sentenceWithoutPuncutations.length() + " : \n " + sentenceWithoutPuncutations);
+			MyExceptions.logException(logger, e);
+			e.printStackTrace();
+		}
+		
+		// tokenize and setTokensStartandEnd
+		String[] tokensArray = this.tokenizer.tokenize(normalizedSentence);
+		int[][] tokenStartEndInSentence = null;
+		try {
+			tokenStartEndInSentence = this.getTokensStartEndInSentence(
+					originalSentence,
+					normalizedSentence, 
+					tokensArray
+					);
+		} catch (UnfoundTokenInSentence e) {
+			logger.info("Something went wrong during detecting start and end of each token");
+			e.printStackTrace();
+		}
+		String[] tokensArrayOriginal = this.getTokensArrayOriginal(tokensArray, originalSentence, tokenStartEndInSentence);
+		TNoutput tnoutput = new TNoutput(originalSentence, normalizedSentence, tokensArray, tokensArrayOriginal, tokenStartEndInSentence);
+		return(tnoutput);
+	}
+	
+	private String[] getTokensArrayOriginal(String[] tokensArray, String originalSentence, int[][] tokenStartEndInSentence) {
+		String [] tokensArrayOriginal = new String[tokensArray.length];
+		for (int i = 0; i<tokenStartEndInSentence.length;i++) {
+			int[] OneTokenStartEnd = tokenStartEndInSentence[i];
+			int tokenStart = OneTokenStartEnd[0];
+			int tokenEnd = OneTokenStartEnd[1];
+			tokensArrayOriginal[i] = originalSentence.substring(tokenStart, tokenEnd + 1);
+		}
+		return(tokensArrayOriginal);
+	}
+	
+	/**
+	 * Check if characters removal didn't change the sentence length
+	 * @param modifiedSentence a modified sentence
+	 * @throws InvalidSentenceLength if the length of the modified sentence is unexpected
+	 */
+	private void checkUnchangedLength(String originalSentence, String modifiedSentence) throws InvalidSentenceLength {
+		if (originalSentence.length() != modifiedSentence.length()) {
+			String msg = "Original length " + originalSentence.length() + " : " + originalSentence + "\n" +
+		"Modified length " + modifiedSentence.length() + modifiedSentence;
+			throw new InvalidSentenceLength(logger, msg);
+		}
+		return;
 	}
 
 	/********************************* Tokenizers function ***********************************/
 
 	/**
-	 * Tokenize with the following pattern : "[0-9]+|[a-z]+"
-	 * @param normalizedSentence A normalized term or sentence to tokenize
-	 * @return An array of token
-	 */
-	public static String[] tokenizeAlphaNum(String normalizedSentence) {
-		List<String> chunks = new LinkedList<String>();
-		Pattern VALID_PATTERN = Pattern.compile(pattern);
-		Matcher matcher = VALID_PATTERN.matcher(normalizedSentence);
-		while (matcher.find()) {
-			chunks.add( matcher.group() );
-		}
-		String[] tokenArray = new String[chunks.size()];
-		tokenArray = chunks.toArray(tokenArray);
-		return tokenArray;
-	}
-
-	/**
-	 * Normalize and tokenize a sentence
-	 * @param sentence A string to tokenize
-	 */
-	public void tokenize(String sentence) {
-		normalizerTerm.setSentence(sentence);
-		this.tokensArray = tokenizeAlphaNum(normalizerTerm.getNormalizedSentence());
-		try {
-			setTokensStartEndInSentence();
-		} catch (UnfoundTokenInSentence e) {
-			logger.info("Something went wrong during detecting start and end of each token");
-			e.printStackTrace();
-		}
-	}
-
-	/**
 	 * Same as tokenize function without calculating start and end offset for each token
 	 * @param sentence a String to tokenize
 	 */
-	public void tokenizeWithoutEndStart(String sentence) {
-		normalizerTerm.setSentence(sentence);
-		this.tokensArray = tokenizeAlphaNum(normalizerTerm.getNormalizedSentence());
+	public String[] tokenizeWithoutEndStart(String sentence) {
+		String normalizedSentence = normalizerTerm.getNormalizedSentence(sentence);
+		String[] tokensArray = this.tokenizer.tokenize(normalizedSentence);
+		return(tokensArray);
 	}
 
 
@@ -109,8 +128,8 @@ public class TokenizerNormalizer {
 		label = label.replaceAll("^\"", "");
 		label = label.replaceAll("\"$", "");
 		// normalizedTerm :
-		tokenizeWithoutEndStart(label);
-		String normalizedTerm = getNormalizerTerm().getNormalizedSentence();
+		String[] tokensArray = tokenizeWithoutEndStart(label);
+		String normalizedTerm = this.normalizerTerm.getNormalizedSentence(label);
 		if (normalizedTerm.equals("")) {
 			normalizedTerm = "nothingRemains";
 			logger.info(label + " \t is a stopword - nothing remains of this label");
@@ -129,44 +148,32 @@ public class TokenizerNormalizer {
 	}
 
 	/**
-	 * Change the tokenizer pattern
-	 * @param pattern A regular expression to tokenize a sentence
+	 * Get the normalizer
+	 * @return {@link INormalizer}
 	 */
-	public static void setPattern(String pattern) {
-		TokenizerNormalizer.pattern = pattern;
-	}
-
 	public INormalizer getNormalizerTerm() {
 		return(normalizerTerm);
 	}
-
-	/************************************* Getters ****************************************/
+	
 	/**
-	 * 
-	 * @return Array of tokens of the original sentence
+	 * Get the tokenizer
+	 * @return {@link ITokenizer }
 	 */
-	public String[] getTokensArrayOriginal() {
-		return tokensArrayOriginal;
-	}
-
-	public String[] getTokens() {
-		return tokensArray;
-	}
-
-	public int[][] getTokenStartEndInSentence() throws UnfoundTokenInSentence {
-		return(tokenStartEndInSentence);
+	public ITokenizer getTokenizer() {
+		return(tokenizer);
 	}
 
 	/**
 	 * Calculate the start and end of each token in the sentence
 	 * @throws UnfoundTokenInSentence If start or end of a token can't be found in the sentence
 	 */
-	private void setTokensStartEndInSentence() throws UnfoundTokenInSentence{
-		String normalizedSentence = normalizerTerm.getNormalizedSentence();
-		String originalSentence = normalizerTerm.getOriginalSentence();
-
-		tokensArrayOriginal = new String[tokensArray.length];
-		tokenStartEndInSentence = new int[tokensArray.length][2];
+	private int[][] getTokensStartEndInSentence(
+			String originalSentence,
+			String normalizedSentence,
+			String[] tokensArray
+			) throws UnfoundTokenInSentence {
+		//this.tokensArrayOriginal = new String[tokensArray.length];
+		int[][] tokenStartEndInSentence = new int[tokensArray.length][2];
 
 		int sentenceLength = normalizedSentence.length();
 		int sentencePosition = 0;
@@ -208,8 +215,9 @@ public class TokenizerNormalizer {
 			tokenStartEndInSentence[i] = OneTokenStartEnd;
 
 			// Token Original Form : 
-			tokensArrayOriginal[i] = originalSentence.substring(tokenStart, tokenEnd + 1); // + 1 because method stop at indexEnd - 1
-			logger.debug("\t token original : " + tokensArrayOriginal[i]);
+			//tokensArrayOriginal[i] = originalSentence.substring(tokenStart, tokenEnd + 1); // + 1 because method stop at indexEnd - 1
+			//logger.debug("\t token original : " + tokensArrayOriginal[i]);
 		}
+		return(tokenStartEndInSentence);
 	}
 }
