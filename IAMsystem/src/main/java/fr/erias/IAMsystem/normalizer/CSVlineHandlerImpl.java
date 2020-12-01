@@ -3,6 +3,7 @@ package fr.erias.IAMsystem.normalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.exceptions.InvalidCSV;
 import fr.erias.IAMsystem.exceptions.ProcessSentenceException;
 import fr.erias.IAMsystem.load.Loader;
@@ -53,7 +54,20 @@ public class CSVlineHandlerImpl implements CSVlineHandler {
 		sb.append(line);
 
 		// normalizedTerm :
-		String normalizedTerm = tokenizerNormalizer.normalizeLabel(label);
+		
+		// remove first and last quote
+		label = label.replaceAll("^\"", "");
+		label = label.replaceAll("\"$", "");
+		String normalizedTerm = this.tokenizerNormalizer.getNormalizerTerm().getNormalizedSentence(label);
+		String[] tokensArray = this.tokenizerNormalizer.getTokenizer().tokenize(normalizedTerm);
+		String[] newTokensArray = Loader.removeStopWords(this.tokenizerNormalizer.getNormalizerTerm().getStopwords(), tokensArray);
+		normalizedTerm = CT.arrayToString(newTokensArray, " ".charAt(0));
+		normalizedTerm = normalizedTerm.trim();
+		if (normalizedTerm.equals("")) {
+			normalizedTerm = "nothingRemains";
+			logger.info(label + " \t is a stopword - nothing remains of this label");
+		}
+		
 		sb.append(sep);
 		sb.append(normalizedTerm);
 		sb.append("\n");
