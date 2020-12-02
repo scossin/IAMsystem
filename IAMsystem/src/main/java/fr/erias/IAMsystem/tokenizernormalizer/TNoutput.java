@@ -1,5 +1,8 @@
 package fr.erias.IAMsystem.tokenizernormalizer;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class TNoutput {
 	
 	/**
@@ -107,6 +110,28 @@ public class TNoutput {
 	 */
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	
+	/**
+	 * Get a JSON object representation
+	 * @return a JSON representation
+	 */
+	public JSONObject getJSONobject() {
+		JSONObject jsonObject = new JSONObject();
+		jsonObject.put("status", getStatus());
+		jsonObject.put("originalSentence", getOriginalSentence());
+		jsonObject.put("normalizedSentence", getNormalizedSentence());
+		JSONArray jsonArray = new JSONArray();
+		for (String token : tokensArray) {
+			jsonArray.put(token);
+		}
+		jsonObject.put("tokensArray", jsonArray);
+		JSONArray jsonArrayOriginal = new JSONArray();
+		for (String token : tokensArrayOriginal) {
+			jsonArrayOriginal.put(token);
+		}
+		jsonObject.put("tokensArrayOriginal", jsonArrayOriginal);
+		return(jsonObject);
 	}
 	
 	/**
