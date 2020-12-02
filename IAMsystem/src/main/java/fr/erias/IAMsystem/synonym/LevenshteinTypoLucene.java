@@ -51,7 +51,27 @@ public class LevenshteinTypoLucene implements Synonym {
 	 */
 	private HashMap<String, HashSet<String[]>> matched = new HashMap<String, HashSet<String[]>>();
 	
+	/**
+	 * Number of insertion, deletion of the Levenshtein distance. Max 2
+	 */
+	private int maxEdits = 1; 
 	
+	/**
+	 * setMaxEdits value in Lucene: number of insertion, deletion of the Levenshtein distance.
+	 * 1 or 2 (maximum)
+	 */
+	
+	public void setMaxEdits(int maxEdits) {
+		if (maxEdits > 2) {
+			logger.info("impossible to set maxEdits greater than 2");
+			this.maxEdits = 2;
+		} else if (maxEdits < 1) {
+			logger.info("impossible to set maxEdits lower than 1"); // 0 means exact match
+			this.maxEdits = 1;
+		} else {
+			this.maxEdits = maxEdits;
+		}
+	}
 	
 	/**
 	 * Constructor 
@@ -92,8 +112,7 @@ public class LevenshteinTypoLucene implements Synonym {
 			return(synonyms);
 		}
 
-		int maxEdits = 1; // number of insertion, deletion of the Levenshtein distance. Max 2
-		int maxHits = 20; // number of maximum hits - results
+		int maxHits = 10; // number of maximum hits - results
 
 		// search a typo in a term (ex : cardique for cardiaque) or a concatenation (meningoencephalite for meningo encephalite)
 		Query query = searchIndex.fuzzyQuery(term, concatenationField, maxEdits);
