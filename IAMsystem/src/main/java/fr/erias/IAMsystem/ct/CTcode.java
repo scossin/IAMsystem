@@ -76,8 +76,8 @@ public class CTcode extends CT {
 		json.put("start", getStartPosition());
 		json.put("end", getEndPosition());
 		json.put("code", getCode());
-		json.put("dictLabel", getTermino());
-		json.put("termino", termino);
+		json.put("dictLabel", getLabel());
+		json.put("termino", getTermino());
 		json.put("tokenStartPosition", getTokenStartPosition());
 		json.put("tokenEndPosition", getTokenEndPosition());
 		return(json);
