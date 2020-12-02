@@ -57,22 +57,10 @@ public class LevenshteinTypoLucene implements Synonym {
 	private int maxEdits = 1; 
 	
 	/**
-	 * setMaxEdits value in Lucene: number of insertion, deletion of the Levenshtein distance.
-	 * 1 or 2 (maximum)
+	 * don't search anything in the index if number of character is below this number
 	 */
-	
-	public void setMaxEdits(int maxEdits) {
-		if (maxEdits > 2) {
-			logger.info("impossible to set maxEdits greater than 2");
-			this.maxEdits = 2;
-		} else if (maxEdits < 1) {
-			logger.info("impossible to set maxEdits lower than 1"); // 0 means exact match
-			this.maxEdits = 1;
-		} else {
-			this.maxEdits = maxEdits;
-		}
-	}
-	
+	private int minNchar = 5;
+		
 	/**
 	 * Constructor 
 	 * @param indexFolder The indexFolder of the Lucene Index to perform fuzzy queries (Levenshtein distance)
@@ -95,6 +83,30 @@ public class LevenshteinTypoLucene implements Synonym {
 		return(searchIndex);
 	}
 	
+	/**
+	 * setMaxEdits value in Lucene: number of insertion, deletion of the Levenshtein distance.
+	 * 1 or 2 (maximum)
+	 */
+	
+	public void setMaxEdits(int maxEdits) {
+		if (maxEdits > 2) {
+			logger.info("impossible to set maxEdits greater than 2");
+			this.maxEdits = 2;
+		} else if (maxEdits < 1) {
+			logger.info("impossible to set maxEdits lower than 1"); // 0 means exact match
+			this.maxEdits = 1;
+		} else {
+			this.maxEdits = maxEdits;
+		}
+	}
+	
+	/**
+	 * set minNchar
+	 * @param minNchar don't search anything in the index if number of character is below this number (default to 5)
+	 */
+	public void setMinNchar (int minNchar) {
+		this.minNchar = minNchar;
+	}
 	
 	/**
 	 * Search a normalized term with a Levenshtein distance (fuzzy query of Lucene)
@@ -108,7 +120,7 @@ public class LevenshteinTypoLucene implements Synonym {
 		HashSetStringArray synonyms = new HashSetStringArray(); // A customized HashSet of array
 
 		// don't search anything if less than 4 characters (to avoid noise)
-		if (term.length()<5) { 
+		if (term.length()<this.minNchar) { 
 			return(synonyms);
 		}
 
