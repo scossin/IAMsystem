@@ -7,7 +7,7 @@ import fr.erias.IAMsystem.exceptions.InvalidSentenceLength;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
-import fr.erias.IAMsystem.normalizer.NormalizerTerm;
+import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
@@ -122,9 +122,9 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 
 	/**
 	 * Change the normalizer
-	 * @param normalizerTerm {@link NormalizerTerm } set a new normalizerTerm instance
+	 * @param normalizerTerm {@link Normalizer } set a new normalizerTerm instance
 	 */
-	public void setNormalizer(NormalizerTerm normalizerTerm) {
+	public void setNormalizer(Normalizer normalizerTerm) {
 		this.normalizerTerm = normalizerTerm;
 	}
 

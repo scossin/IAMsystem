@@ -14,7 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.normalizer.IStopwords;
-import fr.erias.IAMsystem.normalizer.NormalizerTerm;
+import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -336,7 +336,7 @@ public class Loader {
 	 */
 	public static TokenizerNormalizer getTokenizerNormalizer(IStopwords stopwords){
 		ITokenizer tokenizer = new Tokenizer();
-		NormalizerTerm normalizerTerm = new NormalizerTerm(stopwords);
+		Normalizer normalizerTerm = new Normalizer(stopwords);
 		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
 		return(tokenizerNormalizer);
 	}

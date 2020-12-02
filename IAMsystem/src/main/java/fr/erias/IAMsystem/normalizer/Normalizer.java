@@ -11,9 +11,9 @@ import fr.erias.IAMsystem.exceptions.MyExceptions;
  * @author Cossin Sebastien
  *
  */
-public class NormalizerTerm implements INormalizer {
+public class Normalizer implements INormalizer {
 
-	final static Logger logger = LoggerFactory.getLogger(NormalizerTerm.class);
+	final static Logger logger = LoggerFactory.getLogger(Normalizer.class);
 	
 	/**
 	 * Stopwords to exclude during normalization
@@ -24,7 +24,7 @@ public class NormalizerTerm implements INormalizer {
 	 * Constructor 
 	 * @param stopwords a class containing stopwords
 	 */
-	public NormalizerTerm(IStopwords stopwords) {
+	public Normalizer(IStopwords stopwords) {
 		this.stopwords = stopwords;
 	}
 	

@@ -13,6 +13,7 @@ import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -129,5 +130,13 @@ public class DetectionTest {
 		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
 		assertEquals(CTdetected.getCandidateTermString(), sentence);
 		assertEquals(CTdetected.getCode(), "X10"); // the "abces de la chambre implantable" code
+		
+		// detection with stopwords: 
+		TNoutput tnoutput = detectDictionaryEntry.getTNoutput();
+		int tokenStart = CTdetected.getTokenStartPosition();
+		int tokenEnd = CTdetected.getTokenEndPosition();
+		String[] tokens = tnoutput.getTokens();
+		assertEquals(tokens[tokenStart], "abces");
+		assertEquals(tokens[tokenEnd], "implantable");
 	}
 }
