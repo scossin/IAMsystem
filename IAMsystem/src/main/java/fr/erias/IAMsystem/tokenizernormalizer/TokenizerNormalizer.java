@@ -7,8 +7,11 @@ import fr.erias.IAMsystem.exceptions.InvalidSentenceLength;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
+import fr.erias.IAMsystem.normalizer.IStopwords;
 import fr.erias.IAMsystem.normalizer.Normalizer;
+import fr.erias.IAMsystem.normalizer.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
+import fr.erias.IAMsystem.tokenizer.Tokenizer;
 
 /**
  * A class that tokenizes and normalizes a sentence
@@ -39,6 +42,29 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	public TokenizerNormalizer(INormalizer normalizerTerm, ITokenizer tokenizer) {
 		this.normalizerTerm = normalizerTerm;
 		this.tokenizer = tokenizer;
+	}
+	
+	/**
+	 * Get a default {@link TokenizerNormalizer} 
+	 * @param stopwords an instance of {@link IStopwords}
+	 * @return The tokenizerNormalizer
+	 */
+	public static TokenizerNormalizer getDefaultTokenizerNormalizer(IStopwords stopwords){
+		ITokenizer tokenizer = new Tokenizer();
+		Normalizer normalizerTerm = new Normalizer(stopwords);
+		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
+		return(tokenizerNormalizer);
+	}
+	
+	/**
+	 * Get a default {@link TokenizerNormalizer} 
+	 * @return The tokenizerNormalizer
+	 */
+	public static TokenizerNormalizer getDefaultTokenizerNormalizer(){
+		ITokenizer tokenizer = new Tokenizer();
+		Normalizer normalizerTerm = new Normalizer(new StopwordsImpl());
+		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
+		return(tokenizerNormalizer);
 	}
 	
 	/**
