@@ -76,16 +76,25 @@ public class CTcode extends CT {
 		json.put("start", getStartPosition());
 		json.put("end", getEndPosition());
 		json.put("code", getCode());
-		json.put("dictLabel", getLabel());
+		json.put("dictLabel", getTermino());
 		json.put("termino", termino);
 		json.put("tokenStartPosition", getTokenStartPosition());
 		json.put("tokenEndPosition", getTokenEndPosition());
 		return(json);
 	}
 	
+	/**
+	 * 
+	 * @return the first token number
+	 */
 	public int getTokenStartPosition() {
 		return(this.tokenStartPosition);
 	}
+	
+	/**
+	 * 
+	 * @return the last token number
+	 */
 	
 	public int getTokenEndPosition() {
 		return(this.tokenEndPosition);
