@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.detect.HashSetStringArray;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
+import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.lucene.SearchIndex;
 
 /**
@@ -30,16 +31,6 @@ public class LevenshteinTypoLucene implements ISynonym {
 	 * A lucene search engine to perform Levenshtein distance
 	 */
 	private SearchIndex searchIndex = null;
-	
-	/**
-	 * the name of the Lucene field in the index containing a bigram concatenation (ex : meningoencephalite)
-	 */
-	private String concatenationField = null;
-	
-	/**
-	 * bigramField the name of the Lucene field in the index containing the initial bigram (ex : meningo encephalite)
-	 */
-	private String bigramField = null;
 	
 	/**
 	 * Save unmatched, no need to search multiples times the same token that had no match
@@ -64,16 +55,19 @@ public class LevenshteinTypoLucene implements ISynonym {
 	/**
 	 * Constructor 
 	 * @param indexFolder The indexFolder of the Lucene Index to perform fuzzy queries (Levenshtein distance)
-	 * @param concatenationField the name of the Lucene field in the index containing a bigram concatenation (ex : meningoencephalite)
-	 * @param bigramField the name of the Lucene field in the index containing the initial bigram (ex : meningo encephalite)
 	 * @throws IOException If the Lucene index can't be found
 	 */
-	public LevenshteinTypoLucene(File indexFolder, String concatenationField, String bigramField) throws IOException {
+	public LevenshteinTypoLucene(File indexFolder) throws IOException {
 		this.searchIndex = new SearchIndex(indexFolder);
-		this.concatenationField = concatenationField;
-		this.bigramField = bigramField;
 	}
 	
+	/**
+	 * Constructor with default LUCENE_INDEX_FOLDER filename
+	 * @throws IOException
+	 */
+	public LevenshteinTypoLucene() throws IOException {
+		this(new File(IndexBigramLucene.LUCENE_INDEX_FOLDER));
+	}
 	
 	/**
 	 * Create an instance to connect to the Lucene Index
@@ -127,7 +121,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 		int maxHits = 10; // number of maximum hits - results
 
 		// search a typo in a term (ex : cardique for cardiaque) or a concatenation (meningoencephalite for meningo encephalite)
-		Query query = searchIndex.fuzzyQuery(term, concatenationField, maxEdits);
+		Query query = searchIndex.fuzzyQuery(term, IndexBigramLucene.CONCATENATED_FIELD, maxEdits);
 		ScoreDoc[] hits = searchIndex.evaluateQuery(query, maxHits);
 
 		// if no hits return
@@ -139,7 +133,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 		// if hits, add the array of synonyms
 		for (int i = 0; i<hits.length ; i++) {
 			Document doc = searchIndex.getIsearcher().doc(hits[i].doc);
-			String bigram = doc.get(bigramField);
+			String bigram = doc.get(IndexBigramLucene.BIGRAM_FIELD);
 			logger.debug("detected synonyms : " + bigram);
 			String[] bigramArray = bigram.split(" ");
 			if (!synonyms.containsArray(bigramArray)) {
