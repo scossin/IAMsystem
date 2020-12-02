@@ -4,14 +4,13 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashSet;
-
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
-
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.synonym.Abbreviations;
+import fr.erias.IAMsystem.synonym.Synonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -62,20 +61,11 @@ public class DetectionTest {
 		stopwordsSet.add("de");
 		stopwordsSet.add("la");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);
-		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
 
 		// Abbreviations : 
-		Synonym abbreviations = new Synonym() {
-			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
-				if (token.equals("insuf")) {
-					String[] temp = {"insuffisance"};
-					synonym.add(temp);
-				}
-				return synonym;
-			}
-		};
+		Abbreviations abbreviations = new Abbreviations();
+		abbreviations.addAbbreviation("insuffisance", "insuf");
 
 		// Levenshtein distance : 
 		// simulating a levenshtein distance : 

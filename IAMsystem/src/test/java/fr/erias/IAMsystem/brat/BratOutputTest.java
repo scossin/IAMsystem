@@ -8,13 +8,10 @@ import java.util.TreeSet;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
-
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
-import fr.erias.IAMsystem.detect.Synonym;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.load.Loader;
-import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.synonym.Synonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -42,8 +39,7 @@ public class BratOutputTest {
 	@Test
 	public void BratOutputCTTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		// Tokenizer
-		StopwordsImpl stopwords = new StopwordsImpl();
-		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 
 		// Abbreviations : 
 		Synonym abbreviations = new Synonym() {

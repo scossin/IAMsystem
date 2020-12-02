@@ -4,14 +4,12 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashSet;
-
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
-
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.load.Loader;
 import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.synonym.Synonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -58,7 +56,7 @@ public class DetectionBackwardTest {
 		};
 		HashSet<Synonym> synonyms = new HashSet<Synonym>();
 		synonyms.add(synonym);
-		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(new StopwordsImpl());
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
@@ -87,7 +85,7 @@ public class DetectionBackwardTest {
 		};
 		HashSet<Synonym> synonyms = new HashSet<Synonym>();
 		synonyms.add(synonym);
-		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(new StopwordsImpl());
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
@@ -121,7 +119,7 @@ public class DetectionBackwardTest {
 		stopwords.addStopwords("la");
 		stopwords.addStopwords("suite");
 		stopwords.addStopwords("a");
-		TokenizerNormalizer tokenizerNormalizer = Loader.getTokenizerNormalizer(stopwords);
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
