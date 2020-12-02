@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.normalizer;
+package fr.erias.IAMsystem.terminology;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -33,18 +33,18 @@ public class NormalizeTerminology {
 	
 	private File outputFile = null;
 
-	private CSVlineHandler csvLineHandler;
+	private ICSVlineHandler csvLineHandler;
 
 	private boolean header;
 	
 	/**
 	 * Normalize the labels of a terminology
-	 * @param csvLineHandler A {@link CSVlineHandler} instance
+	 * @param csvLineHandler A {@link ICSVlineHandler} instance
 	 * @param outputFile The outputFile
 	 * @param header Does the CSV file has a header ?
 	 * @throws IOException File not found and can't create a new file
 	 */
-	public NormalizeTerminology(File outputFile, boolean header, CSVlineHandler csvLineHandler) throws IOException {
+	public NormalizeTerminology(File outputFile, boolean header, ICSVlineHandler csvLineHandler) throws IOException {
 		this.outputFile = outputFile;
 		if (!outputFile.exists()) {
 			outputFile.createNewFile();

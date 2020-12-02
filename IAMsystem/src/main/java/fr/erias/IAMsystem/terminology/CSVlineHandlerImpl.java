@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.normalizer;
+package fr.erias.IAMsystem.terminology;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -7,6 +7,7 @@ import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.exceptions.InvalidCSV;
 import fr.erias.IAMsystem.exceptions.ProcessSentenceException;
 import fr.erias.IAMsystem.load.Loader;
+import fr.erias.IAMsystem.normalizer.IStopwords;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 /**
@@ -14,7 +15,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
  * @author Cossin Sebastien (cossin.sebastien@gmail.com)
  *
  */
-public class CSVlineHandlerImpl implements CSVlineHandler {
+public class CSVlineHandlerImpl implements ICSVlineHandler {
 
 	final static Logger logger = LoggerFactory.getLogger(CSVlineHandlerImpl.class);
 

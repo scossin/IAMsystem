@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.normalizer;
+package fr.erias.IAMsystem.terminology;
 
 import fr.erias.IAMsystem.exceptions.InvalidCSV;
 import fr.erias.IAMsystem.exceptions.ProcessSentenceException;
@@ -8,7 +8,7 @@ import fr.erias.IAMsystem.exceptions.ProcessSentenceException;
  * @author Cossin Sebastien (cossin.sebastien@gmail.com)
  *
  */
-public interface CSVlineHandler {
+public interface ICSVlineHandler {
 
 	/**
 	 * A method to process a line in the CSV to get a Normalized Line
