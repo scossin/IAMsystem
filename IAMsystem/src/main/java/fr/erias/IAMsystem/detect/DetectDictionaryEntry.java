@@ -47,12 +47,12 @@ public class DetectDictionaryEntry {
 	/**
 	 * 
 	 * @param setTokenTree A terminology stored in a tree datastructure. See {@link SetTokenTree}
-	 * @param tokenizer to normalize and tokenize terms in the sentence
+	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
-	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizer, HashSet<ISynonym> synonyms) {
+	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizerNormalizer, HashSet<ISynonym> synonyms) {
 		this.setTokenTree = setTokenTree;
-		this.tokenizerNormalizer = tokenizer ;
+		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
 	}
 	
@@ -61,7 +61,7 @@ public class DetectDictionaryEntry {
 	 * @param sentence The sentence to analyze
 	 * @throws UnfoundTokenInSentence The offsets of the token can't be found
 	 */
-	public DetectOutput detectCandidateTerm(String sentence) throws UnfoundTokenInSentence {
+	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
 		TreeLocation treeLocation = new TreeLocation(this.setTokenTree);
 
@@ -112,7 +112,7 @@ public class DetectDictionaryEntry {
 	 * @param TNoutput tnoutput: needed for private function addCandidateTerm
 	 * @throws UnfoundTokenInSentence
 	 */
-	private void setCurrentCandidate(String token, TreeLocation treeLocation, TNoutput tnoutput) throws UnfoundTokenInSentence {
+	private void setCurrentCandidate(String token, TreeLocation treeLocation, TNoutput tnoutput) {
 		// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
 		if (!treeLocation.getMonitorCandidates().isCurrentCandidate()) {
 			logger.debug("\t not a currentCandidate, go to next token");
@@ -143,7 +143,7 @@ public class DetectDictionaryEntry {
 	 * @param treeLocation currentTreeLocation
 	 * @throws UnfoundTokenInSentence 
 	 */
-	private void addCandidateTerm(TreeLocation treeLocation, TNoutput tnoutput) throws UnfoundTokenInSentence {
+	private void addCandidateTerm(TreeLocation treeLocation, TNoutput tnoutput) {
 		// current position 
 		// last token can be a stopword. We need to remove it : 
 
