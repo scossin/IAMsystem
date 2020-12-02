@@ -150,6 +150,6 @@ public class Normalizer implements INormalizer {
 	
 	@Override
 	public String getNormalizedSentence(String sentence) {
-		return (this.getNormalizedSentence(sentence));
+		return (this.normalizedSentence(sentence));
 	}
 }
