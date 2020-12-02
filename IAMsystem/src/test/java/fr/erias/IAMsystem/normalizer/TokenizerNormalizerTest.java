@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import org.junit.Test;
+
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 

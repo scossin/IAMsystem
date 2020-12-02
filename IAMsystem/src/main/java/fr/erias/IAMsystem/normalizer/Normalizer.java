@@ -3,6 +3,9 @@ package fr.erias.IAMsystem.normalizer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.stopwords.IStopwords;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
+
 /**
  * Class to normalize terms and sentences
  * @author Cossin Sebastien

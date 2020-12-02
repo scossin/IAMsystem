@@ -7,9 +7,9 @@ import fr.erias.IAMsystem.exceptions.InvalidSentenceLength;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
-import fr.erias.IAMsystem.normalizer.IStopwords;
 import fr.erias.IAMsystem.normalizer.Normalizer;
-import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.stopwords.IStopwords;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 

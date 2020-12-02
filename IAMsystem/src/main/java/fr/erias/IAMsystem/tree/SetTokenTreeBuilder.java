@@ -1,6 +1,6 @@
 package fr.erias.IAMsystem.tree;
 
-import fr.erias.IAMsystem.normalizer.IStopwords;
+import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;

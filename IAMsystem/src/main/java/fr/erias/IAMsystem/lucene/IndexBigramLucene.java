@@ -16,7 +16,8 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fr.erias.IAMsystem.normalizer.IStopwords;
+
+import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;

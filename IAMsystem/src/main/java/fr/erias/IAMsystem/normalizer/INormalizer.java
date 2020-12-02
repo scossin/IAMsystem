@@ -1,5 +1,7 @@
 package fr.erias.IAMsystem.normalizer;
 
+import fr.erias.IAMsystem.stopwords.IStopwords;
+
 public interface INormalizer {
 	
 	/**

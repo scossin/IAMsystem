@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.normalizer;
+package fr.erias.IAMsystem.stopwords;
 
 import java.util.Arrays;
 

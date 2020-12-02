@@ -8,7 +8,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Synonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;

@@ -12,8 +12,8 @@ import java.util.HashSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.normalizer.INormalizer;
-import fr.erias.IAMsystem.normalizer.IStopwords;
-import fr.erias.IAMsystem.normalizer.StopwordsImpl;
+import fr.erias.IAMsystem.stopwords.IStopwords;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
 /**
  * This class represents a terminology (a set of terms)
