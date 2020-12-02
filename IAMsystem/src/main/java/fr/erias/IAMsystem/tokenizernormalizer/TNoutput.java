@@ -1,8 +1,12 @@
 package fr.erias.IAMsystem.tokenizernormalizer;
 
-import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-
 public class TNoutput {
+	
+	/**
+	 * Return 200 if no error in the tokenizer/normalizer process
+	 */
+	private int status = 200;
+	
 	/**
 	 * Original term or sentence
 	 */
@@ -64,18 +68,59 @@ public class TNoutput {
 	}
 	
 	/**
-	 * 
+	 * Get the array of tokens containing unormalized words
 	 * @return Array of tokens of the original sentence
 	 */
 	public String[] getTokensArrayOriginal() {
 		return tokensArrayOriginal;
 	}
 
+	/**
+	 * Get the array of tokens containing normalized words
+	 * @return
+	 */
 	public String[] getTokens() {
 		return tokensArray;
 	}
 
+	/**
+	 * Get the start and end of each token in the sentence
+	 * @return An array (length number of tokens) of array (TokenStartPosition in sentence and TokenEndPosition in sentence)
+	 */
 	public int[][] getTokenStartEndInSentence() {
 		return(tokenStartEndInSentence);
+	}
+	
+	
+	/**
+	 * Return 200 if no error in the tokenizer/normalizer process
+	 * @return
+	 */
+	public int getStatus() {
+		return(this.status);
+	}
+	
+	
+	/**
+	 * Set the status value (to indicate an error occured for example)
+	 * @param status
+	 */
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	
+	/**
+	 * 
+	 * @return a TNoutput object containing an error message
+	 */
+	public static TNoutput getErrorTNoutput() {
+		String normalizedSentence = "an error occured";
+		String originalSentence = normalizedSentence;
+		String[] tokens = {"an","error","occured"};
+		String[] tokensOriginal = tokens;
+		int [][] tokensStartEnd = {{0,1},{2,6},{7,13}};
+		TNoutput tnoutpout = new TNoutput(originalSentence,normalizedSentence,tokens,tokensOriginal,tokensStartEnd);
+		tnoutpout.setStatus(500);
+		return(tnoutpout);
 	}
 }

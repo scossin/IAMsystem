@@ -53,14 +53,17 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		try {
 			this.checkUnchangedLength(originalSentence, normalizedSentence);
 		} catch (InvalidSentenceLength e) {
-			logger.info("Something went wrong during normalization");
-			logger.info("sentence of " + sentence.length() + " : \n " + sentence);
-			String sentenceWithoutAccents = INormalizer.flattenToAscii(sentence);
-			logger.info("sentence without accents :" + sentenceWithoutAccents.length() + " : \n " + sentenceWithoutAccents);
-			String sentenceWithoutPuncutations = INormalizer.removeSomePunctuation(sentenceWithoutAccents);
-			logger.info("sentence without punctuation :" + sentenceWithoutPuncutations.length() + " : \n " + sentenceWithoutPuncutations);
+			logger.error("Something went wrong during normalization");
+			logger.error("\t original sentence:" + originalSentence);
+			logger.error("\t\toriginal sentence length: " + sentence.length());
+			logger.error("\t normalizedSentence:" + normalizedSentence);
+			logger.error("\t\tnormalizedSentence length: " + normalizedSentence.length());
+			logger.error("sentence length: " + sentence.length() + " : \n " + sentence);
 			MyExceptions.logException(logger, e);
 			e.printStackTrace();
+			
+			// we recover from this error by assigning the normalized form to the original sentence:
+			originalSentence = normalizedSentence;
 		}
 		
 		// tokenize and setTokensStartandEnd
@@ -68,19 +71,28 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		int[][] tokenStartEndInSentence = null;
 		try {
 			tokenStartEndInSentence = this.getTokensStartEndInSentence(
-					originalSentence,
 					normalizedSentence, 
 					tokensArray
 					);
 		} catch (UnfoundTokenInSentence e) {
-			logger.info("Something went wrong during detecting start and end of each token");
+			logger.error("Something went wrong during detecting start and end of each token");
+			MyExceptions.logException(logger, e);
 			e.printStackTrace();
+			// impossible to recover from this error - send an error object
+			return(TNoutput.getErrorTNoutput());
 		}
 		String[] tokensArrayOriginal = this.getTokensArrayOriginal(tokensArray, originalSentence, tokenStartEndInSentence);
 		TNoutput tnoutput = new TNoutput(originalSentence, normalizedSentence, tokensArray, tokensArrayOriginal, tokenStartEndInSentence);
 		return(tnoutput);
 	}
 	
+	/**
+	 * 
+	 * @param tokensArray The array of tokens containing normalized words
+	 * @param originalSentence The unormalized sentence
+	 * @param tokenStartEndInSentence the start and end of each token in the sentence
+	 * @return the array of tokens containing unormalized words
+	 */
 	private String[] getTokensArrayOriginal(String[] tokensArray, String originalSentence, int[][] tokenStartEndInSentence) {
 		String [] tokensArrayOriginal = new String[tokensArray.length];
 		for (int i = 0; i<tokenStartEndInSentence.length;i++) {
@@ -146,16 +158,13 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 
 	/**
 	 * Calculate the start and end of each token in the sentence
+	 * @param normalizedSentence the normalized sentence by the {@link INormalizer}
+	 * @param tokensArray normalize array of tokens from {@link ITokenizer}
+	 * @return An array (length number of tokens) of array (TokenStartPosition in sentence and TokenEndPosition in sentence)
 	 * @throws UnfoundTokenInSentence If start or end of a token can't be found in the sentence
 	 */
-	private int[][] getTokensStartEndInSentence(
-			String originalSentence,
-			String normalizedSentence,
-			String[] tokensArray
-			) throws UnfoundTokenInSentence {
-		//this.tokensArrayOriginal = new String[tokensArray.length];
+	private int[][] getTokensStartEndInSentence(String normalizedSentence, String[] tokensArray) throws UnfoundTokenInSentence {
 		int[][] tokenStartEndInSentence = new int[tokensArray.length][2];
-
 		int sentenceLength = normalizedSentence.length();
 		int sentencePosition = 0;
 		int tokenStart = 0 ;
@@ -194,10 +203,6 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 			logger.debug("\t token found at positions " +  Integer.toString(tokenStart) + " - " + Integer.toString(tokenEnd)); 
 			int[] OneTokenStartEnd = {tokenStart,tokenEnd};
 			tokenStartEndInSentence[i] = OneTokenStartEnd;
-
-			// Token Original Form : 
-			//tokensArrayOriginal[i] = originalSentence.substring(tokenStart, tokenEnd + 1); // + 1 because method stop at indexEnd - 1
-			//logger.debug("\t token original : " + tokensArrayOriginal[i]);
 		}
 		return(tokenStartEndInSentence);
 	}
