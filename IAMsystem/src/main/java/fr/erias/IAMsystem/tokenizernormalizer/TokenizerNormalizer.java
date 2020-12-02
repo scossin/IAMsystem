@@ -25,7 +25,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	/**
 	 * A class to normalize a term
 	 */
-	private INormalizer normalizerTerm ;
+	private INormalizer normalizer ;
 	
 	/**
 	 * A class to tokenize
@@ -37,10 +37,10 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	
 	/**
 	 * Constructor
-	 * @param normalizerTerm A normalizer instance to normalize terms or sentences
+	 * @param normalizer A normalizer instance to normalize terms or sentences
 	 */
-	public TokenizerNormalizer(INormalizer normalizerTerm, ITokenizer tokenizer) {
-		this.normalizerTerm = normalizerTerm;
+	public TokenizerNormalizer(INormalizer normalizer, ITokenizer tokenizer) {
+		this.normalizer = normalizer;
 		this.tokenizer = tokenizer;
 	}
 	
@@ -74,7 +74,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	 */
 	public TNoutput tokenizeNormalize(String sentence) {
 		String originalSentence = sentence;
-		String normalizedSentence = this.normalizerTerm.getNormalizedSentence(sentence);
+		String normalizedSentence = this.normalizer.getNormalizedSentence(sentence);
 		// check it doesn't change the sentence length
 		try {
 			this.checkUnchangedLength(originalSentence, normalizedSentence);
@@ -112,6 +112,18 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		return(tnoutput);
 	}
 	
+	/********************************* Tokenizers function ***********************************/
+
+	/**
+	 * Same as tokenize function without calculating start and end offset for each token
+	 * @param sentence a String to tokenize
+	 */
+	public String[] tokenizeWithoutEndStart(String sentence) {
+		String normalizedSentence = normalizer.getNormalizedSentence(sentence);
+		String[] tokensArray = this.tokenizer.tokenize(normalizedSentence);
+		return(tokensArray);
+	}
+	
 	/**
 	 * 
 	 * @param tokensArray The array of tokens containing normalized words
@@ -144,34 +156,32 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		return;
 	}
 
-	/********************************* Tokenizers function ***********************************/
 
-	/**
-	 * Same as tokenize function without calculating start and end offset for each token
-	 * @param sentence a String to tokenize
-	 */
-	public String[] tokenizeWithoutEndStart(String sentence) {
-		String normalizedSentence = normalizerTerm.getNormalizedSentence(sentence);
-		String[] tokensArray = this.tokenizer.tokenize(normalizedSentence);
-		return(tokensArray);
-	}
-
-	/************************************* Setters ****************************************/
+	/************************************* Setters / Getters ****************************************/
 
 	/**
 	 * Change the normalizer
-	 * @param normalizerTerm {@link Normalizer } set a new normalizerTerm instance
+	 * @param normalizer {@link INormalizer } set a new normalizerTerm instance
 	 */
-	public void setNormalizer(Normalizer normalizerTerm) {
-		this.normalizerTerm = normalizerTerm;
+	public void setNormalizer(INormalizer normalizer) {
+		this.normalizer = normalizer;
 	}
 
+
+	/**
+	 * Change the tokenizer
+	 * @param tokenizer {@link ITokenizer } set a new normalizerTerm instance
+	 */
+	public void setTokenizer(ITokenizer tokenizer) {
+		this.tokenizer = tokenizer;
+	}
+	
 	/**
 	 * Get the normalizer
 	 * @return {@link INormalizer}
 	 */
 	public INormalizer getNormalizer() {
-		return(normalizerTerm);
+		return(normalizer);
 	}
 	
 	/**

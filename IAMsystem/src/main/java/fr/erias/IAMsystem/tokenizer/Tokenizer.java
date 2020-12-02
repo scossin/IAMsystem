@@ -41,7 +41,7 @@ public class Tokenizer implements ITokenizer {
 	}
 	
 	/**
-	 * Change the tokenizer pattern
+	 * Change the tokenizer pattern - default "[0-9]+|[a-z]+";
 	 * @param pattern A regular expression to tokenize a sentence
 	 */
 	public void setPattern(String pattern) {
