@@ -12,7 +12,7 @@ import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.synonym.Synonym;
+import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -43,7 +43,7 @@ public class BratOutputTest {
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 
 		// Abbreviations : 
-		Synonym abbreviations = new Synonym() {
+		ISynonym abbreviations = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -58,7 +58,7 @@ public class BratOutputTest {
 		// Levenshtein distance : 
 		
 		// simulating a levenshtein distance : 
-		Synonym levenshtein = new Synonym() {
+		ISynonym levenshtein = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -71,7 +71,7 @@ public class BratOutputTest {
 		};
 
 		// find synonyms with abbreviations and typos : 
-		HashSet<Synonym> synonyms = new HashSet<Synonym>();
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);
 		synonyms.add(levenshtein);
 

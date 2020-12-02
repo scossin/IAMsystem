@@ -10,7 +10,7 @@ import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
-import fr.erias.IAMsystem.synonym.Synonym;
+import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -69,7 +69,7 @@ public class DetectionTest {
 
 		// Levenshtein distance : 
 		// simulating a levenshtein distance : 
-		Synonym levenshtein = new Synonym() {
+		ISynonym levenshtein = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -82,7 +82,7 @@ public class DetectionTest {
 		};
 
 		// find synonyms with abbreviations and typos : 
-		HashSet<Synonym> synonyms = new HashSet<Synonym>();
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);
 		synonyms.add(levenshtein);
 

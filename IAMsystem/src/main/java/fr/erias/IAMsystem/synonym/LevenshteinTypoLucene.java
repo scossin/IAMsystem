@@ -22,7 +22,7 @@ import fr.erias.IAMsystem.lucene.SearchIndex;
  * @author Cossin Sebastien
  *
  */
-public class LevenshteinTypoLucene implements Synonym {
+public class LevenshteinTypoLucene implements ISynonym {
 	
 	final static Logger logger = LoggerFactory.getLogger(LevenshteinTypoLucene.class);
 	

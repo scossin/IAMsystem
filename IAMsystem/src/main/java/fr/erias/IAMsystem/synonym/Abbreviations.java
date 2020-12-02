@@ -11,7 +11,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
  * @author Cossin Sebastien
  *
  */
-public class Abbreviations implements Synonym {
+public class Abbreviations implements ISynonym {
 	
 	private HashMap<String, HashSet<String[]>> abbreviations;
 	

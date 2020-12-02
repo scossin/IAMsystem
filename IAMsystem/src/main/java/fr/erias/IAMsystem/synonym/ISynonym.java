@@ -9,7 +9,7 @@ import java.util.HashSet;
  * @author Cossin Sebastien
  *
  */
-public interface Synonym {
+public interface ISynonym {
 	
 	/**
 	 * Search synonyms like abbreviations and typos

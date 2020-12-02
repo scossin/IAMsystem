@@ -2,9 +2,17 @@ package fr.erias.IAMsystem.detect;
 
 import java.util.TreeSet;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 
+/**
+ * The output class of {@link DetectDictionaryEntry}
+ * @author Cossin Sebastien
+ *
+ */
 public class DetectOutput {
 	
 	/**
@@ -39,4 +47,18 @@ public class DetectOutput {
 		return(this.tnoutput);
 	}
 	
+	/**
+	 * A JSON representation of the detection
+	 * @return
+	 */
+	public JSONObject getJSONObject() {
+		JSONObject output = new JSONObject();
+		output.put("tnoutut", tnoutput.getJSONobject());
+		JSONArray jsonArray = new JSONArray();
+		for (CTcode ct : getCTcodes()) {
+			jsonArray.put(ct.getJSONobject());
+		}
+		output.put("ct", jsonArray);
+		return(output);
+	}
 }

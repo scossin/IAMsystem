@@ -9,7 +9,7 @@ import org.junit.Test;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
-import fr.erias.IAMsystem.synonym.Synonym;
+import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -43,7 +43,7 @@ public class DetectionBackwardTest {
 
 	@Test
 	public void DetectionSaignementTest() throws IOException, UnfoundTokenInSentence, ParseException{
-		Synonym synonym = new Synonym() {
+		ISynonym synonym = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -54,7 +54,7 @@ public class DetectionBackwardTest {
 				return synonym;
 			}
 		};
-		HashSet<Synonym> synonyms = new HashSet<Synonym>();
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
@@ -73,7 +73,7 @@ public class DetectionBackwardTest {
 	
 	@Test
 	public void DetectionSaignementMenopauseTest() throws IOException, UnfoundTokenInSentence, ParseException{
-		Synonym synonym = new Synonym() {
+		ISynonym synonym = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -84,7 +84,7 @@ public class DetectionBackwardTest {
 				return synonym;
 			}
 		};
-		HashSet<Synonym> synonyms = new HashSet<Synonym>();
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
@@ -103,7 +103,7 @@ public class DetectionBackwardTest {
 	
 	@Test
 	public void DetectionSaignementMenopauseStopwordsTest() throws IOException, UnfoundTokenInSentence, ParseException{
-		Synonym synonym = new Synonym() {
+		ISynonym synonym = new ISynonym() {
 			@Override
 			public HashSet<String[]> getSynonyms(String token) {
 				HashSet<String[]> synonym = new HashSet<String[]>();
@@ -114,7 +114,7 @@ public class DetectionBackwardTest {
 				return synonym;
 			}
 		};
-		HashSet<Synonym> synonyms = new HashSet<Synonym>();
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		StopwordsImpl stopwords = new StopwordsImpl();
 		stopwords.addStopwords("de");

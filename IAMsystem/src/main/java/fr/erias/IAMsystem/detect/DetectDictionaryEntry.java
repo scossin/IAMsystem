@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
-import fr.erias.IAMsystem.synonym.Synonym;
+import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -40,15 +40,15 @@ public class DetectDictionaryEntry {
 	/**
 	 * Set of synonyms: abbreviations, typos...
 	 */
-	private final HashSet<Synonym> synonyms ;
+	private final HashSet<ISynonym> synonyms ;
 
 	/**
 	 * 
 	 * @param setTokenTree A terminology stored in a tree datastructure. See {@link SetTokenTree}
 	 * @param tokenizer to normalize and tokenize terms in the sentence
-	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link Synonym}
+	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
-	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizer, HashSet<Synonym> synonyms) {
+	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizer, HashSet<ISynonym> synonyms) {
 		this.setTokenTree = setTokenTree;
 		this.tokenizerNormalizer = tokenizer ;
 		this.synonyms = synonyms;
@@ -198,9 +198,9 @@ public class DetectDictionaryEntry {
 	
 	/**
 	 * Set of synonyms: abbreviations, typos...
-	 * @return a set of {@link Synonym} that will search an alternative for each token
+	 * @return a set of {@link ISynonym} that will search an alternative for each token
 	 */
-	public HashSet<Synonym> getSynonyms (){
+	public HashSet<ISynonym> getSynonyms (){
 		return(this.synonyms);
 	}
 }
@@ -254,7 +254,7 @@ class TreeLocation {
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
 	 */
-	public void setCurrentSynonyms(String token, HashSet<Synonym> synonyms) {
+	public void setCurrentSynonyms(String token, HashSet<ISynonym> synonyms) {
 		// find synonyms (typos and abbreviations) :
 		currentSynonyms = new HashSet<String[]>(); // reinitializing synonyms
 
@@ -262,7 +262,7 @@ class TreeLocation {
 		String[] tokenInArray = {token};
 		currentSynonyms.add(tokenInArray);
 		// find synonyms: 
-		for (Synonym synonym : synonyms) {
+		for (ISynonym synonym : synonyms) {
 			currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
 		}
 
