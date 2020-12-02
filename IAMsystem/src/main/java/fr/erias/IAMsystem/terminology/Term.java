@@ -31,6 +31,7 @@ public class Term {
 	 */
 	public Term (String label, String code) {
 		this.setLabel(label);
+		this.setNormalizedLabel(label); // same by default before normalization
 		this.setCode(code);
 	}
 	
@@ -41,7 +42,7 @@ public class Term {
 	 * @param normalizer a {@link INormalizer} to normalize the label
 	 */
 	public Term(String label, String code, INormalizer normalizer) {
-		new Term(label, code);
+		this(label, code);
 		setNormalizedLabel(normalizer.getNormalizedSentence(label));
 	}
 
