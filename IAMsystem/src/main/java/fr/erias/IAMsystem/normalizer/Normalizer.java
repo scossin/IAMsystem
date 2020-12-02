@@ -17,12 +17,25 @@ public class Normalizer implements INormalizer {
 	 */
 	private IStopwords stopwords ;
 	
+	
+	/**
+	 * Remove every character except these ones:
+	 */
+	private String regexNormalizer = "[^A-Za-z0-9µ]";
+	
 	/**
 	 * Constructor 
 	 * @param stopwords a class containing stopwords
 	 */
 	public Normalizer(IStopwords stopwords) {
 		this.stopwords = stopwords;
+	}
+	
+	/**
+	 * Constructor 
+	 */
+	public Normalizer() {
+		this.stopwords = new StopwordsImpl(); // default stopwords implementation
 	}
 	
 	/********************************************* Getters ***************************************/
@@ -58,8 +71,16 @@ public class Normalizer implements INormalizer {
 	 * @return The sentence with punctuation replace by white space
 	 */
 	public String removeSomePunctuation(String sentence) {
-		String output = sentence.replaceAll("[^A-Za-z0-9µ]", " "); // µ in µg
+		String output = sentence.replaceAll(this.regexNormalizer, " "); // µ in µg
 		return(output);
+	}
+	
+	/**
+	 * Set the regexNormalizer 
+	 * @param regexNormalizer regular expression - remove every character except these ones: 
+	 */
+	public void setRegexNormalizer (String regexNormalizer) {
+		this.regexNormalizer = regexNormalizer;
 	}
 	
 	/**
