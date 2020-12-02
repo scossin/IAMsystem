@@ -4,7 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-public class NormalizerTermTest {
+public class NormalizerTest {
 	
 	@Test
     public void removeAccentTest() {
