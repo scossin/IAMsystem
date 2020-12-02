@@ -22,11 +22,27 @@ public class Abbreviations implements Synonym {
 	
 	/**
 	 * Add abbreviations
-	 * @param tokensArray (ex : 'accident' 'vasculaire' 'cerebral'
+	 * @param tokensArray (ex : 'accident' 'vasculaire' 'cerebral'). See {@link ITokenizerNormalizer} to tokenize
 	 * @param abbreviation (ex : 'avc')
 	 */
 	public void addAbbreviation(String[] tokensArray, String abbreviation) {
 		HashSet<String[]> temp = new HashSet<String[]>();
+		if (!abbreviations.containsKey(abbreviation)) {
+			temp.add(tokensArray);
+			abbreviations.put(abbreviation, temp);
+			return;
+		}
+		abbreviations.get(abbreviation).add(tokensArray);
+	}
+	
+	/**
+	 * Add abbreviations
+	 * @param token (ex : 'insuf')
+	 * @param abbreviation (ex : 'insuffisance')
+	 */
+	public void addAbbreviation(String token, String abbreviation) {
+		HashSet<String[]> temp = new HashSet<String[]>();
+		String[] tokensArray = {token};
 		if (!abbreviations.containsKey(abbreviation)) {
 			temp.add(tokensArray);
 			abbreviations.put(abbreviation, temp);
