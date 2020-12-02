@@ -3,6 +3,8 @@ package fr.erias.IAMsystem.synonym;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+
 /**
  * Manage and store abbreviations
  * 
