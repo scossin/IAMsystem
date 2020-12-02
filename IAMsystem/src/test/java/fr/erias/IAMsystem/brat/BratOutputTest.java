@@ -10,6 +10,7 @@ import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
+import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.Synonym;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
@@ -83,10 +84,10 @@ public class BratOutputTest {
 		
 		String sentence = "Insuf.            cardiaqu aigue et AVC hémorragiQUE";
 		
-		detectDictionaryEntry.detectCandidateTerm(sentence);
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		// output : 
 		TreeSet<CTbrat> setCTbrat = new TreeSet<CTbrat>();
-		for (CT candidateTerm : detectDictionaryEntry.getCTcode()) {
+		for (CT candidateTerm : detectOutput.getCTcodes()) {
 			setCTbrat.add(new CTbrat(candidateTerm, "disease"));
 		}
 		

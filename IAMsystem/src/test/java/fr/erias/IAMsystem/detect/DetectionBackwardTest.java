@@ -60,10 +60,11 @@ public class DetectionBackwardTest {
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
-		detectDictionaryEntry.detectCandidateTerm("saignements abondants");
+		String sentence = "saignements abondants";
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
-		CTcode CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		assertEquals(detectOutput.getCTcodes().size(), 1);
+		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
 		assertEquals(CTdetected.getCandidateTerm(), "saignements");
 		assertEquals(CTdetected.getCandidateTermString(),"saignements");
 		assertEquals(CTdetected.getCode(), "X1"); // the abces code
@@ -89,11 +90,12 @@ public class DetectionBackwardTest {
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
-		detectDictionaryEntry.detectCandidateTerm("saignements abondants de la       ménopause suite à");
-		CTcode CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		String sentence = "saignements abondants de la       ménopause suite à";
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
+		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
 		System.out.println(CTdetected.getJSONobject().toString());
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
+		assertEquals(detectOutput.getCTcodes().size(), 1);
 		assertEquals(CTdetected.getCandidateTerm(), "saignements abondants de la menopause");
 		assertEquals(CTdetected.getCandidateTermString(),"saignements abondants de la       ménopause");
 		assertEquals(CTdetected.getCode(), "X2"); // the abces code
@@ -123,11 +125,12 @@ public class DetectionBackwardTest {
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
-		detectDictionaryEntry.detectCandidateTerm("saignements abondants de la       ménopause suite à un traitement");
-		CTcode CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		String sentence = "saignements abondants de la       ménopause suite à un traitement";
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
+		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
 		System.out.println(CTdetected.getJSONobject().toString());
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
+		assertEquals(detectOutput.getCTcodes().size(), 1);
 		assertEquals(CTdetected.getCandidateTerm(), "saignements abondants de la menopause");
 		assertEquals(CTdetected.getCandidateTermString(),"saignements abondants de la       ménopause");
 		assertEquals(CTdetected.getCode(), "X2"); // the abces code

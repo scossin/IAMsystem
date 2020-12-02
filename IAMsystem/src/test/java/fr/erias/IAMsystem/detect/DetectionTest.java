@@ -94,35 +94,35 @@ public class DetectionTest {
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "Insuf.            cardiaqu aigue";
-		detectDictionaryEntry.detectCandidateTerm(sentence);
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
-		CTcode CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		assertEquals(detectOutput.getCTcodes().size(), 1);
+		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
 		
 		assertEquals(CTdetected.getCandidateTermString(), sentence);
 		assertEquals(CTdetected.getCandidateTerm(), "insuf cardiaqu aigue");
 		
 		// getPreviousCode test : 
 		sentence = "Abcès de la chambre anterieure"; // must find abces only 
-		detectDictionaryEntry.detectCandidateTerm(sentence);
+		detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
-		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		assertEquals(detectOutput.getCTcodes().size(), 1);
+		CTdetected = detectOutput.getCTcodes().iterator().next();
 		assertEquals(CTdetected.getCandidateTerm(), "abces");
 		assertEquals(CTdetected.getCode(), "X1"); // the abces code
 		
 		// detection with stopwords: 
 		sentence = "Abcès chambre implantable"; // must find abces de la chambre implantable
-		detectDictionaryEntry.detectCandidateTerm(sentence);
+		detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		// only one match : 
-		assertEquals(detectDictionaryEntry.getCTcode().size(), 1);
-		CTdetected = detectDictionaryEntry.getCTcode().iterator().next();
+		assertEquals(detectOutput.getCTcodes().size(), 1);
+		CTdetected = detectOutput.getCTcodes().iterator().next();
 		assertEquals(CTdetected.getCandidateTermString(), sentence);
 		assertEquals(CTdetected.getCode(), "X10"); // the "abces de la chambre implantable" code
 		
 		// detection with stopwords: 
-		TNoutput tnoutput = detectDictionaryEntry.getTNoutput();
+		TNoutput tnoutput = detectOutput.getTNoutput();
 		int tokenStart = CTdetected.getTokenStartPosition();
 		int tokenEnd = CTdetected.getTokenEndPosition();
 		String[] tokens = tnoutput.getTokens();
