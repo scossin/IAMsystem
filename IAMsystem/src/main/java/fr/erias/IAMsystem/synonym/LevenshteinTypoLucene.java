@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.detect;
+package fr.erias.IAMsystem.synonym;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import org.apache.lucene.search.ScoreDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.detect.HashSetStringArray;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.lucene.SearchIndex;
 

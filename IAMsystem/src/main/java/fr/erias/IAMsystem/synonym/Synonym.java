@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.detect;
+package fr.erias.IAMsystem.synonym;
 
 import java.util.HashSet;
 
