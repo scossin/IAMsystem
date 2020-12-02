@@ -79,7 +79,7 @@ public class Normalizer implements INormalizer {
 	}
 	
 	/**
-	 * Set the regexNormalizer 
+	 * Set the regexNormalizer (default: "[^A-Za-z0-9µ]";)
 	 * @param regexNormalizer regular expression - remove every character except these ones: 
 	 */
 	public void setRegexNormalizer (String regexNormalizer) {

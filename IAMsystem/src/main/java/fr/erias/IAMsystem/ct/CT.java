@@ -7,6 +7,8 @@ import java.util.TreeSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
+
 /**
  * This class represents a candidate term : a substring in a sentence with a start and endposition
  * @author Cossin Sebastien (cossin.sebastien@gmail.com)
@@ -78,26 +80,7 @@ public class CT implements Comparable<CT> {
 	 * @return The candidate term after tokenization (ex : ulceres gastriques)
 	 */
 	public String getCandidateTerm(){
-		return(arrayToString(candidateTokensArray, " ".charAt(0)));
-	}
-	
-	/**
-	 * Transform an array of String to a String
-	 * 
-	 * @param anArray A string array
-	 * @param sep A separator
-	 * @return Concatenated String
-	 */
-	public static String arrayToString(String[] anArray, char sep){
-		StringBuilder strBuilder = new StringBuilder();
-		for (int i = 0; i < anArray.length; i++) {
-		  if (i != 0) {
-			  strBuilder.append(sep);
-		  }
-		   strBuilder.append(anArray[i]);
-		}
-		String newString = strBuilder.toString();
-		return(newString);
+		return(ITokenizer.arrayToString(candidateTokensArray, " ".charAt(0)));
 	}
 	
 	/**

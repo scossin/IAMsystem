@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.TreeSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fr.erias.IAMsystem.ct.CT;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -169,7 +171,7 @@ public class DetectDictionaryEntry {
 		int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 		String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
 		String code =  oneTokenTree.getCode();
-		String label = CT.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
+		String label = ITokenizer.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
 		logger.debug("code is : " + code);
 		
 		logger.debug("CandidateTermString : " + candidateTermString);
