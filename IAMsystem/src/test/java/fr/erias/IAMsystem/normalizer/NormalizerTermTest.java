@@ -4,31 +4,38 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import fr.erias.IAMsystem.normalizer.INormalizer;
-
 public class NormalizerTermTest {
 	
 	@Test
     public void removeAccentTest() {
+		Normalizer normalizer = new Normalizer();
 		String label = "aé;èïo-";
-		String normalizedLabel = INormalizer.flattenToAscii(label);
+		String normalizedLabel = normalizer.flattenToAscii(label);
 		String expectedNormalizedLabel = "ae;eio-";
 		assertEquals(normalizedLabel, expectedNormalizedLabel);
     }
 	
 	@Test
     public void removePunctuationTest() {
+		Normalizer normalizer = new Normalizer();
 		String label = "a;-?test.";
-		String normalizedLabel = INormalizer.removeSomePunctuation(label);
+		String normalizedLabel = normalizer.removeSomePunctuation(label);
 		String expectedNormalizedLabel = "a   test ";
 		assertEquals(normalizedLabel, expectedNormalizedLabel);
     }
 	
 	@Test
     public void normalizedTest() {
-		String label = "aé;èïo-";
-		String normalizedLabel = INormalizer.normalizedSentence(label);
-		String expectedNormalizedLabel = "ae eio ";
+		Normalizer normalizer = new Normalizer();
+		String label = "Covid +";
+		String normalizedLabel = normalizer.normalizedSentence(label);
+		String expectedNormalizedLabel = "covid  ";
+		assertEquals(normalizedLabel, expectedNormalizedLabel);
+		
+		// change regex normalizer expression
+		normalizer.setRegexNormalizer("[^A-Za-z0-9µ+]");
+		normalizedLabel = normalizer.normalizedSentence(label);
+		expectedNormalizedLabel = "covid +";
 		assertEquals(normalizedLabel, expectedNormalizedLabel);
     }
 }
