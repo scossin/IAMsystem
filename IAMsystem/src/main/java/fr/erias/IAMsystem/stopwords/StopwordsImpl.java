@@ -49,7 +49,8 @@ public class StopwordsImpl implements IStopwords {
 	
 	/**
 	 * Add stopwords from a file
-	 * @param stopwordsFile A file containing a list of stopword ; one by line
+	 * @param in stopwordsFile A file containing a list of stopword ; one by line
+	 * @param normalizer a {@link INormalizer} to normalize stopword
 	 * @throws IOException if the file can't be found
 	 */
 	public void setStopWords (InputStream in, INormalizer normalizer) throws IOException {
