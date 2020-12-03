@@ -18,7 +18,7 @@ import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
 
 /**
- * In this example we:
+ * In this example we don't use TermDetector:
  * 1) show how the normalizer/tokenizer works and how to personalized them
  * 2) create manually a terminology by adding terms
  * 3) manually create abbreviations
@@ -51,7 +51,7 @@ public class Example1 {
 		Tokenizer tokenizer = new Tokenizer();
 		String normalizeSentence = "patient covid +";
 		System.out.println(normalizeSentence + "     ------ default tokenizer ----->      " + ITokenizer.arrayToString(tokenizer.tokenize(normalizeSentence), ";".charAt(0)));
-		// change tokenizer expression:
+		// change tokenizer expression: default "[0-9]+|[a-z]+";
 		tokenizer.setPattern("[0-9]+|[a-z]+|\\+");
 		System.out.println(normalizeSentence + "     ------ personnalized tokenizer ----->      " + ITokenizer.arrayToString(tokenizer.tokenize(normalizeSentence), ";".charAt(0)));
 		
