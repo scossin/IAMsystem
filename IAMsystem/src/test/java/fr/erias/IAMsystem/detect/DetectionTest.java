@@ -65,7 +65,7 @@ public class DetectionTest {
 
 		// Abbreviations : 
 		Abbreviations abbreviations = new Abbreviations();
-		abbreviations.addAbbreviation("insuffisance", "insuf");
+		abbreviations.addAbbreviation("insuffisance", "insuf",tokenizerNormalizer);
 
 		// Levenshtein distance : 
 		// simulating a levenshtein distance : 

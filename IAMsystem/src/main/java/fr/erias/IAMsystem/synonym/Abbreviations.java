@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 /**
  * Manage and store abbreviations
@@ -39,18 +40,13 @@ public class Abbreviations implements ISynonym {
 	
 	/**
 	 * Add abbreviations
-	 * @param token (ex : 'insuf')
+	 * @param term (ex : 'insuf')
 	 * @param abbreviation (ex : 'insuffisance')
+	 * @param tokenizerNormalizer a {@link TokenizerNormalizer}
 	 */
-	public void addAbbreviation(String token, String abbreviation) {
-		HashSet<String[]> temp = new HashSet<String[]>();
-		String[] tokensArray = {token};
-		if (!abbreviations.containsKey(abbreviation)) {
-			temp.add(tokensArray);
-			abbreviations.put(abbreviation, temp);
-			return;
-		}
-		abbreviations.get(abbreviation).add(tokensArray);
+	public void addAbbreviation(String term, String abbreviation, TokenizerNormalizer tokenizerNormalizer) {
+		String[] tokensArray = tokenizerNormalizer.tokenizeWithoutEndStart(term);
+		addAbbreviation(tokensArray, abbreviation);
 	}
 	
 	/**
