@@ -5,7 +5,7 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
  * Interface for the TokenizerNormalizer class
- * @author cossins
+ * @author Cossin Sebastien
  *
  */
 public interface ITokenizerNormalizer {
@@ -28,4 +28,17 @@ public interface ITokenizerNormalizer {
 	 * @return a {@link ITokenizer}
 	 */
 	public ITokenizer getTokenizer();
+	
+	/**
+	 * Set the tokenizer 
+	 * @return a {@link ITokenizer}
+	 */
+	public void setTokenizer(ITokenizer tokenizer);
+	
+	/**
+	 * Set the normalizer
+	 * @return a {@link INormalizer}
+	 */
+	public void setNormalizer(INormalizer normalizer);
+	
 }
