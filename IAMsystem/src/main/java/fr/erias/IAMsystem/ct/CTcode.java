@@ -115,4 +115,23 @@ public class CTcode extends CT {
 	public void setTermino(String termino) {
 		this.termino = termino;
 	}
+	
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("\t label in terminology: '" + this.getLabel() + "'");
+		sb.append("\n");
+		sb.append("\t written exactly like this in the sentence: '" + this.getCandidateTermString() + "'");
+		sb.append("\n");
+		sb.append("\t code in terminology: " + this.getCode());
+		sb.append("\n");
+		sb.append("\t starting at position:" + this.getStartPosition());
+		sb.append("\n");
+		sb.append("\t end at position:" + this.getEndPosition());
+		sb.append("\n");
+		sb.append("\t first token number " + this.getTokenStartPosition());
+		sb.append("\n");
+		sb.append("\t last token number " + this.getTokenEndPosition());
+		sb.append("\n");
+		return(sb.toString());
+	}
 }
