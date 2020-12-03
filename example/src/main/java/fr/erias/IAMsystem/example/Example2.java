@@ -34,7 +34,7 @@ import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
  * 4) manually create abbreviations
  * 5) transform the terminology to a tree datastructure
  * 6) manually add a term to the tree
- * 7) show how it works for detection 
+ * 7) show how the detection works and BratOutput 
  * 
  * @author Cossin Sebastien
  *
@@ -42,13 +42,12 @@ import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
 public class Example2 {
 
 	// abbreviations manually added
-	public static Abbreviations getAbbreviations() {
+	public static Abbreviations getAbbreviations(TokenizerNormalizer tokenizerNormalizer) {
 		Abbreviations abbreviations = new Abbreviations();
 		// adding abbreviations :
-		abbreviations.addAbbreviation("acide", "ac");
-		abbreviations.addAbbreviation("kardegic", "kdg");
-		String[] avc = {"accident","vasculaire","cerebral"};
-		abbreviations.addAbbreviation(avc, "avc");
+		abbreviations.addAbbreviation("acide", "ac",tokenizerNormalizer);
+		abbreviations.addAbbreviation("kardegic", "kdg",tokenizerNormalizer);
+		abbreviations.addAbbreviation("accident vasculaire cérébral", "avc",tokenizerNormalizer);
 		return(abbreviations);
 	}
 
@@ -86,9 +85,9 @@ public class Example2 {
 
 		// create Synonyms with abbreviations and Lucene:
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
-		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene();
+		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene(); // open the index
 		synonyms.add(levenshteinTypoLucene);
-		synonyms.add(getAbbreviations());
+		synonyms.add(getAbbreviations(tokenizerNormalizer));
 
 		// transform the terminology to a tree datastructure
 		SetTokenTree tokenTreeSet0 = SetTokenTreeBuilder.loadTokenTree(terminology,tokenizerNormalizer);

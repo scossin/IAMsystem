@@ -20,7 +20,7 @@ import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
 /**
  * In this example we:
  * 1) show how the normalizer/tokenizer works and how to personalized them
- * 2) create manually a terminology by adding term
+ * 2) create manually a terminology by adding terms
  * 3) manually create abbreviations
  * 4) transform the terminology to a tree datastructure
  * 5) show basic detection
@@ -73,7 +73,9 @@ public class Example1 {
 		
 		// optional: add synonyms (abbreviations etc...)
 		Abbreviations abbreviations = new Abbreviations();
-		abbreviations.addAbbreviation("positive","+"); // positive can be replaced by +
+		abbreviations.addAbbreviation("positive","+", tokenizerNormalizer); // positive can be replaced by +
+		// same as abbreviations.addAbbreviation(new String[] {"positive"},"+");
+		
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);
 		
