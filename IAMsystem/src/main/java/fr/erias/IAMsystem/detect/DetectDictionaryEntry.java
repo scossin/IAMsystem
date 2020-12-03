@@ -50,7 +50,7 @@ public class DetectDictionaryEntry {
 	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
-	public DetectDictionaryEntry(SetTokenTree setTokenTree,TokenizerNormalizer tokenizerNormalizer, HashSet<ISynonym> synonyms) {
+	public DetectDictionaryEntry(SetTokenTree setTokenTree, ITokenizerNormalizer tokenizerNormalizer, HashSet<ISynonym> synonyms) {
 		this.setTokenTree = setTokenTree;
 		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
