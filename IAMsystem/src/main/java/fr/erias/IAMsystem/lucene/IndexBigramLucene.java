@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 /**
@@ -48,11 +49,24 @@ public class IndexBigramLucene {
 	public static final String LUCENE_INDEX_FOLDER = "LUCENE_INDEX_FOLDER";
 
 
-	public static void IndexLuceneUniqueTokensBigram(Terminology terminology, TokenizerNormalizer tokenizerNormalizer) throws IOException {
+	/**
+	 * Create a Lucene index to search similar strings with Levenshtein distance
+	 * @param terminology A {@link Terminology} to index
+	 * @param tokenizerNormalizer A {@link ITokenizerNormalizer} to normalize the terms
+	 * @throws IOException if the Lucene index can't be created
+	 */
+	public static void IndexLuceneUniqueTokensBigram(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) throws IOException {
 		IndexLuceneUniqueTokensBigram(terminology, tokenizerNormalizer, new File(LUCENE_INDEX_FOLDER));
 	}
 
-	public static void IndexLuceneUniqueTokensBigram(Terminology terminology, TokenizerNormalizer tokenizerNormalizer, File indexFolder) throws IOException {
+	/**
+	 * Create a Lucene index to search similar strings with Levenshtein distance
+	 * @param terminology A {@link Terminology} to index
+	 * @param tokenizerNormalizer A {@link ITokenizerNormalizer} to normalize the terms
+	 * @param indexFolder Path to create Lucene Index
+	 * @throws IOException
+	 */
+	public static void IndexLuceneUniqueTokensBigram(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer, File indexFolder) throws IOException {
 		HashMap<String,String> uniqueTokensBigram = getUniqueTokenBigram(terminology, tokenizerNormalizer);
 		IndexLuceneUniqueTokensBigram(uniqueTokensBigram, indexFolder);
 	}
@@ -95,11 +109,11 @@ public class IndexBigramLucene {
 	 * @param fileCSV a CSV file
 	 * @param sep the separator of the CSV file (comma, tab...)
 	 * @param colLibNormal the ith column of the CSV file corresponding to the normalize label to index
-	 * @param tokenizerNormalizer {@link TokenizerNormalizer} 
+	 * @param tokenizerNormalizer {@link ITokenizerNormalizer} 
 	 * @return A map between the collapse form and the uncollapse form (ex "meningoencephalite, meningo encephalite")
 	 * @throws IOException Unfound File
 	 */
-	private static HashMap<String,String> getUniqueTokenBigram(Terminology terminology, TokenizerNormalizer tokenizerNormalizer) {
+	private static HashMap<String,String> getUniqueTokenBigram(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
 		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
 		for (Term term : terminology.getTerms()) {
