@@ -17,7 +17,7 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
 /**
  * This class represents a terminology (a set of terms)
- * The terminology is then compressed in a tree data structure with {@SetTokenTree}
+ * The terminology is then compressed in a tree data structure with SetTokenTree
  * 
  * @author Cossin Sebastien
  */
@@ -49,7 +49,8 @@ public class Terminology {
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
-	 * @throws IOException 
+	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @throws IOException inputstream error
 	 */
 	public Terminology(InputStream in, String sep, int colLabel, int colCode, INormalizer normalizer) throws IOException {
 		String line = null;
@@ -70,7 +71,7 @@ public class Terminology {
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
-	 * @throws IOException 
+	 * @throws IOException inputstream error
 	 */
 	public Terminology(InputStream in, String sep, int colLabel, int colCode) throws IOException {
 		this(in, sep, colLabel, colCode, new INormalizer() {
@@ -89,7 +90,7 @@ public class Terminology {
 		
 	/**
 	 * Normalize the terminology 
-	 * @param normalizer
+	 * @param normalizer a {@link INormalizer} to normalize the terminology
 	 */
 	public void normalizeTerminology(INormalizer normalizer) {
 		for (Term term : terms) {
@@ -101,7 +102,7 @@ public class Terminology {
 	
 	/**
 	 * Retrieve all the terms of a terminology
-	 * @return
+	 * @return the set of terms
 	 */
 	public HashSet<Term> getTerms() {
 		return(this.terms);
@@ -111,7 +112,7 @@ public class Terminology {
 	 * write the terminology to a file
 	 * @param outputFile the output CSV file
 	 * @param sep file separator
-	 * @throws IOException
+	 * @throws IOException fail to write to file
 	 */
 	public void writeTerminology2file(File outputFile, String sep) throws IOException {
 		for (Term term : terms) {

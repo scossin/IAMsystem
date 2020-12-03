@@ -63,7 +63,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 	
 	/**
 	 * Constructor with default LUCENE_INDEX_FOLDER filename
-	 * @throws IOException
+	 * @throws IOException can't open the Lucene index
 	 */
 	public LevenshteinTypoLucene() throws IOException {
 		this(new File(IndexBigramLucene.LUCENE_INDEX_FOLDER));
@@ -79,7 +79,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 	
 	/**
 	 * setMaxEdits value in Lucene: number of insertion, deletion of the Levenshtein distance.
-	 * 1 or 2 (maximum)
+	 * @param maxEdits 1 or 2 (maximum)
 	 */
 	
 	public void setMaxEdits(int maxEdits) {

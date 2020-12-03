@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 /**
  * Manage and store abbreviations

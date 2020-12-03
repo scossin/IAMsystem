@@ -80,7 +80,7 @@ public class TNoutput {
 
 	/**
 	 * Get the array of tokens containing normalized words
-	 * @return
+	 * @return array of tokens
 	 */
 	public String[] getTokens() {
 		return tokensArray;
@@ -96,8 +96,8 @@ public class TNoutput {
 	
 	
 	/**
-	 * Return 200 if no error in the tokenizer/normalizer process
-	 * @return
+	 * get Tokenizer Normalizer status
+	 * @return Return 200 if no error in the tokenizer/normalizer process
 	 */
 	public int getStatus() {
 		return(this.status);
@@ -105,8 +105,8 @@ public class TNoutput {
 	
 	
 	/**
-	 * Set the status value (to indicate an error occured for example)
-	 * @param status
+	 * Set the status value (to indicate an error occurred for example)
+	 * @param status value indicating if an error occurred (success = 200)
 	 */
 	public void setStatus(int status) {
 		this.status = status;

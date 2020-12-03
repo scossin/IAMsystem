@@ -64,7 +64,7 @@ public class IndexBigramLucene {
 	 * @param terminology A {@link Terminology} to index
 	 * @param tokenizerNormalizer A {@link ITokenizerNormalizer} to normalize the terms
 	 * @param indexFolder Path to create Lucene Index
-	 * @throws IOException
+	 * @throws IOException if the Lucene index can't be created
 	 */
 	public static void IndexLuceneUniqueTokensBigram(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer, File indexFolder) throws IOException {
 		HashMap<String,String> uniqueTokensBigram = getUniqueTokenBigram(terminology, tokenizerNormalizer);

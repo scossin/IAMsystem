@@ -1,9 +1,10 @@
 package fr.erias.IAMsystem.detect;
 import java.io.IOException;
 import java.util.HashSet;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
+
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -89,14 +90,14 @@ public class TermDetector {
 	
 	/**
 	 * Set stopwords
-	 * @param stopwords
+	 * @param stopwords a stopword instance
 	 */
 	public void setStopwords(IStopwords stopwords) {
 		this.stopwords = stopwords;
 	}
 	/**
-	 * 
-	 * @param word a stopword to add
+	 * add a word
+	 * @param word a stopword 
 	 */
 	public void addStopwords(String word) {
 		this.stopwords.addStopwords(word);
@@ -133,7 +134,6 @@ public class TermDetector {
 	 * Detect candidate terms, return a {@link DetectOutput}
 	 * @param sentence textual content to analyze
 	 * @return A set of CandidateTerm (CT) detected
-	 * @throws UnfoundTokenInSentence 
 	 */
 	public DetectOutput detect(String sentence) {
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
@@ -148,7 +148,7 @@ public class TermDetector {
 	
 	/**
 	 * Add a synonym
-	 * @param synonym
+	 * @param synonym an implementation of a {@link ISynonym} to find alternatives to a token
 	 */
 	public void addSynonym(ISynonym synonym) {
 		this.synonyms.add(synonym);
@@ -156,14 +156,14 @@ public class TermDetector {
 	
 	/**
 	 * Retrieve the {@link ITokenizerNormalizer}
-	 * @return
+	 * @return the {@link ITokenizerNormalizer}
 	 */
 	public ITokenizerNormalizer getTokenizerNormalizer() {
 		return(this.tokenizerNormalizer);
 	}
 	
 	/**
-	 * 
+	 * retrieve the stopwords
 	 * @return the stopwords
 	 */
 	public IStopwords getStopwords() {

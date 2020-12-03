@@ -14,7 +14,6 @@ import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 
@@ -59,7 +58,7 @@ public class DetectDictionaryEntry {
 	/**
 	 * Initialize a new sentence
 	 * @param sentence The sentence to analyze
-	 * @throws UnfoundTokenInSentence The offsets of the token can't be found
+	 * @return an instance of {@link DetectOutput} containing {@link CTcode} and {@link TNoutput}
 	 */
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :

@@ -13,7 +13,7 @@ public class SetTokenTreeBuilder {
 	 * @param terminology a representation of a {@link Terminology}
 	 * @param tokenTreeSet0 a previous {@link SetTokenTree} or an empty one (new SetTokenTree())
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
-	 * @return
+	 * @return a {@link SetTokenTree} 
 	 */
 	public static SetTokenTree loadTokenTree(Terminology terminology, SetTokenTree tokenTreeSet0, ITokenizerNormalizer tokenizerNormalizer) {
 		for (Term term : terminology.getTerms()) {
@@ -27,7 +27,7 @@ public class SetTokenTreeBuilder {
 	 * @param term a {@link Term} to add to the terminology
 	 * @param tokenTreeSet0 a previous {@link SetTokenTree} or an empty one (new SetTokenTree())
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
-	 * @return
+	 * @return a {@link SetTokenTree}
 	 */
 	public static SetTokenTree addTerm(Term term, SetTokenTree tokenTreeSet0, ITokenizerNormalizer tokenizerNormalizer) {
 		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
@@ -50,7 +50,7 @@ public class SetTokenTreeBuilder {
 	 * Create a tree data structure from a terminology 
 	 * @param terminology a representation of a {@link Terminology}
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
-	 * @return
+	 * @return a {@link SetTokenTree}
 	 */
 	public static SetTokenTree loadTokenTree(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
 		SetTokenTree setTokenTree0 = new SetTokenTree();

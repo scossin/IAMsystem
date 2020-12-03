@@ -5,14 +5,15 @@ import fr.erias.IAMsystem.stopwords.IStopwords;
 public interface INormalizer {
 	
 	/**
-	 * @return Normalize a sentence
+	 * Normalize a text/(e.g. a sentence)
+	 * @param sentence a sentence to normalize
+	 * @return a normalized a sentence
 	 */
 	public String getNormalizedSentence(String sentence);
 	
 	/**
-	 * @return the stopwords instance of the normalizerTerm
+	 * Retrieve the stopwords
+	 * @return the stopwords instance of the normalizer
 	 */
 	public IStopwords getStopwords();
-	
-	
 }

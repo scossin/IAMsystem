@@ -28,6 +28,8 @@ public class CTcode extends CT {
 	 * @param endPosition The end position of this candidate term in the sentence
 	 * @param code the candidateTerm comes from a terminology, it must have a code or uri
 	 * @param label the candidateTerm comes from a terminology, it must have a label
+	 * @param tokenStartPosition the ith start position in the token array (after sentence tokenization)
+	 * @param tokenEndPosition the ith end position in the token array (after sentence tokenization)
 	 */
 	public CTcode(String candidateTermString, String[] candidateTokensArray, 
 			int startPosition, int endPosition, String code, String label, 

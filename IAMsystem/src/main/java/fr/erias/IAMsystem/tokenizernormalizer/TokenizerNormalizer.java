@@ -38,6 +38,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	/**
 	 * Constructor
 	 * @param normalizer A normalizer instance to normalize terms or sentences
+	 * @param tokenizer A tokenizer to tokenize terms or sentences
 	 */
 	public TokenizerNormalizer(INormalizer normalizer, ITokenizer tokenizer) {
 		this.normalizer = normalizer;
@@ -117,6 +118,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	/**
 	 * Same as tokenize function without calculating start and end offset for each token
 	 * @param sentence a String to tokenize
+	 * @return an array of tokens
 	 */
 	public String[] tokenizeWithoutEndStart(String sentence) {
 		String normalizedSentence = normalizer.getNormalizedSentence(sentence);

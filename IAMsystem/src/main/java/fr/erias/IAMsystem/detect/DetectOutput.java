@@ -41,7 +41,7 @@ public class DetectOutput {
 	
 	/**
 	 * Retrieve tokenizer normalizer output
-	 * @return
+	 * @return {@link TNoutput} tokenizer/normalizer output
 	 */
 	public TNoutput getTNoutput() {
 		return(this.tnoutput);
@@ -49,7 +49,7 @@ public class DetectOutput {
 	
 	/**
 	 * A JSON representation of the detection
-	 * @return
+	 * @return a JSONobject
 	 */
 	public JSONObject getJSONObject() {
 		JSONObject output = new JSONObject();

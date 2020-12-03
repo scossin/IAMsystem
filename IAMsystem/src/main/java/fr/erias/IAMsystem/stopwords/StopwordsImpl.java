@@ -70,7 +70,7 @@ public class StopwordsImpl implements IStopwords {
 	/**
 	 * Add stopwords from a file without normalization
 	 * @param in stopwordsFile A file containing a list of stopword ; one by line
-	 * @throws IOException
+	 * @throws IOException can't load the stopwords file
 	 */
 	public void setStopWords (InputStream in) throws IOException {
 		setStopWords(in, new INormalizer() {
