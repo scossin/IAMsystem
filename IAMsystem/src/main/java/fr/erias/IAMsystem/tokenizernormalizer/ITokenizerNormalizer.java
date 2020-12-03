@@ -30,14 +30,12 @@ public interface ITokenizerNormalizer {
 	public ITokenizer getTokenizer();
 	
 	/**
-	 * Set the tokenizer 
-	 * @return a {@link ITokenizer}
+	 * Set the tokenizer a {@link ITokenizer}
 	 */
 	public void setTokenizer(ITokenizer tokenizer);
 	
 	/**
-	 * Set the normalizer
-	 * @return a {@link INormalizer}
+	 * Set the normalizer a {@link INormalizer}
 	 */
 	public void setNormalizer(INormalizer normalizer);
 	
