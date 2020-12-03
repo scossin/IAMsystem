@@ -42,10 +42,11 @@ public class Abbreviations implements ISynonym {
 	 * Add abbreviations
 	 * @param term (ex : 'insuf')
 	 * @param abbreviation (ex : 'insuffisance')
-	 * @param tokenizerNormalizer a {@link TokenizerNormalizer}
+	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
 	 */
-	public void addAbbreviation(String term, String abbreviation, TokenizerNormalizer tokenizerNormalizer) {
-		String[] tokensArray = tokenizerNormalizer.tokenizeWithoutEndStart(term);
+	public void addAbbreviation(String term, String abbreviation, ITokenizerNormalizer tokenizerNormalizer) {
+		String normalizedTerm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(term);
+		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizedTerm);
 		addAbbreviation(tokensArray, abbreviation);
 	}
 	
