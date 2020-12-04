@@ -12,6 +12,7 @@ import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
+import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 
 /**
  * A class that tokenizes and normalizes a sentence
@@ -51,7 +52,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	 * @return The tokenizerNormalizer
 	 */
 	public static TokenizerNormalizer getDefaultTokenizerNormalizer(IStopwords stopwords){
-		ITokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		Normalizer normalizerTerm = new Normalizer(stopwords);
 		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
 		return(tokenizerNormalizer);
@@ -62,7 +63,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	 * @return The tokenizerNormalizer
 	 */
 	public static TokenizerNormalizer getDefaultTokenizerNormalizer(){
-		ITokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		Normalizer normalizerTerm = new Normalizer(new StopwordsImpl());
 		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
 		return(tokenizerNormalizer);

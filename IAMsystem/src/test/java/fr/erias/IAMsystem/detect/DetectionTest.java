@@ -11,6 +11,7 @@ import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
@@ -23,7 +24,7 @@ public class DetectionTest {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
 		String term = "avc sylvien droit";
-		Tokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		setTokenTree.addTokenTree(tokenTree);

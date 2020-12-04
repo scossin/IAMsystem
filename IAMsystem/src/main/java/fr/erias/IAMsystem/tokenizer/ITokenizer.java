@@ -27,4 +27,11 @@ public interface ITokenizer {
 		return(newString);
 	}
 	
+	/**
+	 * Retrieve the default tokenizer
+	 * @return a default {@link ITokenizer}
+	 */
+	public static ITokenizer getDefaultTokenizer() {
+		return new TokenizerWhiteSpace();
+	}
 }

@@ -10,6 +10,7 @@ import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -21,7 +22,7 @@ public class DetectionBackwardTest {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
 		String term = "saignement";
-		Tokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"X1");
 		setTokenTree.addTokenTree(tokenTree);

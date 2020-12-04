@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 import org.junit.Test;
 
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 
 public class TokenTreeTest {
@@ -14,7 +15,7 @@ public class TokenTreeTest {
 	@Test
     public void tokenTreeTest() {
 		String term = "avc sylvien droit";
-		Tokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		
@@ -42,7 +43,7 @@ public class TokenTreeTest {
 	@Test
     public void previousCodeTest() {
 		String term = "avc sylvien droit";
-		Tokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		

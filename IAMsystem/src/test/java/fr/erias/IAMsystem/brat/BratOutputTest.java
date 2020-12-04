@@ -13,6 +13,7 @@ import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -23,7 +24,7 @@ public class BratOutputTest {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
 		String term = "avc sylvien droit";
-		Tokenizer tokenizer = new Tokenizer();
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
 		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
 		setTokenTree.addTokenTree(tokenTree);
