@@ -29,13 +29,13 @@ public class Example0 {
 		// change the default normalizer and tokenizer if you need:
 		// Normalizer:
 		Normalizer normalizer = new Normalizer(termDetector.getStopwords());
-		normalizer.setRegexNormalizer("[^A-Za-z0-9µ+-]"); // default [^A-Za-z0-9µ]
+		normalizer.setRegexNormalizer("[^a-z0-9+-]"); // default [^a-z0-9]
 		termDetector.getTokenizerNormalizer().setNormalizer(normalizer);
 		
-		// Tokenizer:
-		Tokenizer tokenizer = new Tokenizer();
-		tokenizer.setPattern("[0-9]+|[a-z]+|\\+"); // default "[0-9]+|[a-z]+";
-		termDetector.getTokenizerNormalizer().setTokenizer(tokenizer);
+		// Tokenizer: change the default whitespace tokenizer by a regular expression tokenizer:
+//		Tokenizer tokenizer = new Tokenizer();
+//		tokenizer.setPattern("[0-9]+|[a-z]+|\\+"); // default "[0-9]+|[a-z]+";
+//		termDetector.getTokenizerNormalizer().setTokenizer(tokenizer);
 		
 		// add abbreviations
 		termDetector.addAbbreviations("positive", "+");
@@ -47,17 +47,17 @@ public class Example0 {
 		//
 		String sentence = "le patient a une PCR Covid +";
 		DetectOutput detectOutput = termDetector.detect(sentence);
-		System.out.println(detectOutput.toString());
+		System.out.println(detectOutput.toString()); // 1 term detected
 		
-		sentence = "le patient a une PCR SarsCov-2 +"; // not detected because not exactly like Sars-Cov-2
+		sentence = "le patient a une PCR SarsCov-2 +"; 
 		detectOutput = termDetector.detect(sentence);
-		System.out.println(detectOutput.toString());
+		System.out.println(detectOutput.toString()); // not detected because not exactly like Sars-Cov-2
 		
 		// add Levenshtein distance to detect it:
 		Terminology terminology = new Terminology(); // can be loaded from a CSV file see: new Terminology(in, sep, colLabel, colCode) 
 		terminology.addTerm("PCR Sars-Cov-2 positive", "codePostive", normalizer);
 		termDetector.addLevenshteinIndex(terminology);
-		detectOutput = termDetector.detect(sentence);
+		detectOutput = termDetector.detect(sentence); // 1 term detected
 		System.out.println(detectOutput.toString());
 	}
 }

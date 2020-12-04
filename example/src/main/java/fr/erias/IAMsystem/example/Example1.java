@@ -11,7 +11,7 @@ import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
+import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -40,20 +40,17 @@ public class Example1 {
 		// Normalizer:
 		Normalizer normalizer = new Normalizer(stopwords);
 		// this normalizer will remove accents, lowercase and
-		// replace in terminology and text: 1) stopwords, 2) everything that is in the regex: [^A-Za-z0-9µ]
+		// replace in terminology and text: 1) stopwords, 2) everything that is in the regex: [^a-z0-9]
 		String sentence = "patient Covid +";
 		System.out.println(sentence + "     ------ default normalizer ----->      " + normalizer.getNormalizedSentence(sentence)); // patient covid 
 		// change normalizer regex:
-		normalizer.setRegexNormalizer("[^A-Za-z0-9µ+]");
+		normalizer.setRegexNormalizer("[^a-z0-9+]"); // add + sign to character not removed
 		System.out.println(sentence + "     ------ personnalized normalizer ----->      " + normalizer.getNormalizedSentence(sentence)); // patient covid  
 		
-		// Tokenizer will tokenize a text accordingn to a regular expression
-		Tokenizer tokenizer = new Tokenizer();
-		String normalizeSentence = "patient covid +";
-		System.out.println(normalizeSentence + "     ------ default tokenizer ----->      " + ITokenizer.arrayToString(tokenizer.tokenize(normalizeSentence), ";".charAt(0)));
-		// change tokenizer expression: default "[0-9]+|[a-z]+";
-		tokenizer.setPattern("[0-9]+|[a-z]+|\\+");
-		System.out.println(normalizeSentence + "     ------ personnalized tokenizer ----->      " + ITokenizer.arrayToString(tokenizer.tokenize(normalizeSentence), ";".charAt(0)));
+		// Tokenizer will tokenize a text by white space. See new Tokenizer() for tokenizing with a regular expression
+		ITokenizer tokenizer = new TokenizerWhiteSpace();
+		String normalizedSentence = normalizer.getNormalizedSentence(sentence);
+		System.out.println(normalizedSentence + "     ------ default tokenizer ----->      " + ITokenizer.arrayToString(tokenizer.tokenize(normalizedSentence), ";".charAt(0)));
 		
 		// combined the 2 operations :
 		sentence = "PCR Covid +";
@@ -81,7 +78,7 @@ public class Example1 {
 		
 		//
 		DetectDictionaryEntry detect = new DetectDictionaryEntry(setTokenTree, tokenizerNormalizer, synonyms);
-		sentence = "le patient a une PCR Covid +";
+		sentence = "le patient a une PCR Covid   +";
 		// detectOutput:
 		DetectOutput detectOutput = detect.detectCandidateTerm(sentence);
 		
