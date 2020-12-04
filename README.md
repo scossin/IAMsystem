@@ -12,7 +12,7 @@ Add the dependency to your pom.xml to download it from the Maven Repository:
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.0.0</version>
+	<version>1.0.1</version>
 </dependency>
 ```
 
