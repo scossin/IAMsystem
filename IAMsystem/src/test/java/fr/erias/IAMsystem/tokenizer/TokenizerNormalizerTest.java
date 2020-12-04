@@ -1,8 +1,9 @@
-package fr.erias.IAMsystem.normalizer;
+package fr.erias.IAMsystem.tokenizer;
 
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+
 import org.junit.Test;
 
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -44,5 +45,16 @@ public class TokenizerNormalizerTest {
 		assertEquals(tokensOriginal[0], "Insuf");
 		assertEquals(tokensOriginal[1], "cardio");
 		assertEquals(tokensOriginal[2], "Vasculaire");
+	}
+	
+	public void tokenizerTest() {
+		TokenizerWhiteSpace tokenizerWhiteSpace = new TokenizerWhiteSpace();
+		String sentence = "le patient prend du kardegic75";
+		String tokens = ITokenizer.arrayToString(tokenizerWhiteSpace.tokenize(sentence), ";".charAt(0));
+		assertEquals(tokens, "le;patient;prend;du;kardegic75");
+		
+		Tokenizer tokenizer = new Tokenizer();
+		tokens = ITokenizer.arrayToString(tokenizer.tokenize(sentence), ";".charAt(0));
+		assertEquals(tokens, "le;patient;prend;du;kardegic;75"); // in comparison with whitespace tokenizer kardegic and 75 are separated
 	}
 }
