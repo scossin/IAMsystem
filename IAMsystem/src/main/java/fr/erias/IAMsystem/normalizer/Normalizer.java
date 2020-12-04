@@ -22,9 +22,9 @@ public class Normalizer implements INormalizer {
 	
 	
 	/**
-	 * Remove every character except these ones:
+	 * Remove every character except these ones after normalization (lower case and remove accents):
 	 */
-	private String regexNormalizer = "[^A-Za-z0-9µ]";
+	private String regexNormalizer = "[^a-z0-9]";
 	
 	/**
 	 * Constructor 
@@ -69,18 +69,19 @@ public class Normalizer implements INormalizer {
 	}
 	
 	/**
-	 * Remove any character that is not "A-Za-z0-9µ" by a white space
+	 * Remove any character that is not in the regular expression
 	 * @param sentence a sentence to remove punctuation
 	 * @return The sentence with punctuation replace by white space
 	 */
 	public String removeSomePunctuation(String sentence) {
-		String output = sentence.replaceAll(this.regexNormalizer, " "); // µ in µg
+		String output = sentence.replaceAll(this.regexNormalizer, " ");
 		return(output);
 	}
 	
 	/**
-	 * Set the regexNormalizer (default: "[^A-Za-z0-9µ]";)
-	 * @param regexNormalizer regular expression - remove every character except these ones: 
+	 * Remove every character except these ones after normalization (lower case and remove accents)
+	 * Default any character except "[^a-z0-9]"
+	 * @param regexNormalizer regular expression - remove every character except these ones
 	 */
 	public void setRegexNormalizer (String regexNormalizer) {
 		this.regexNormalizer = regexNormalizer;
@@ -93,15 +94,17 @@ public class Normalizer implements INormalizer {
 	 */
 	public String normalizedSentence(String sentence){
 		String normalizedSentence = null;
+		// the order matters
+		
+		// lowercase
+		normalizedSentence = sentence.toLowerCase();
 		
 		//remove accents : 
-		normalizedSentence = flattenToAscii(sentence); //.replaceAll("[^\\p{ASCII}]", "");
+		normalizedSentence = flattenToAscii(normalizedSentence); //.replaceAll("[^\\p{ASCII}]", "");
 		
 		// remove punctuation
 		normalizedSentence = removeSomePunctuation(normalizedSentence); // µ in µg
 
-		// lowercase
-		normalizedSentence = normalizedSentence.toLowerCase();
 		return (normalizedSentence);
 	}
 	
