@@ -8,7 +8,7 @@ import org.json.JSONObject;
  * @author Cossin Sebastien
  *
  */
-public class CTcode extends CT {
+public class CTcode extends CT implements Comparable<CTcode> {
 
 	private String code ;
 	
@@ -116,6 +116,24 @@ public class CTcode extends CT {
 	 */
 	public void setTermino(String termino) {
 		this.termino = termino;
+	}
+	
+	/**
+	 * In order to use a sort CandidateTerm with a TreeSet
+	 */
+	@Override
+	public int compareTo(CTcode otherCandidateTerm) {
+		int diffStart = this.getStartPosition() - otherCandidateTerm.getStartPosition();
+		if (diffStart != 0) { // order by diffStart if it doesn't start at the same start Position
+			return(diffStart); 
+		}
+		int diffEnd = this.getEndPosition() - otherCandidateTerm.getEndPosition();
+		if (diffEnd != 0) { // order by diffStart if it doesn't start at the same start Position
+			return(diffEnd); 
+		}
+		// if same start and end position it means the code is different
+		int codeCompare = this.getCode().compareTo(otherCandidateTerm.getCode());
+		return (codeCompare);
 	}
 	
 	public String toString() {

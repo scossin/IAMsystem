@@ -15,7 +15,7 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
  *
  */
 
-public class CT implements Comparable<CT> {
+public class CT {
 
 	final static Logger logger = LoggerFactory.getLogger(CT.class);
 	
@@ -105,20 +105,6 @@ public class CT implements Comparable<CT> {
 	 */
 	public int getEndPosition() {
 		return(endPosition);
-	}
-	
-	
-	/**
-	 * In order to use a sort CandidateTerm with a TreeSet
-	 */
-	@Override
-	public int compareTo(CT otherCandidateTerm) {
-		int diffStart = this.startPosition - otherCandidateTerm.startPosition;
-		if (diffStart != 0) { // order by diffStart if it doesn't start at the same start Position
-			return(diffStart); 
-		}
-		int endStart = this.endPosition - otherCandidateTerm.endPosition; // otherwise order by endPosition
-		return (endStart);
 	}
 	
 	/**

@@ -3,6 +3,7 @@ package fr.erias.IAMsystem.brat;
 import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.TreeSet;
 
@@ -14,7 +15,6 @@ import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -87,7 +87,7 @@ public class BratOutputTest {
 		
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		// output : 
-		TreeSet<CTbrat> setCTbrat = new TreeSet<CTbrat>();
+		ArrayList<CTbrat> setCTbrat = new ArrayList<CTbrat>();
 		for (CT candidateTerm : detectOutput.getCTcodes()) {
 			setCTbrat.add(new CTbrat(candidateTerm, "disease"));
 		}
