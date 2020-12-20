@@ -4,21 +4,16 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
-
 import org.junit.Test;
-
+import fr.erias.IAMsystem.detect.DetectionBackwardTest;
+import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 
 public class TokenTreeTest {
     
 	@Test
     public void tokenTreeTest() {
-		String term = "avc sylvien droit";
-		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		String[] tokensArray = tokenizer.tokenize(term);
-		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
-		
+		TokenTree tokenTree = DetectionBackwardTest.getTokenTree("avc sylvien droit", "I63");
 		// first token is "avc" : 
 		String tokenAVC = tokenTree.getToken();
 		assertEquals(tokenAVC, "avc");
@@ -28,11 +23,11 @@ public class TokenTreeTest {
 		assertEquals(tokenSylvien, "sylvien");
 		
 		// sylvien has a child so no code is available : 
-		String code = tokenTree.getTokenTreeChild().getCode();
-		assertTrue(code == null);
+		Term term = tokenTree.getTokenTreeChild().getTerm();
+		assertTrue(term == null);
 		
 		// the last token has the code
-		code = tokenTree.getTokenTreeChild().getTokenTreeChild().getCode();
+		String code = tokenTree.getTokenTreeChild().getTokenTreeChild().getTerm().getCode();
 		assertTrue(code.equals("I63"));
 		
 		// the depth of the last child is 2
@@ -45,7 +40,7 @@ public class TokenTreeTest {
 		String term = "avc sylvien droit";
 		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		String[] tokensArray = tokenizer.tokenize(term);
-		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
+		TokenTree tokenTree = new TokenTree(null,tokensArray,new Term(term,"I63"));
 		
 		// the last token has the code
 		tokenTree = tokenTree.getTokenTreeChild().getTokenTreeChild();
@@ -59,7 +54,7 @@ public class TokenTreeTest {
 		// with only one term : 
 		term = "avc";
 		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"I63");
+		tokenTree = new TokenTree(null,tokensArray,new Term(term,"I63"));
 		tokens = tokenTree.getCurrentAndPreviousTokens();
 		assertTrue(Arrays.equals(tokens, tokensArray));
 		

@@ -2,6 +2,8 @@ package fr.erias.IAMsystem.ct;
 
 import org.json.JSONObject;
 
+import fr.erias.IAMsystem.terminology.Term;
+
 /**
  * Just a {@link CT} with a code/uri associated
  * 
@@ -9,16 +11,12 @@ import org.json.JSONObject;
  *
  */
 public class CTcode extends CT implements Comparable<CTcode> {
+	
+	private final Term term;
 
-	private String code ;
+	private final int tokenStartPosition;
 	
-	private String label;
-	
-	private String termino = "";
-	
-	private int tokenStartPosition;
-	
-	private int tokenEndPosition;
+	private final int tokenEndPosition;
 	
 	/**
 	 * Create a new candidateTerm with a code associated to it
@@ -26,29 +24,17 @@ public class CTcode extends CT implements Comparable<CTcode> {
 	 * @param candidateTokensArray An array containing each token of candidateTermString
 	 * @param startPosition The start position of this candidate term in the sentence
 	 * @param endPosition The end position of this candidate term in the sentence
-	 * @param code the candidateTerm comes from a terminology, it must have a code or uri
-	 * @param label the candidateTerm comes from a terminology, it must have a label
+	 * @param term a {@link Term} of a terminology
 	 * @param tokenStartPosition the ith start position in the token array (after sentence tokenization)
 	 * @param tokenEndPosition the ith end position in the token array (after sentence tokenization)
 	 */
 	public CTcode(String candidateTermString, String[] candidateTokensArray, 
-			int startPosition, int endPosition, String code, String label, 
+			int startPosition, int endPosition, Term term, 
 			int tokenStartPosition, int tokenEndPosition) {
 		super(candidateTermString, candidateTokensArray, startPosition, endPosition);
-		this.code = code;
-		this.label = label;
+		this.term = term;
 		this.tokenStartPosition = tokenStartPosition;
 		this.tokenEndPosition = tokenEndPosition;
-	}
-	
-	/**
-	 * Create a new candidateTerm with a code associated to it
-	 * @param candidateTerm A {@link CT}
-	 * @param code The candidateTerm comes from a terminology, it must have a code or uri
-	 */
-	public CTcode(CT candidateTerm, String code) {
-		super(candidateTerm);
-		this.code = code;
 	}
 	
 	/**
@@ -56,7 +42,7 @@ public class CTcode extends CT implements Comparable<CTcode> {
 	 * @return the code / uri associated to this candidateTerm in a terminology
 	 */
 	public String getCode() {
-		return(code);
+		return(term.getCode());
 	}
 	
 	/**
@@ -64,7 +50,7 @@ public class CTcode extends CT implements Comparable<CTcode> {
 	 * @return the label associated to this candidateTerm in a terminology
 	 */
 	public String getLabel() {
-		return(label);
+		return(term.getLabel());
 	}
 	
 	/**
@@ -107,17 +93,9 @@ public class CTcode extends CT implements Comparable<CTcode> {
 	 * @return the name of the terminology
 	 */
 	public String getTermino() {
-		return termino;
+		return term.getTermino();
 	}
 
-	/**
-	 * Set the name of the terminology
-	 * @param termino name of the terminology
-	 */
-	public void setTermino(String termino) {
-		this.termino = termino;
-	}
-	
 	/**
 	 * In order to use a sort CandidateTerm with a TreeSet
 	 */

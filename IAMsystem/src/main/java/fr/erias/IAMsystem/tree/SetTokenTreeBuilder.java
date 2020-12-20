@@ -35,13 +35,12 @@ public class SetTokenTreeBuilder {
 		if (stopwords.isStopWord(normalizedLabel)) {
 			return(tokenTreeSet0);
 		}
-		String code = term.getCode();
 		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizedLabel);
 		tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
 		if (tokensArray.length == 0) {
 			return(tokenTreeSet0);
 		}
-		TokenTree tokenTree = new TokenTree(null,tokensArray, code);
+		TokenTree tokenTree = new TokenTree(null,tokensArray, term);
 		tokenTreeSet0.addTokenTree(tokenTree);
 		return(tokenTreeSet0);
 	}

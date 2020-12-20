@@ -12,6 +12,7 @@ import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -19,33 +20,28 @@ import fr.erias.IAMsystem.tree.TokenTree;
 
 public class DetectionBackwardTest {
 
+	public static TokenTree getTokenTree(String label, String code) {
+		Term term = new Term(label,code);
+		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
+		String[] tokensArray = tokenizer.tokenize(term.getLabel());
+		TokenTree tokenTree = new TokenTree(null,tokensArray,term);
+		return(tokenTree);
+	}
+	
 	public static SetTokenTree getSetTokenTreeTest() {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
-		String term = "saignement";
-		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		String[] tokensArray = tokenizer.tokenize(term);
-		TokenTree tokenTree = new TokenTree(null,tokensArray,"X1");
-		setTokenTree.addTokenTree(tokenTree);
+		setTokenTree.addTokenTree(getTokenTree("saignement", "X1"));
 		
 		// second term of the terminology
-		term = "saignement abondants de la menopause";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"X2");
-		setTokenTree.addTokenTree(tokenTree);
+		setTokenTree.addTokenTree(getTokenTree("saignement abondants de la menopause","X2"));
 		
 		// third term of the terminology
-		term = "saignement abondants de la menopause suite à un traitement anticoagulant";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"X3");
-		setTokenTree.addTokenTree(tokenTree);
+		setTokenTree.addTokenTree(getTokenTree(
+				"saignement abondants de la menopause suite à un traitement anticoagulant","X3"));
 		
 		// fourth term of the terminology
-		term = "anticoagulant";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"X4");
-		setTokenTree.addTokenTree(tokenTree);
-		
+		setTokenTree.addTokenTree(getTokenTree("anticoagulant","X4"));
 		return(setTokenTree);
 	}
 

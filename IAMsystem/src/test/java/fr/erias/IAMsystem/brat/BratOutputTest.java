@@ -5,7 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.TreeSet;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
@@ -14,6 +13,7 @@ import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -23,16 +23,16 @@ public class BratOutputTest {
 	public static SetTokenTree getSetTokenTreeTest() {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		// first term of the terminology
-		String term = "avc sylvien droit";
+		Term term = new Term("avc sylvien droit","I63");
 		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		String[] tokensArray = tokenizer.tokenize(term);
-		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
+		String[] tokensArray = tokenizer.tokenize(term.getLabel());
+		TokenTree tokenTree = new TokenTree(null,tokensArray,term);
 		setTokenTree.addTokenTree(tokenTree);
 
 		// second term of the terminology
-		term = "insuffisance cardiaque aigue";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"I50");
+		term = new Term("insuffisance cardiaque aigue","I50");
+		tokensArray = tokenizer.tokenize(term.getLabel());
+		tokenTree = new TokenTree(null,tokensArray,term);
 		setTokenTree.addTokenTree(tokenTree);
 		
 		return(setTokenTree);

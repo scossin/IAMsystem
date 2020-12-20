@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
@@ -174,15 +175,14 @@ public class DetectDictionaryEntry {
 		
 		// create it
 		for (TokenTree tokenTree : previousTokenTrees) {
-			String code =  tokenTree.getCode();
-			logger.debug("code is : " + code);
+			Term term =  tokenTree.getTerm();
+			logger.debug("code is : " + term.getCode());
 			String label = ITokenizer.arrayToString(tokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
 			CTcode candidateTerm = new CTcode(candidateTermString, 
 					candidateTokensArray, 
 					startPosition, 
 					endPosition,
-					code,
-					label,
+					term,
 					tokenStartPosition,
 					tokenEndPosition);
 			// finally add it

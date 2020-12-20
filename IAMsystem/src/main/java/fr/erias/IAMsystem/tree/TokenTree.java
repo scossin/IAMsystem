@@ -2,6 +2,8 @@ package fr.erias.IAMsystem.tree;
 
 import java.util.Arrays;
 
+import fr.erias.IAMsystem.terminology.Term;
+
 /**
  * A terminology contains terms that are stored in a tree datastructure {@link SetTokenTree} <br>
  * For example, for these 2 terms : "avc sylvien droit" and "avc sylvien gauche" ; each one is first tokenized : "avc" "sylvien" "droit" and "gauche"  <br> 
@@ -16,9 +18,9 @@ import java.util.Arrays;
 public class TokenTree {
 
 	/**
-	 * A unique code or URI 
+	 * A {@link Term}: label, code, terminology name 
 	 */
-	private final String code ;
+	private final Term term ;
 	
 	/**
 	 * The child tree or null
@@ -39,20 +41,20 @@ public class TokenTree {
 	 * Create a new TokenTree
 	 * @param tokenTreeParent The tokenTree instance of this object or null if the token is the first (e.g. the value is null)
 	 * @param tokensArray A String array of tokens ; the results of tokenization of a term
-	 * @param code A code or URI of the term
+	 * @param term a {@link Term} of a terminology
 	 */
-	public TokenTree(TokenTree tokenTreeParent, String[] tokensArray, String code) {
+	public TokenTree(TokenTree tokenTreeParent, String[] tokensArray, Term term) {
 		this.tokenTreeParent = tokenTreeParent;
 		this.token = tokensArray[0];
 		if (tokensArray.length != 1) { // if it's not the last token
 			 // remove the first token
 			String[] tokensArrayChild = Arrays.copyOfRange(tokensArray, 1, tokensArray.length);
 			// create recursively the child 
-			this.tokenTreeChild = new TokenTree(this,tokensArrayChild, code);
-			this.code = null; // code is null if it's not the last token
+			this.tokenTreeChild = new TokenTree(this,tokensArrayChild, term);
+			this.term = null; // term is null if it's not the last token
 		} else {
 			this.tokenTreeChild = null;
-			this.code = code; // only the last token get the code
+			this.term = term; // only the last token get the term
 		}
 	}
 	
@@ -133,7 +135,7 @@ public class TokenTree {
 	 * @return The code/uri or null if the token is not the last one
 	 */
 	
-	public String getCode() {
-		return(code);
+	public Term getTerm() {
+		return(term);
 	}
 }

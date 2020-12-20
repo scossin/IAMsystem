@@ -22,36 +22,11 @@ public class DetectionTest {
 
 	public static SetTokenTree getSetTokenTreeTest() {
 		SetTokenTree setTokenTree = new SetTokenTree();
-		// first term of the terminology
-		String term = "avc sylvien droit";
-		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		String[] tokensArray = tokenizer.tokenize(term);
-		TokenTree tokenTree = new TokenTree(null,tokensArray,"I63");
-		setTokenTree.addTokenTree(tokenTree);
-		
-		// second term of the terminology
-		term = "avc hemorragique";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"I61");
-		setTokenTree.addTokenTree(tokenTree);
-		
-		// third term of the terminology
-		term = "insuffisance cardiaque aigue";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"I50");
-		setTokenTree.addTokenTree(tokenTree);
-		
-		
-		term = "abces";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"X1");
-		setTokenTree.addTokenTree(tokenTree);
-		
-		term = "abces chambre implantable";
-		tokensArray = tokenizer.tokenize(term);
-		tokenTree = new TokenTree(null,tokensArray,"X10");
-		setTokenTree.addTokenTree(tokenTree);
-		
+		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("avc sylvien droit", "I63"));
+		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("avc hemorragique", "I61"));
+		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("insuffisance cardiaque aigue", "I50"));
+		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("abces", "X1"));
+		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("abces chambre implantable", "X10"));
 		return(setTokenTree);
 	}
 
