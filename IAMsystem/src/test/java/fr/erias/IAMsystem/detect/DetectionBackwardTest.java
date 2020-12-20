@@ -4,14 +4,15 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashSet;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -33,10 +34,16 @@ public class DetectionBackwardTest {
 		tokenTree = new TokenTree(null,tokensArray,"X2");
 		setTokenTree.addTokenTree(tokenTree);
 		
-		// second term of the terminology
+		// third term of the terminology
 		term = "saignement abondants de la menopause suite à un traitement anticoagulant";
 		tokensArray = tokenizer.tokenize(term);
 		tokenTree = new TokenTree(null,tokensArray,"X3");
+		setTokenTree.addTokenTree(tokenTree);
+		
+		// fourth term of the terminology
+		term = "anticoagulant";
+		tokensArray = tokenizer.tokenize(term);
+		tokenTree = new TokenTree(null,tokensArray,"X4");
 		setTokenTree.addTokenTree(tokenTree);
 		
 		return(setTokenTree);
@@ -135,5 +142,42 @@ public class DetectionBackwardTest {
 		assertEquals(CTdetected.getCandidateTerm(), "saignements abondants de la menopause");
 		assertEquals(CTdetected.getCandidateTermString(),"saignements abondants de la       ménopause");
 		assertEquals(CTdetected.getCode(), "X2"); // the abces code
+	}
+	
+	@Test
+	public void DetectionAfterBackwardTest() throws IOException, UnfoundTokenInSentence, ParseException{
+		ISynonym synonym = new ISynonym() {
+			@Override
+			public HashSet<String[]> getSynonyms(String token) {
+				HashSet<String[]> synonym = new HashSet<String[]>();
+				if (token.equals("saignements")) {
+					String[] temp = {"saignement"};
+					synonym.add(temp);
+				}
+				if (token.equals("anticoag")) {
+					String[] temp = {"anticoagulant"};
+					synonym.add(temp);
+					String[] temp2 = {"suite"}; // anticoag has 2 meanings possibles
+					synonym.add(temp2);
+				}
+				return synonym;
+			}
+		};
+		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
+		synonyms.add(synonym);
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
+				tokenizerNormalizer,synonyms);
+		//term = "saignement abondants de la menopause suite à un traitement anticoagulant";
+		String sentence = "saignements abondants de la ménopause anticoag fin";
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
+		assertEquals(detectOutput.getCTcodes().size(), 2);
+		
+		// Test for these lines: 
+		//int diff = treeLocation.getMonitorCandidates().getDiff();
+		//treeLocation.setCurrentI(treeLocation.getCurrentI() - diff);
+		
+		// Explanation: anticoag is a path toward X2, so the algorithm takes it but it's a dead end
+		// so it needs to come back just after menopause and enters this new path : anticoagulant word (not a dead end)
 	}
 }

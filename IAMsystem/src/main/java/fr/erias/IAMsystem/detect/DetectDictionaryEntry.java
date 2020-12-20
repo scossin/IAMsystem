@@ -186,6 +186,10 @@ public class DetectDictionaryEntry {
 				tokenEndPosition);
 		// finally add it
 		treeLocation.getCandidateTermsCode().add(candidateTerm);
+		
+		// set current i if we did go backward:
+		int diff = treeLocation.getMonitorCandidates().getDiff();
+		treeLocation.setCurrentI(treeLocation.getCurrentI() - diff);
 	}
 	
 	
@@ -386,6 +390,10 @@ class MonitorCandidates{
 			this.lastTokenTree = oneTokenTree;
 			this.lastTokenTreePosition = candidateTokensList.size();
 		}
+	}
+	
+	public int getDiff() {
+		return(candidateTokensList.size() - lastTokenTreePosition);
 	}
 
 	/**
