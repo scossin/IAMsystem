@@ -25,6 +25,12 @@ public class Term {
 	private String code;
 	
 	/**
+	 * the name of the terminology (ex: ICD-10)
+	 * default "" for none
+	 */
+	private String termino = "";
+	
+	/**
 	 * Create a new Term
 	 * @param label the label of a terminology
 	 * @param code the code 
@@ -33,6 +39,19 @@ public class Term {
 		this.setLabel(label);
 		this.setNormalizedLabel(label); // same by default before normalization
 		this.setCode(code);
+	}
+	
+	/**
+	 * Create a new Term
+	 * @param label the label of a terminology
+	 * @param code the code
+	 * @param termino the terminology name
+	 */
+	public Term (String label, String code, String termino) {
+		this.setLabel(label);
+		this.setNormalizedLabel(label); // same by default before normalization
+		this.setCode(code);
+		this.setTermino(termino);
 	}
 	
 	/**
@@ -68,5 +87,13 @@ public class Term {
 
 	public void setNormalizedLabel(String normalizedLabel) {
 		this.normalizedLabel = normalizedLabel;
+	}
+
+	public String getTermino() {
+		return termino;
+	}
+
+	public void setTermino(String termino) {
+		this.termino = termino;
 	}
 }
