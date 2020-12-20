@@ -208,40 +208,4 @@ public class SetTokenTree {
 	public HashSet<TokenTree> getPreviousTokenTrees(){
 		return(previousTokenTrees);
 	}
-	
-	/**
-	 * Retrieve only one {@link TokenTree}
-	 * @return one {@link TokenTree} or null if empty
-	 */
-	public TokenTree getOneTokenTree() {
-		if (previousTokenTrees.isEmpty()) {
-			return(null);
-		}
-		if (previousTokenTrees.size() != 1) {
-			logger.debug("warning ! multiples codes available !");
-		}
-		for (TokenTree tokenTree : previousTokenTrees) {
-			return(tokenTree);
-		}
-		return(null);
-	}
-	
-	/**
-	 * Retrieve only one code in {@link getOneTokenTree}. A term may have one or many codes (e.g only one)
-	 * Deprecated, use {@link getOneTokenTree} to retrieve a code
-	 * @return A string of a code (uri) of one {@link TokenTree}
-	 */
-	@Deprecated
-	 public String getOneCode() {
-		if (previousTokenTrees.isEmpty()) {
-			return(null);
-		}
-		if (previousTokenTrees.size() != 1) {
-			logger.debug("warning ! multiples codes available !");
-		}
-		for (TokenTree tokenTree : previousTokenTrees) {
-			return(tokenTree.getCode());
-		}
-		return(null);
-	}
 }

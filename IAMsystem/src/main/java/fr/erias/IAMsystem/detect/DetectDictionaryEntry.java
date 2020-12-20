@@ -148,8 +148,8 @@ public class DetectDictionaryEntry {
 
 		// is a code associated to this candidateTerm ? find the last tokenTree with a code going backward
 		treeLocation.getMonitorCandidates().setLastTokenTree(treeLocation.getTempSetTokenTree());
-		TokenTree oneTokenTree = treeLocation.getMonitorCandidates().getLastTokenTree();
-		if (oneTokenTree == null) { // for example "insuffisance" was matched but no code for this word (no term in the terminology)
+		HashSet<TokenTree> previousTokenTrees = treeLocation.getMonitorCandidates().getLastTokenTree();
+		if (previousTokenTrees.size() == 0) { // for example "insuffisance" was matched but no code for this word (no term in the terminology)
 			logger.debug("no previous token, code is null again. no term found");
 			int currentI = (treeLocation.getCurrentI() - treeLocation.getMonitorCandidates().getCandidateTokensList().size()) + 1 ; // i => i + 1 ; without the first token
 			treeLocation.setCurrentI(currentI);
@@ -169,29 +169,29 @@ public class DetectDictionaryEntry {
 		int startPosition = tnoutput.getTokenStartEndInSentence()[tokenStartPosition][0];
 		int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 		String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
-		String code =  oneTokenTree.getCode();
-		String label = ITokenizer.arrayToString(oneTokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
-		logger.debug("code is : " + code);
 		
 		logger.debug("CandidateTermString : " + candidateTermString);
 		
 		// create it
-		CTcode candidateTerm = new CTcode(candidateTermString, 
-				candidateTokensArray, 
-				startPosition, 
-				endPosition,
-				code,
-				label,
-				tokenStartPosition,
-				tokenEndPosition);
-		// finally add it
-		treeLocation.getCandidateTermsCode().add(candidateTerm);
-		
+		for (TokenTree tokenTree : previousTokenTrees) {
+			String code =  tokenTree.getCode();
+			logger.debug("code is : " + code);
+			String label = ITokenizer.arrayToString(tokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
+			CTcode candidateTerm = new CTcode(candidateTermString, 
+					candidateTokensArray, 
+					startPosition, 
+					endPosition,
+					code,
+					label,
+					tokenStartPosition,
+					tokenEndPosition);
+			// finally add it
+			treeLocation.getCandidateTermsCode().add(candidateTerm);
+		}
 		// set current i if we did go backward:
 		int diff = treeLocation.getMonitorCandidates().getDiff();
 		treeLocation.setCurrentI(treeLocation.getCurrentI() - diff);
 	}
-	
 	
 	/**
 	 * Get the terminology
@@ -351,7 +351,8 @@ class MonitorCandidates{
 	 * Sometimes we need to go backward, as we go deeper in the tree, if no code is found, we go up to find a previous code
 	 * lastTokenTree saves the last {@link TokenTree} or null if no code was found so far
 	 */
-	private TokenTree lastTokenTree = null;
+	private HashSet<TokenTree> lastTokenTrees = new HashSet<TokenTree>();
+	
 	int lastTokenTreePosition = 0; // why not simply use the depth ? because => 
 	// term "avc" is length 1 but "accident vasculaire cerebral" is depth 3 in the tree ; depth in the tree is not equal to the candidateTokensArray length
 
@@ -377,7 +378,7 @@ class MonitorCandidates{
 	public void addToken(String token, SetTokenTree tempSetTokenTree) {
 		currentCandidate = true;
 		setLastTokenTree(tempSetTokenTree);
-		candidateTokensList.add(token); // NB ++ : after to setLastTokenTree
+		candidateTokensList.add(token); // NB ++ : after setLastTokenTree
 	}
 
 	/**
@@ -386,8 +387,7 @@ class MonitorCandidates{
 	 */
 	public void setLastTokenTree(SetTokenTree tempSetTokenTree) {
 		if (tempSetTokenTree.getPreviousTokenTrees().size() != 0) {
-			TokenTree oneTokenTree = tempSetTokenTree.getOneTokenTree();
-			this.lastTokenTree = oneTokenTree;
+			this.lastTokenTrees = tempSetTokenTree.getPreviousTokenTrees();
 			this.lastTokenTreePosition = candidateTokensList.size();
 		}
 	}
@@ -431,8 +431,8 @@ class MonitorCandidates{
 	 * 
 	 * @return the last TokenTree or null if no code so far
 	 */
-	public TokenTree getLastTokenTree() {
-		return(lastTokenTree);
+	public HashSet<TokenTree> getLastTokenTree() {
+		return(lastTokenTrees);
 	}
 
 	/**

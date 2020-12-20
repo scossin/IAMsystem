@@ -10,7 +10,6 @@ import java.util.Set;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 
 public class SetTokenTreeTest {
 	
@@ -116,7 +115,5 @@ public class SetTokenTreeTest {
 		// but we have one code ! 
 		assertEquals(afterAccident.getPreviousTokenTrees().size(), 1);
 		
-		// and this code is I63
-		assertEquals(afterAccident.getOneCode(), "I63");
     }
 }
