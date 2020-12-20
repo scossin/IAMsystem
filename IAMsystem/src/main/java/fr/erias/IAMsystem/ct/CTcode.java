@@ -87,7 +87,15 @@ public class CTcode extends CT implements Comparable<CTcode> {
 	public int getTokenEndPosition() {
 		return(this.tokenEndPosition);
 	}
-
+	
+	/**
+	 * Retrieve the term of the terminology detected
+	 * @return the {@link Term}
+	 */
+	public Term getTerm() {
+		return(this.term);
+	}
+	
 	/**
 	 * 
 	 * @return the name of the terminology
