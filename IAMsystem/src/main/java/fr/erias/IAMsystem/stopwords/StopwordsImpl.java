@@ -73,17 +73,14 @@ public class StopwordsImpl implements IStopwords {
 	 * @throws IOException can't load the stopwords file
 	 */
 	public void setStopWords (InputStream in) throws IOException {
-		setStopWords(in, new INormalizer() {
-			@Override
-			public IStopwords getStopwords() {
-				return null;
-			}
-			
-			@Override
-			public String getNormalizedSentence(String sentence) {
-				return sentence;
-			}
-		});
+		BufferedReader br = null;
+		br = new BufferedReader(new InputStreamReader(in));
+		String line = null;
+		while ((line = br.readLine()) != null) {
+			stopwordsSet.add(line);
+		}
+		logger.info("stopwords size : " + stopwordsSet.size());
+		br.close();
 	}
 	
 	/**

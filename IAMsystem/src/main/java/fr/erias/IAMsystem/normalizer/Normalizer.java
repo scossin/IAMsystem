@@ -158,4 +158,9 @@ public class Normalizer implements INormalizer {
 	public String getNormalizedSentence(String sentence) {
 		return (this.normalizedSentence(sentence));
 	}
+
+	@Override
+	public void setStopwords(IStopwords stopwords) {
+		this.stopwords = stopwords;
+	}
 }
