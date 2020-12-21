@@ -29,11 +29,6 @@ public class TermDetector {
 	final static Logger logger = LoggerFactory.getLogger(TermDetector.class);
 	
 	/**
-	 * stores stopwords
-	 */
-	private IStopwords stopwords;
-	
-	/**
 	 * normalizes terms and textual content. It stores the stopwords instances
 	 */
 	private ITokenizerNormalizer tokenizerNormalizer;
@@ -74,8 +69,7 @@ public class TermDetector {
 	 * Constructor
 	 */
 	public TermDetector() {
-		this.stopwords = new StopwordsImpl(); // stopwords by default
-		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(this.stopwords); // default tokenizerNormalizer
+		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
 		this.setTokenTree = new SetTokenTree();
 		this.abbreviations = new Abbreviations();
 		// initialize levenshtein distance - replace it 
@@ -87,22 +81,6 @@ public class TermDetector {
 		};
 	}
 
-	
-	/**
-	 * Set stopwords
-	 * @param stopwords a stopword instance
-	 */
-	public void setStopwords(IStopwords stopwords) {
-		this.stopwords = stopwords;
-	}
-	/**
-	 * add a word
-	 * @param word a stopword 
-	 */
-	public void addStopwords(String word) {
-		this.stopwords.addStopwords(word);
-	}
-	
 	/**
 	 * Add an abbreviation
 	 * @param term (ex : 'acide')
@@ -163,10 +141,10 @@ public class TermDetector {
 	}
 	
 	/**
-	 * retrieve the stopwords
-	 * @return the stopwords
+	 * set the {@link ITokenizerNormalizer}
+	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
 	 */
-	public IStopwords getStopwords() {
-		return(this.stopwords);
+	public void setTokenizerNormalizer(ITokenizerNormalizer tokenizerNormalizer){
+		this.tokenizerNormalizer = tokenizerNormalizer;
 	}
 }
