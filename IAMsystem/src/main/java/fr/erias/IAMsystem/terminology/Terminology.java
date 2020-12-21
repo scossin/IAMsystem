@@ -38,8 +38,24 @@ public class Terminology {
 		
 	}
 	
+	/**
+	 * Add a term to the terminology
+	 * @param label  the label (will be normalized)
+	 * @param code the code
+	 * @param normalizer the normalize to normalize the label
+	 */
 	public void addTerm(String label, String code, INormalizer normalizer) {
 		Term term = new Term(label, code, normalizer);
+		terms.add(term);
+	}
+	
+	/**
+	 * Add a term to the terminology
+	 * @param label the label (not normalized, see other function signature to normalize it)
+	 * @param code the code
+	 */
+	public void addTerm(String label, String code) {
+		Term term = new Term(label, code);
 		terms.add(term);
 	}
 	
@@ -84,6 +100,12 @@ public class Terminology {
 			@Override
 			public String getNormalizedSentence(String sentence) { // don't normalize
 				return sentence;
+			}
+
+			@Override
+			public void setStopwords(IStopwords stopwords) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}
