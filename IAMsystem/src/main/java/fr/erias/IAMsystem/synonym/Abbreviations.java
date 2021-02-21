@@ -44,9 +44,10 @@ public class Abbreviations implements ISynonym {
 	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
 	 */
 	public void addAbbreviation(String term, String abbreviation, ITokenizerNormalizer tokenizerNormalizer) {
+		String normalizedAbbreviation = tokenizerNormalizer.getNormalizer().getNormalizedSentence(abbreviation);
 		String normalizedTerm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(term);
 		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizedTerm);
-		addAbbreviation(tokensArray, abbreviation);
+		addAbbreviation(tokensArray, normalizedAbbreviation);
 	}
 	
 	/**
