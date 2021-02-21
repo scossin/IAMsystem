@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.synonym.ISynonym;
-import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
@@ -81,7 +80,7 @@ public class TermDetector {
 	}
 	
 	/**
-	 * Add a class that handles synonymy. For example {@link Abbreviations}, {@link LevenshteinTypoLucene} or a customize class that implements {@link ISynonym}
+	 * Add a class that handles synonymy. For example {@link fr.erias.IAMsystem.synonym.Abbreviations}, {@link fr.erias.IAMsystem.synonym.LevenshteinTypoLucene} or a customize class that implements {@link ISynonym}
 	 * @param synonym an implementation of a {@link ISynonym} to find alternatives to a token
 	 */
 	public void addSynonym(ISynonym synonym) {
@@ -90,10 +89,18 @@ public class TermDetector {
 	
 	/**
 	 * Change the set of {@link ISynonym} ; default an empty set
-	 * @param synonyms
+	 * @param synonyms set of {@link ISynonym}
 	 */
 	public void setSynonyms(Set<ISynonym> synonyms) {
 		this.synonyms = synonyms;
+	}
+	
+	/**
+	 * Retrieve the set of {@link ISynonym}
+	 * @return set of {@link ISynonym}
+	 */
+	public Set<ISynonym> getSynonyms() {
+		return(this.synonyms);
 	}
 	
 	/**
@@ -122,7 +129,7 @@ public class TermDetector {
 	
 	/**
 	 * Change the TokenizerNormalizer's {@link IStopwords}
-	 * @param stopwords
+	 * @param stopwords a {@link IStopwords}
 	 */
 	public void setStopwords(IStopwords stopwords) {
 		this.tokenizerNormalizer.getNormalizer().setStopwords(stopwords);
