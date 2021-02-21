@@ -2,6 +2,7 @@ package fr.erias.IAMsystem.terminology;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -79,6 +80,19 @@ public class Terminology {
 		}
 		br.close();
 		logger.info("terminology size : " + terms.size());
+	}
+	
+	/**
+	 * Create a terminology object from a CSV file
+	 * @param csvFile A CSV {@link java.io.File}  
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
+	 * @param colCode the ith column containing the terminology code
+	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @throws IOException If the file doesn't exist
+	 */
+	public Terminology(File csvFile, String sep, int colLabel, int colCode, INormalizer normalizer) throws IOException {
+		this(new FileInputStream(csvFile), sep, colLabel, colCode,normalizer);
 	}
 	
 	/**
