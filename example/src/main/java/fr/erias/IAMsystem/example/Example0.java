@@ -4,9 +4,12 @@ import java.io.IOException;
 
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.TermDetector;
+import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.normalizer.Normalizer;
+import fr.erias.IAMsystem.synonym.Abbreviations;
+import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Terminology;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 
 /**
  * In this example we show how to use TermDetector class
@@ -38,8 +41,14 @@ public class Example0 {
 //		termDetector.getTokenizerNormalizer().setTokenizer(tokenizer);
 		
 		// add abbreviations
-		termDetector.addAbbreviations("positive", "+");
-		termDetector.addAbbreviations("Sars-Cov-2", "covid");
+		Abbreviations abbreviations = new Abbreviations();
+		termDetector.addSynonym(abbreviations); // it will handle abbreviations
+		
+		// use the TokenizerNormalizer of the termDetector to tokenize and normalize abbreviation:
+		ITokenizerNormalizer tokenizerNormalizer = termDetector.getTokenizerNormalizer();
+		
+		abbreviations.addAbbreviation("positive", "+"); // no normalization
+		abbreviations.addAbbreviation("Sars-Cov-2", "covid", tokenizerNormalizer); // "Sars-Cov-2 => sars cov 2"
 		
 		// add term or terminology
 		termDetector.addTerm("PCR Sars-Cov-2 positive", "codePostive");
@@ -49,14 +58,22 @@ public class Example0 {
 		DetectOutput detectOutput = termDetector.detect(sentence);
 		System.out.println(detectOutput.toString()); // 1 term detected
 		
-		sentence = "le patient a une PCR SarsCov-2 +"; 
+		sentence = "le patient a une PCR SarsCov-22 +"; 
 		detectOutput = termDetector.detect(sentence);
 		System.out.println(detectOutput.toString()); // not detected because not exactly like Sars-Cov-2
 		
 		// add Levenshtein distance to detect it:
 		Terminology terminology = new Terminology(); // can be loaded from a CSV file see: new Terminology(in, sep, colLabel, colCode) 
 		terminology.addTerm("PCR Sars-Cov-2 positive", "codePostive", normalizer);
-		termDetector.addLevenshteinIndex(terminology);
+		IndexBigramLucene.IndexLuceneUniqueTokensBigram(terminology, tokenizerNormalizer); // create the index ; do it only once
+		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene(); // open the index
+		termDetector.addSynonym(levenshteinTypoLucene); // now it handles typos
+		
+		// change minEdits:
+		levenshteinTypoLucene.setMaxEdits(2); // 2 insertions/deletions allowed per token
+		// change minChar:
+		levenshteinTypoLucene.setMinNchar(9); // ignore token with less than 9 characters
+		
 		detectOutput = termDetector.detect(sentence); // 1 term detected
 		System.out.println(detectOutput.toString());
 	}
