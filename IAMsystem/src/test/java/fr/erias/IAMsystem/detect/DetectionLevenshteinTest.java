@@ -7,6 +7,8 @@ import java.io.IOException;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.ct.CTcode;
+import fr.erias.IAMsystem.lucene.IndexBigramLucene;
+import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Terminology;
 public class DetectionLevenshteinTest {
 
@@ -16,8 +18,12 @@ public class DetectionLevenshteinTest {
 		TermDetector termDetector = new TermDetector();
 		Terminology terminology = new Terminology();
 		terminology.addTerm("gastroenterite", "X1");
-		termDetector.addLevenshteinIndex(terminology);
 		termDetector.addTerminology(terminology);
+		
+		IndexBigramLucene.IndexLuceneUniqueTokensBigram(terminology, termDetector.getTokenizerNormalizer());
+		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene();
+		termDetector.addSynonym(levenshteinTypoLucene);
+		assertEquals(termDetector.getSynonyms().size(), 1); // check it was correctly added
 		DetectOutput detectOutput = termDetector.detect("gastroenteritee");
 		
 		assertEquals(detectOutput.getCTcodes().size(), 1);
