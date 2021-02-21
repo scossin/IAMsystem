@@ -1,14 +1,11 @@
 package fr.erias.IAMsystem.detect;
-import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.stopwords.IStopwords;
-import fr.erias.IAMsystem.stopwords.StopwordsImpl;
-import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Term;
@@ -34,36 +31,14 @@ public class TermDetector {
 	private ITokenizerNormalizer tokenizerNormalizer;
 	
 	/**
-	 * store abbreviations
-	 */
-	private Abbreviations abbreviations = new Abbreviations();
-
-	/**
 	 * stores the terminology in a tree datastructure
 	 */
 	private SetTokenTree setTokenTree;
 	
 	/**
-	 * store Levenshtein method
-	 */
-	private ISynonym levenshtein;
-	
-	/**
 	 * Offer the possibility to add synonym
 	 */
-	private HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
-	
-	
-	/**
-	 * Create a Lucene index
-	 * @param terminology {@link Terminology}
-	 * @throws IOException if 
-	 */
-	public void addLevenshteinIndex(Terminology terminology) throws IOException {
-		IndexBigramLucene.IndexLuceneUniqueTokensBigram(terminology, this.tokenizerNormalizer); // create the index ; do it only once
-		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene(); // open the index
-		this.levenshtein = levenshteinTypoLucene;
-	}
+	private Set<ISynonym> synonyms = new HashSet<ISynonym>();
 	
 	/**
 	 * Constructor
@@ -71,25 +46,8 @@ public class TermDetector {
 	public TermDetector() {
 		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
 		this.setTokenTree = new SetTokenTree();
-		this.abbreviations = new Abbreviations();
-		// initialize levenshtein distance - replace it 
-		levenshtein = new ISynonym() {
-			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				return new HashSet<String[]>();
-			}
-		};
 	}
 
-	/**
-	 * Add an abbreviation
-	 * @param term (ex : 'acide')
-	 * @param abbreviation (ex: 'ac')
-	 */
-	public void addAbbreviations(String term, String abbreviation) {
-		this.abbreviations.addAbbreviation(term, abbreviation, tokenizerNormalizer);
-	}
-	
 	/**
 	 * Add a term of a terminology
 	 * @param term the label of a term (it will be normalized)
@@ -101,7 +59,7 @@ public class TermDetector {
 	}
 	
 	/**
-	 * Add a terminology
+	 * Add a terminology (doesn't remove terms already added)
 	 * @param terminology {@link Terminology}
 	 */
 	public void addTerminology(Terminology terminology) {
@@ -118,18 +76,24 @@ public class TermDetector {
 		for (ISynonym synonym : this.synonyms) {
 			synonyms.add(synonym);
 		}
-		synonyms.add(abbreviations);
-		synonyms.add(levenshtein);
 		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(this.setTokenTree,this.tokenizerNormalizer,synonyms);
 		return(detectDictionaryEntry.detectCandidateTerm(sentence));
 	}
 	
 	/**
-	 * Add a synonym
+	 * Add a class that handles synonymy. For example {@link Abbreviations}, {@link LevenshteinTypoLucene} or a customize class that implements {@link ISynonym}
 	 * @param synonym an implementation of a {@link ISynonym} to find alternatives to a token
 	 */
 	public void addSynonym(ISynonym synonym) {
 		this.synonyms.add(synonym);
+	}
+	
+	/**
+	 * Change the set of {@link ISynonym} ; default an empty set
+	 * @param synonyms
+	 */
+	public void setSynonyms(Set<ISynonym> synonyms) {
+		this.synonyms = synonyms;
 	}
 	
 	/**
@@ -146,5 +110,37 @@ public class TermDetector {
 	 */
 	public void setTokenizerNormalizer(ITokenizerNormalizer tokenizerNormalizer){
 		this.tokenizerNormalizer = tokenizerNormalizer;
+	}
+	
+	/**
+	 * Retrieve the TokenizerNormalizer's stopword instance
+	 * @return {@link IStopwords}
+	 */
+	public IStopwords getStopwords() {
+		return(this.tokenizerNormalizer.getNormalizer().getStopwords());
+	}
+	
+	/**
+	 * Change the TokenizerNormalizer's {@link IStopwords}
+	 * @param stopwords
+	 */
+	public void setStopwords(IStopwords stopwords) {
+		this.tokenizerNormalizer.getNormalizer().setStopwords(stopwords);
+	}
+	
+	/**
+	 * Retrieve the tree data structure of the terminology: {@link SetTokenTree}
+	 * @return the setTokenTree
+	 */
+	public SetTokenTree getSetTokenTree() {
+		return(this.setTokenTree);
+	}
+	
+	/**
+	 * Change the terminology by replace the {@link SetTokenTree}
+	 * @param setTokenTree a new {@link SetTokenTree}
+	 */
+	public void setSetTokenTree(SetTokenTree setTokenTree) {
+		this.setTokenTree = setTokenTree;
 	}
 }
