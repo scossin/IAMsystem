@@ -219,7 +219,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 				char tokenChar = tokenCharArray[y];
 				char sentenceChar = sentenceCharArray[sentencePosition]; // first token char = first sentence char ?
 
-				logger.debug("\t Comparing" + tokenChar + " and " + sentenceChar);
+				logger.debug("\t Comparing " + tokenChar + " and " + sentenceChar);
 
 				while (tokenChar != sentenceChar){ // it's not true in case of whites space => go to the next char of the sentence
 					sentencePosition ++ ;
