@@ -1,8 +1,13 @@
 # IAMsystem
 
-A general dictionary-based approach for semantic annotation.    
-It stores a terminology in a tree data structure for fast lookup.  
-It handles abbreviations and typos (with Levenshtein distance) at the token level. Brat output is available. 
+A dictionary-based approach for semantic annotation, a.k.a [entity linking](https://en.wikipedia.org/wiki/Entity_linking). 
+
+Semantic annotation is the process of finding mappings between text chunks and the concepts of a terminology. 
+
+IAMsystem scales linearly O(n) with n the number of tokens in a document. It doesn't depend on the number of terms in the terminology nor the number of tokens per term. 
+It can handle abbreviations and typos (with Levenshtein distance) dynamically at the token level.
+The terminology is stored in a tree data structure for low memory storage and fast lookup (O(1)). 
+Brat output is available. 
 
 ## Getting started
 
@@ -12,7 +17,7 @@ Add the dependency to your pom.xml to download it from the Maven Repository:
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.0.1</version>
+	<version>1.1.0</version>
 </dependency>
 ```
 
@@ -22,11 +27,14 @@ To build it, you will need Java 1.8 (or higher) JDK a recent version of Maven (h
 ```java
 // Initiate TermDetector
 TermDetector termDetector = new TermDetector();
-// add terms manually or by loading a CSV file
+// add terms from a terminology manually or by loading a CSV file
 termDetector.addTerm("high blood pressure", "I10");
 termDetector.addTerm("fever", "R50.9");
-// add abbreviations
-termDetector.addAbbreviations("blood pressure", "bp");
+// add abbreviations (optional)
+Abbreviations abbreviations = new Abbreviations();
+termDetector.addSynonym(abbreviations);
+abbreviations.addAbbreviation("blood pressure", "bp");
+// detect
 String inputString = "The patient denied any fever and has high BP.";
 DetectOutput detectOutput = termDetector.detect(inputString);
 System.out.println(detectOutput.toString());
@@ -34,7 +42,7 @@ System.out.println(detectOutput.toString());
 ```
 
 See how it works by loading the Maven project in the example folder using your favorite IDE.  
-If you notice some problems, please open an issue.
+If you notice a problem, please open an issue.
 
 ## Reference
 *    Cossin S, Jouhet V, Mougin F, Diallo G, Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. https://arxiv.org/abs/1807.03674
