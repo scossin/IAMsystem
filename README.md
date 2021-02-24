@@ -5,9 +5,18 @@ A dictionary-based approach for semantic annotation, a.k.a [entity linking](http
 Semantic annotation is the process of finding mappings between text chunks and the concepts of a terminology. 
 
 IAMsystem scales linearly O(n) with n the number of tokens in a document. It doesn't depend on the number of terms in the terminology nor the number of tokens per term. 
+  
+The terminology is stored in a tree data structure ([a trie](https://en.wikipedia.org/wiki/Trie)) for low memory storage and fast lookup (O(1)): 
+
+<img src="./trie_datastructure.png"/>
+
 It can handle abbreviations and typos (with Levenshtein distance) dynamically at the token level.
-The terminology is stored in a tree data structure for low memory storage and fast lookup (O(1)). 
+
+<img src="./search_algorithm.png" width="525" height="360"/>
+
 Brat output is available. 
+
+
 
 ## Getting started
 
