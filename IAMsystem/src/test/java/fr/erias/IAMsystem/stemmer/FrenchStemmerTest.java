@@ -9,7 +9,7 @@ import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.synonym.Stems;
 import fr.erias.IAMsystem.terminology.Terminology;
 
-public class StemmerTest {
+public class FrenchStemmerTest {
 
 	@Test
 	public void frenchStemmertest() {
