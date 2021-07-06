@@ -8,6 +8,8 @@ import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.synonym.Stems;
 import fr.erias.IAMsystem.terminology.Terminology;
+import fr.erias.IAMsystem.utils.FilterNchars;
+import fr.erias.IAMsystem.utils.IFilterToken;
 
 public class PrefixStemmerTest {
 
@@ -27,7 +29,8 @@ public class PrefixStemmerTest {
 		termDetector.addTerminology(terminology);
 		
 		IStemmer stemmer = new StemByPrefix(5);
-		Stems stems = new Stems(stemmer, terminology, termDetector.getTokenizerNormalizer());
+		IFilterToken filter = new FilterNchars(5);
+		Stems stems = new Stems(stemmer, terminology, termDetector.getTokenizerNormalizer(), filter);
 		termDetector.addSynonym(stems);
 		
 		DetectOutput detectOutput = termDetector.detect("le patient est diabétique");

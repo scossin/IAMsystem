@@ -6,8 +6,9 @@ import java.util.HashSet;
 import fr.erias.IAMsystem.stemmer.IStemmer;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
-import fr.erias.IAMsystem.utils.IFilter;
+import fr.erias.IAMsystem.utils.IFilterToken;
 import fr.erias.IAMsystem.utils.Utils;
+
 
 public class Stems implements ISynonym {
 
@@ -23,8 +24,14 @@ public class Stems implements ISynonym {
 	 */
 	public Stems(IStemmer stemmer, Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
 		this.stemmer = stemmer;
-		this.stemTokensOfTerminology(terminology, tokenizerNormalizer);
+		this.stemTokensOfTerminology(terminology, tokenizerNormalizer, new NoFilter());
 	}
+	
+	public Stems(IStemmer stemmer, Terminology terminology, ITokenizerNormalizer tokenizerNormalizer, IFilterToken filter) {
+		this.stemmer = stemmer;
+		this.stemTokensOfTerminology(terminology, tokenizerNormalizer, filter);
+	}
+
 
 	public IStemmer getStemmer(){
 		return(this.stemmer);
@@ -41,17 +48,8 @@ public class Stems implements ISynonym {
 		return(arraySynonyms);
 	}
 
-	private void stemTokensOfTerminology(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
-		HashSet<String> tokens = Utils.getUniqueToken(terminology, tokenizerNormalizer,	new IFilter() {
-			@Override
-			public boolean isAtokenToIgnore(String token) {
-				return (tokenHasLessThan5characters(token));
-			}
-
-			private boolean tokenHasLessThan5characters (String token){
-				return(token.length() < 5);
-			}
-		});
+	private void stemTokensOfTerminology(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer, IFilterToken filter) {
+		HashSet<String> tokens = Utils.getUniqueToken(terminology, tokenizerNormalizer,	filter);
 		for (String token : tokens) {
 			String stem = stemmer.stem(token);
 			addStem(token, stem);
@@ -69,6 +67,15 @@ public class Stems implements ISynonym {
 			HashSet<String[]> newEmptyHashSet = new HashSet<String[]>();
 			mapStem2tokens.put(stem, newEmptyHashSet);
 		}
-
 	}
 }	
+
+final class NoFilter implements IFilterToken {
+
+	@Override
+	public boolean isAtokenToIgnore(String token) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
+}

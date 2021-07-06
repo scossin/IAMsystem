@@ -10,7 +10,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 public class Utils {
 
 	public static HashSet<String> getUniqueToken(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer,
-			IFilter filterToken) {
+			IFilterToken filterToken) {
 		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		HashSet<String> uniqueTokens = new HashSet<String> ();
 		for (Term term : terminology.getTerms()) {
