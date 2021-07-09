@@ -1,24 +1,26 @@
 package fr.erias.IAMsystem.stemmer;
 
+/**
+ * Stem a string by taking the n first characters
+ * Is used with the ISynonym Stems class
+ * 
+ * @author Cossin Sebastien
+ *
+ */
 public class StemByPrefix implements IStemmer {
 
-	private int nFirstChar;
+	private int prefixLength;
 	
-	public StemByPrefix(int nFirstChar) {
-		this.nFirstChar = nFirstChar;
+	public StemByPrefix(int prefixLength) {
+		this.prefixLength = prefixLength;
 	}
 	
 	@Override
 	public String stem(String str) {
-		if (str.length() <= nFirstChar) {
+		if (str.length() <= prefixLength) {
 			return(str);
 		} else {
-			return(str.substring(0, nFirstChar));
+			return(str.substring(0, prefixLength));
 		}
-	}
-	
-	public static void main(String[] args){
-		StemByPrefix stem = new StemByPrefix(5);
-		System.out.println(stem.stem("gastroenterite"));
 	}
 }
