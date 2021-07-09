@@ -4,19 +4,18 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashSet;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
-import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.TokenTree;
 
 public class DetectionTest {
 

@@ -9,6 +9,11 @@ import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 
 public class Utils {
 
+	public static HashSet<String> getUniqueToken(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
+		IFilterToken noFilter = new NoFilter();
+		return getUniqueToken(terminology, tokenizerNormalizer, noFilter);
+	}
+	
 	public static HashSet<String> getUniqueToken(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer,
 			IFilterToken filterToken) {
 		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
@@ -25,9 +30,5 @@ public class Utils {
 			}
 		}
 		return(uniqueTokens);
-	}
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
 	}
 }
