@@ -54,8 +54,6 @@ public class StopwordsImpl implements IStopwords {
 	 * @throws IOException if the file can't be found
 	 */
 	public void setStopWords (InputStream in, INormalizer normalizer) throws IOException {
-		//ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-		//File file = new File(classLoader.getResource(stopwordsFile).getFile());
 		BufferedReader br = null;
 		br = new BufferedReader(new InputStreamReader(in));
 		String line = null;
@@ -63,7 +61,7 @@ public class StopwordsImpl implements IStopwords {
 			String normalizedLabel = normalizer.getNormalizedSentence(line);
 			stopwordsSet.add(normalizedLabel);
 		}
-		logger.info("stopwords size : " + stopwordsSet.size());
+		logger.debug("stopwords size : " + stopwordsSet.size());
 		br.close();
 	}
 	
