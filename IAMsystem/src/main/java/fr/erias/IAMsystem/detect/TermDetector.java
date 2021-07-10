@@ -6,8 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
-import fr.erias.IAMsystem.stopwords.IStopwords;
-import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
@@ -24,7 +22,7 @@ import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
  * @author Cossin Sebastien
  *
  */
-public class TermDetector {
+public class TermDetector implements ITermDetector {
 	
 	final static Logger logger = LoggerFactory.getLogger(TermDetector.class);
 	
