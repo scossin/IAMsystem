@@ -66,7 +66,7 @@ public class DetectionTest {
 		SetTokenTree tokenTreeSet0 = getSetTokenTreeTest();
 
 		// class that detects dictionary entries
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "Insuf.            cardiaqu aigue";

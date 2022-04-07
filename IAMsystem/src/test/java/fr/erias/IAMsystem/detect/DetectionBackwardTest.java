@@ -61,7 +61,7 @@ public class DetectionBackwardTest {
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "saignements abondants";
@@ -91,7 +91,7 @@ public class DetectionBackwardTest {
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "saignements abondants de la       ménopause suite à";
@@ -126,7 +126,7 @@ public class DetectionBackwardTest {
 		stopwords.addStopwords("suite");
 		stopwords.addStopwords("a");
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "saignements abondants de la       ménopause suite à un traitement";
@@ -162,7 +162,7 @@ public class DetectionBackwardTest {
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		//term = "saignement abondants de la menopause suite à un traitement anticoagulant";
 		String sentence = "saignements abondants de la ménopause anticoag fin";

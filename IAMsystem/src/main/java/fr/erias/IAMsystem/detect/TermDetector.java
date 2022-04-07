@@ -75,7 +75,7 @@ public class TermDetector {
 		for (ISynonym synonym : this.synonyms) {
 			synonyms.add(synonym);
 		}
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(this.setTokenTree,this.tokenizerNormalizer,synonyms);
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(this.setTokenTree,this.tokenizerNormalizer,synonyms);
 		return(detectDictionaryEntry.detectCandidateTerm(sentence));
 	}
 	

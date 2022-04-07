@@ -11,6 +11,7 @@ import org.junit.Test;
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
+import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
@@ -80,7 +81,7 @@ public class BratOutputTest {
 		SetTokenTree tokenTreeSet0 = getSetTokenTreeTest();
 
 		// class that detects dictionary entries
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
+		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "Insuf.            cardiaqu aigue et AVC hémorragiQUE";

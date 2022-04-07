@@ -25,7 +25,7 @@ import fr.erias.IAMsystem.tree.TokenTree;
  * @author Cossin Sebastien
  *
  */
-public class DetectDictionaryEntry {
+public class DetectDictionaryEntry implements IDetectCT {
 
 	private final static Logger logger = LoggerFactory.getLogger(DetectDictionaryEntry.class);
 
@@ -56,11 +56,7 @@ public class DetectDictionaryEntry {
 		this.synonyms = synonyms;
 	}
 	
-	/**
-	 * Initialize a new sentence
-	 * @param sentence The sentence to analyze
-	 * @return an instance of {@link DetectOutput} containing {@link CTcode} and {@link TNoutput}
-	 */
+	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
 		TreeLocation treeLocation = new TreeLocation(this.setTokenTree);
