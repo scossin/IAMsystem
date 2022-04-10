@@ -1,11 +1,11 @@
 package fr.erias.IAMsystem.exceptions;
 
-import org.slf4j.Logger;
+public class ProcessSentenceException extends IAMsystemExceptions {
 
-public class ProcessSentenceException extends MyExceptions {
+	private static final long serialVersionUID = -1198776754946398049L;
 
-	public ProcessSentenceException(Logger logger, String sentence) {
-		super(logger,"Something went wrong when analysing sentence : " + sentence);
+	public ProcessSentenceException(String sentence) {
+		super("Something went wrong when analysing sentence : " + sentence);
 	}
 
 }

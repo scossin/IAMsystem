@@ -1,11 +1,11 @@
 package fr.erias.IAMsystem.exceptions;
 
-import org.slf4j.Logger;
+public class UnfoundTokenInSentence extends IAMsystemExceptions{
 
-public class UnfoundTokenInSentence extends MyExceptions{
+	private static final long serialVersionUID = -5750726384502837323L;
 
-	public UnfoundTokenInSentence(Logger logger, String token, String sentence) {
-		super(logger,"Unfound token : " + token + "in sentence : \n" + sentence);
+	public UnfoundTokenInSentence(String token, String sentence) {
+		super("Unfound token : " + token + "in sentence : \n" + sentence);
 	}
 
 }

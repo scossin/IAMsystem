@@ -1,8 +1,5 @@
 package fr.erias.IAMsystem.normalizer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
@@ -13,8 +10,6 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
  */
 public class Normalizer implements INormalizer {
 
-	final static Logger logger = LoggerFactory.getLogger(Normalizer.class);
-	
 	/**
 	 * Stopwords to exclude during normalization
 	 */

@@ -6,9 +6,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.normalizer.INormalizer;
 
 /**
@@ -18,8 +15,6 @@ import fr.erias.IAMsystem.normalizer.INormalizer;
  */
 public class StopwordsImpl implements IStopwords {
 
-	final static Logger logger = LoggerFactory.getLogger(StopwordsImpl.class);
-	
 	/**
 	 * A set of stopwords
 	 */
@@ -63,7 +58,6 @@ public class StopwordsImpl implements IStopwords {
 			String normalizedLabel = normalizer.getNormalizedSentence(line);
 			stopwordsSet.add(normalizedLabel);
 		}
-		logger.info("stopwords size : " + stopwordsSet.size());
 		br.close();
 	}
 	
@@ -79,7 +73,6 @@ public class StopwordsImpl implements IStopwords {
 		while ((line = br.readLine()) != null) {
 			stopwordsSet.add(line);
 		}
-		logger.info("stopwords size : " + stopwordsSet.size());
 		br.close();
 	}
 	

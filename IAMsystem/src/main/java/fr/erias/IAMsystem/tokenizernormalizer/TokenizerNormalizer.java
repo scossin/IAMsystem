@@ -1,18 +1,12 @@
 package fr.erias.IAMsystem.tokenizernormalizer;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.exceptions.InvalidSentenceLength;
-import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
-import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 
 /**
  * A class that tokenizes and normalizes a sentence
@@ -20,8 +14,6 @@ import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
  *
  */
 public class TokenizerNormalizer implements ITokenizerNormalizer {
-
-	final static Logger logger = LoggerFactory.getLogger(TokenizerNormalizer.class);
 
 	/**
 	 * A class to normalize a term
@@ -81,15 +73,15 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		try {
 			this.checkUnchangedLength(originalSentence, normalizedSentence);
 		} catch (InvalidSentenceLength e) {
-			logger.error("Something went wrong during normalization");
-			logger.error("\t original sentence:" + originalSentence);
-			logger.error("\t\toriginal sentence length: " + sentence.length());
-			logger.error("\t normalizedSentence:" + normalizedSentence);
-			logger.error("\t\tnormalizedSentence length: " + normalizedSentence.length());
-			logger.error("sentence length: " + sentence.length() + " : \n " + sentence);
-			MyExceptions.logException(logger, e);
+			StringBuilder sb = new StringBuilder();
+			sb.append("Something went wrong during normalization");
+			sb.append("\t original sentence:" + originalSentence);
+			sb.append("\t\toriginal sentence length: " + sentence.length());
+			sb.append("\t normalizedSentence:" + normalizedSentence);
+			sb.append("\t\tnormalizedSentence length: " + normalizedSentence.length());
+			sb.append("sentence length: " + sentence.length() + " : \n " + sentence);
+			System.err.println(sb.toString());
 			e.printStackTrace();
-			
 			// we recover from this error by assigning the normalized form to the original sentence:
 			originalSentence = normalizedSentence;
 		}
@@ -103,10 +95,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 					tokensArray
 					);
 		} catch (UnfoundTokenInSentence e) {
-			logger.error("Something went wrong during detecting start and end of each token");
-			MyExceptions.logException(logger, e);
 			e.printStackTrace();
-			// impossible to recover from this error - send an error object
 			return(TNoutput.getErrorTNoutput());
 		}
 		String[] tokensArrayOriginal = this.getTokensArrayOriginal(tokensArray, originalSentence, tokenStartEndInSentence);
@@ -154,7 +143,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 		if (originalSentence.length() != modifiedSentence.length()) {
 			String msg = "Original length " + originalSentence.length() + " : " + originalSentence + "\n" +
 		"Modified length " + modifiedSentence.length() + modifiedSentence;
-			throw new InvalidSentenceLength(logger, msg);
+			throw new InvalidSentenceLength(msg);
 		}
 		return;
 	}
@@ -212,23 +201,18 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 
 		for (int i = 0 ; i<tokensArray.length ; i++){ // for each token
 			String token = tokensArray[i]; 
-			logger.debug("Current Token to found in sentence : " + token);
 			char[] tokenCharArray = token.toCharArray();
 
 			for (int y = 0 ; y<tokenCharArray.length ; y++){ // for each char of the token
 				char tokenChar = tokenCharArray[y];
 				char sentenceChar = sentenceCharArray[sentencePosition]; // first token char = first sentence char ?
 
-				logger.debug("\t Comparing " + tokenChar + " and " + sentenceChar);
-
 				while (tokenChar != sentenceChar){ // it's not true in case of whites space => go to the next char of the sentence
 					sentencePosition ++ ;
 					if (sentencePosition > sentenceLength){
-						throw new UnfoundTokenInSentence(logger, token, normalizedSentence);
+						throw new UnfoundTokenInSentence(token, normalizedSentence);
 					}
 					sentenceChar = sentenceCharArray[sentencePosition]; // next sentence char
-					logger.debug("\t advancing to next char");
-					logger.debug("\t Comparing now" + tokenChar + " and " + sentenceChar);
 				}
 				if (y == 0){ // First char the token => start position
 					tokenStart = sentencePosition ;
@@ -236,10 +220,8 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 				if (y == tokenCharArray.length - 1){ // Last char of the token => end position
 					tokenEnd = sentencePosition ;
 				}
-				logger.debug("\t char found at position" +  Integer.toString(sentencePosition)); // this info is not recorded ; only tokenStart and end matters
 				sentencePosition = sentencePosition + 1 ; // don't stay at the end of the previous token : move to the next char
 			}
-			logger.debug("\t token found at positions " +  Integer.toString(tokenStart) + " - " + Integer.toString(tokenEnd)); 
 			int[] OneTokenStartEnd = {tokenStart,tokenEnd};
 			tokenStartEndInSentence[i] = OneTokenStartEnd;
 		}

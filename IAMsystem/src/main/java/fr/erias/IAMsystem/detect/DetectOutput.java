@@ -20,7 +20,6 @@ public class DetectOutput {
 	 */
 	private TNoutput tnoutput;
 	
-	
 	/**
 	 * dictionary entries detected
 	 */

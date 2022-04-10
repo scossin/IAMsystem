@@ -8,9 +8,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
@@ -27,8 +24,6 @@ import fr.erias.IAMsystem.tree.Trie;
  *
  */
 public class DetectCT implements IDetectCT {
-
-	private final static Logger logger = LoggerFactory.getLogger(DetectCT.class);
 
 	/**
 	 * The initial terminology in a tree datastructure
@@ -65,13 +60,10 @@ public class DetectCT implements IDetectCT {
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
 		String[] tokensArray = tnoutput.getTokens();
-		logger.debug(tokensArray.length + " tokens");
 
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
-			logger.debug("current index: " + currentI);
 			String token = tokensArray[currentI];
-			logger.debug("current token: " + token);
 			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(token)) {
 				treeLocation.addStopword(token);
 			} else {
@@ -105,8 +97,6 @@ public class DetectCT implements IDetectCT {
  */
 
 class TreeLocation {
-
-	protected final static Logger logger = LoggerFactory.getLogger(TreeLoc.class);
 
 	/**
 	 * dictionary entry found = a {@link CandidateTerm} with a code
@@ -187,12 +177,8 @@ class TreeLocation {
 			int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 			String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
 
-			logger.debug("CandidateTermString : " + candidateTermString);
-
 			String[] candidateTokenArray = candidateTokensList.toArray(new String[candidateTokensList.size()]);
 			// create it
-			logger.debug("code is : " + term.getCode());
-			// String label = ITokenizer.arrayToString(tokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
 			CTcode candidateTerm = new CTcode(candidateTermString, 
 					candidateTokenArray,
 					startPosition, 
@@ -227,7 +213,6 @@ class TreeLocation {
 	
 	public void searchNextStates(TNoutput tnoutput, String token, Set<ISynonym> synonyms) {
 		nodes = nextStates(token, synonyms);
-		logger.debug(" \t nextStates size: " + nodes.size());
 		if (pathFound(nodes)) {
 			candidateTokensList.add(token);
 			saveTermIfAnyFinalState(tnoutput, nodes);

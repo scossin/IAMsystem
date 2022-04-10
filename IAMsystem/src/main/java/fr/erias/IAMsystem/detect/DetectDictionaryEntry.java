@@ -7,9 +7,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.synonym.ISynonym;
@@ -28,8 +25,6 @@ import fr.erias.IAMsystem.tree.TokenTree;
  *
  */
 public class DetectDictionaryEntry implements IDetectCT {
-
-	private final static Logger logger = LoggerFactory.getLogger(DetectDictionaryEntry.class);
 
 	/**
 	 * The initial terminology in a tree datastructure
@@ -66,13 +61,10 @@ public class DetectDictionaryEntry implements IDetectCT {
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
 		String[] tokensArray = tnoutput.getTokens();
-		logger.debug(tokensArray.length + " tokens");
 
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
-			logger.debug("current index: " + currentI);
 			String token =  tokensArray[currentI];
-			logger.debug("current token: " + token);
 			treeLocation.setCurrentSynonyms(token, synonyms); // search synonyms (abbreviations, typos...)
 			if (treeLocation.getMonitorCandidates().isCurrentFound()) { // the token is found in the tree
 				changeTreeLocation(token, treeLocation); // move deeper
@@ -102,7 +94,6 @@ public class DetectDictionaryEntry implements IDetectCT {
 		// the algorithm change its current location in the tree : 
 		SetTokenTree tempSetTokenTree = treeLocation.getTempSetTokenTree().getSetTokenTree(treeLocation.getCurrentSynonyms()); // currentSynonyms may contain : token (perfect match), abbreviations and corrected typos
 		treeLocation.setTempSetTokenTree(tempSetTokenTree);
-		logger.debug("size of tempSetTokens : " + tempSetTokenTree.getMapTokenTree().size());
 	}
 	/**
 	 * Add a dictionary entry
@@ -113,20 +104,17 @@ public class DetectDictionaryEntry implements IDetectCT {
 	private void setCurrentCandidate(String token, TreeLoc treeLocation, TNoutput tnoutput) {
 		// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
 		if (!treeLocation.getMonitorCandidates().isCurrentCandidate()) {
-			logger.debug("\t not a currentCandidate, go to next token");
 			return; // 
 		}
 
 		// case stopwords : add and continue 
 		if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(token)) {
-			logger.debug(" \t stopword detected");
 			// add the stopword to the array of tokens :
 			treeLocation.getMonitorCandidates().addToken(token);
 			return;
 		}
 
 		// case end of a candidate term (isCurrentCandidate() is true)
-		logger.debug("\t it's a current candidate, add it");
 		addCandidateTerm(treeLocation, tnoutput);
 
 		// reset the algorithm to detect the next candidate term : 
@@ -149,17 +137,12 @@ public class DetectDictionaryEntry implements IDetectCT {
 		treeLocation.getMonitorCandidates().setLastTokenTree(treeLocation.getTempSetTokenTree());
 		HashSet<TokenTree> previousTokenTrees = treeLocation.getMonitorCandidates().getLastTokenTree();
 		if (previousTokenTrees.size() == 0) { // for example "insuffisance" was matched but no code for this word (no term in the terminology)
-			logger.debug("no previous token, code is null again. no term found");
 			int currentI = (treeLocation.getCurrentI() - treeLocation.getMonitorCandidates().getCandidateTokensList().size()) + 1 ; // i => i + 1 ; without the first token
 			treeLocation.setCurrentI(currentI);
 			return;
 		}
-		logger.debug("term was found"); // a term with a code is found
 
 		String[] candidateTokensArray = treeLocation.getMonitorCandidates().getCandidateTokenArray(tokenizerNormalizer);
-		for (String candidate : candidateTokensArray) {
-			logger.debug("new candidate is " + candidate);
-		}
 
 		// recalculate start/end position in sentence - substring to have the term ...
 		int tokenStartPosition = treeLocation.getCurrentI() - treeLocation.getMonitorCandidates().getCandidateTokensList().size();
@@ -169,12 +152,9 @@ public class DetectDictionaryEntry implements IDetectCT {
 		int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 		String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
 
-		logger.debug("CandidateTermString : " + candidateTermString);
-
 		// create it
 		for (TokenTree tokenTree : previousTokenTrees) {
 			Term term =  tokenTree.getTerm();
-			logger.debug("code is : " + term.getCode());
 			String label = ITokenizer.arrayToString(tokenTree.getCurrentAndPreviousTokens()," ".charAt(0));
 			CTcode candidateTerm = new CTcode(candidateTermString, 
 					candidateTokensArray, 
@@ -214,8 +194,6 @@ public class DetectDictionaryEntry implements IDetectCT {
  */
 
 class TreeLoc {
-
-	protected final static Logger logger = LoggerFactory.getLogger(TreeLocation.class);
 
 	/**
 	 * dictionary entry found = a {@link CandidateTerm} with a code
@@ -277,15 +255,8 @@ class TreeLoc {
 		// if found by perfect match :
 		boolean currentFound = tempSetTokenTree.containToken(token); 
 		// if not found by perfect match, is it found with synonyms ?
-		if (currentFound) {
-			logger.debug(" \t token found by perfect match");
-		} else {
+		if (!currentFound) {
 			currentFound = tempSetTokenTree.containTokenBi(currentSynonyms);
-			if (currentFound) {
-				logger.debug(" \t token found by synonyms (typos or abbreviations)");
-			} else {
-				logger.debug(" \t token not found at all");
-			}
 		}
 		monitorCandidates.setCurrentFound(currentFound);
 	}
@@ -337,8 +308,6 @@ class TreeLoc {
  *
  */
 class MonitorCandidates{
-
-	private final static Logger logger = LoggerFactory.getLogger(MonitorCandidates.class);
 
 	/**
 	 * If the current token is found in the dictionary
@@ -408,7 +377,6 @@ class MonitorCandidates{
 		// sometimes we must go backward to retrieve a code
 		ArrayList<String> tempCandidateTokenList = null;
 		if (candidateTokensList.size()!= lastTokenTreePosition) {
-			logger.debug("Removing some tokens because we need to go backward");
 			tempCandidateTokenList = new ArrayList<String>(candidateTokensList.subList(0,lastTokenTreePosition));
 		} else {
 			tempCandidateTokenList = candidateTokensList; // if not, it's just equal to candidateTokensList
@@ -419,7 +387,6 @@ class MonitorCandidates{
 		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
 			String lastToken = tempCandidateTokenList.get(y);
 			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(lastToken)){
-				logger.debug("last token is a stopword : " + lastToken);
 				numberOfTokens2remove = numberOfTokens2remove + 1;
 			} else {
 				break;

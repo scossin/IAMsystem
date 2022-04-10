@@ -17,8 +17,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.apache.lucene.search.TermQuery;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class search in the Lucene index
@@ -27,8 +25,6 @@ import org.slf4j.LoggerFactory;
  */
 public class SearchIndex {
 
-	final static Logger logger = LoggerFactory.getLogger(SearchIndex.class);
-	
 	/**
 	 * By default a stopword analyzer without stopwords
 	 */
@@ -80,7 +76,6 @@ public class SearchIndex {
      * @throws ParseException If something bad happens while parsing the term
      */
     public Query searchTerm (String term, String fieldName) throws IOException, ParseException {
-    	logger.debug("Preparing query to search index term : " + term + " in fieldName : " + fieldName);
 	    QueryParser parser = new QueryParser(fieldName, analyzer);
 	    Query query = null;
 	    query = parser.parse(term);
@@ -107,7 +102,6 @@ public class SearchIndex {
      * @throws IOException If something append while searching the index
      */
     public Query searchExactTerm (String term, String fieldName) throws IOException{
-        logger.debug("Preparing to search in index this exact term : " + term + " in fieldName : " + fieldName);
     	Query query = new TermQuery(new Term(fieldName,term));
     	return(query);
     }

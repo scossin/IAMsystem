@@ -2,9 +2,6 @@ package fr.erias.IAMsystem.detect;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
@@ -21,8 +18,6 @@ import fr.erias.IAMsystem.tree.Trie;
  *
  */
 public class TermDetector {
-	
-	final static Logger logger = LoggerFactory.getLogger(TermDetector.class);
 	
 	/**
 	 * normalizes terms and textual content. It stores the stopwords instances

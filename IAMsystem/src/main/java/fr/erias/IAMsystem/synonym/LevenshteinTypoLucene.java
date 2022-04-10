@@ -16,7 +16,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.lucene.SearchIndex;
 
@@ -189,8 +188,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 			output = searchIndexLeven(token);
 			return(output);
 		} catch (IOException | ParseException e) {
-			logger.debug("an error occured while searching in the lucene index");
-			MyExceptions.logException(logger, e);
+			e.getStackTrace();
 			return(ISynonym.no_synonyms);
 		}
 	}

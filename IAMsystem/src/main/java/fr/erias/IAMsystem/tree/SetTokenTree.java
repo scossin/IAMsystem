@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This class contains all the terms of a terminology. Each term has 1 to n token. Each token is a {@link TokenTree} <br> 
  * The main attribute is mapTokenTree : it contains all the first token (the key of the HashMap) of every terms of the terminology <br>
@@ -15,8 +12,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class SetTokenTree {
-
-	final static Logger logger = LoggerFactory.getLogger(SetTokenTree.class);
 
 	/**
 	 * The main attribute : it contains all the first token of every terms of a terminology
@@ -151,13 +146,10 @@ public class SetTokenTree {
 	 * @return a {@link SetTokenTree}
 	 */
 	public SetTokenTree getSetTokenTree(String[] tokensArray) {
-		logger.debug("\t \t getSetTokenTree by tokensArray");
 		SetTokenTree newSetTokenTree = this;
 		for (int i = 0 ; i < tokensArray.length; i++) {
 			String token = tokensArray[i];
-			logger.debug("\t \t token : " + token);
 			newSetTokenTree = newSetTokenTree.getSetTokenTree(token);
-			logger.debug("\t \t size : " + newSetTokenTree.getMapTokenTree().size());
 		}
 		return(newSetTokenTree);
 	}
@@ -171,16 +163,13 @@ public class SetTokenTree {
 	public SetTokenTree getSetTokenTree(HashSet<String[]> synonyms) {
 		SetTokenTree newSetTokenTree = new SetTokenTree();
 		for (String[] synonyme : synonyms) {
-			logger.debug("synonyms : " + synonyme[0]);
 			SetTokenTree tempSetTokenTree = getSetTokenTree(synonyme);
 			for (HashSet<TokenTree> hashsetTokenTree : tempSetTokenTree.getMapTokenTree().values()) {
 				for (TokenTree tokenTree : hashsetTokenTree) {
 					newSetTokenTree.addTokenTree(tokenTree);
 				}
 			}
-			logger.debug("newSetTokenTreeSize : " + newSetTokenTree.getMapTokenTree().size());
 			newSetTokenTree.getPreviousTokenTrees().addAll(tempSetTokenTree.getPreviousTokenTrees());
-			logger.debug("number of codes tempSetTokenTree : " + tempSetTokenTree.getPreviousTokenTrees().size());
 		}
 		return(newSetTokenTree);
 	}

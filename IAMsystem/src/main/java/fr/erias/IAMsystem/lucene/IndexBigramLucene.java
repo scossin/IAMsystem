@@ -14,8 +14,6 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
@@ -30,8 +28,6 @@ import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
  *
  */
 public class IndexBigramLucene {
-
-	final static Logger logger = LoggerFactory.getLogger(IndexBigramLucene.class);
 
 	/**
 	 * The name of the Lucene that contains the concatenated form (ex : "meningoencephalite")
@@ -80,7 +76,6 @@ public class IndexBigramLucene {
 	 */
 	private static void IndexLuceneUniqueTokensBigram(HashMap<String,String> uniqueTokensBigram, File indexFolder) throws IOException {
 		// Indexing in Lucene
-		logger.info("Indexing Terminology...");
 		Directory directory = FSDirectory.open(indexFolder.toPath());
 		IndexWriterConfig config = new IndexWriterConfig();
 		config.setOpenMode(OpenMode.CREATE);    //config.setOpenMode(OpenMode.CREATE_OR_APPEND);
@@ -99,7 +94,6 @@ public class IndexBigramLucene {
 			iwriter.addDocument(doc); // write the document to the index
 			counter ++ ;
 		}
-		logger.info("number of lines indexed : " + counter);
 		iwriter.close();
 		directory.close();
 	}

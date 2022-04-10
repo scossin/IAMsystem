@@ -76,7 +76,6 @@ public class DetectionBackwardTest {
 		assertEquals(CTdetected.getCandidateTerm(), "saignements");
 		assertEquals(CTdetected.getCandidateTermString(),"saignements");
 		assertEquals(CTdetected.getCode(), "X1"); // the abces code
-		System.out.println(CTdetected.getJSONobject().toString());
 	}
 	
 	@Test
@@ -101,7 +100,6 @@ public class DetectionBackwardTest {
 		String sentence = "saignements abondants de la       ménopause suite à";
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
-		System.out.println(CTdetected.getJSONobject().toString());
 		// only one match : 
 		assertEquals(detectOutput.getCTcodes().size(), 1);
 		assertEquals(CTdetected.getCandidateTerm(), "saignements abondants de la menopause");
@@ -136,7 +134,6 @@ public class DetectionBackwardTest {
 		String sentence = "saignements abondants de la       ménopause suite à un traitement";
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
-		System.out.println(CTdetected.getJSONobject().toString());
 		// only one match : 
 		assertEquals(detectOutput.getCTcodes().size(), 1);
 		assertEquals(CTdetected.getCandidateTerm(), "saignements abondants de la menopause");

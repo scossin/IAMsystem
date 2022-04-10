@@ -16,9 +16,6 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
  */
 public class Trie {
 	
-	// There is only one unique emptyNode
-	//public final static int emptyNodeNumber = -1;
-	//public final static Node emptyNode = new Node("EMPTY_NODE", emptyNodeNumber);
 	public static boolean isTheEmptyNode(INode node) {
 		return node == EmptyNode.EMPTYNODE;
 	}

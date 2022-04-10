@@ -17,8 +17,6 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 public class CT {
 
-	final static Logger logger = LoggerFactory.getLogger(CT.class);
-	
 	/**
 	 * The candidate term as it is in the sentence 
 	 */
@@ -166,16 +164,5 @@ public class CT {
 			outputSet.add(potentialCandidate);
 		}
 		return(outputSet);
-	}
-	
-	/**
-	 * Debugging purpose only
-	 */
-	public void debugInitialization(){
-		logger.debug("New candidateTerm");
-		logger.debug("\t New candidate term : " + candidateTermString);
-		logger.debug("\t Starting at : " + startPosition);
-		logger.debug("\t Ending at : " + endPosition);
-		logger.debug("\t Tokens : " + getCandidateTerm());
 	}
 }
