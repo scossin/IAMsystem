@@ -2,8 +2,11 @@ package fr.erias.IAMsystem.synonym;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
@@ -13,7 +16,6 @@ import org.apache.lucene.search.ScoreDoc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.erias.IAMsystem.detect.HashSetStringArray;
 import fr.erias.IAMsystem.exceptions.MyExceptions;
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.lucene.SearchIndex;
@@ -35,12 +37,12 @@ public class LevenshteinTypoLucene implements ISynonym {
 	/**
 	 * Save unmatched, no need to search multiples times the same token that had no match
 	 */
-	private HashSet<String> unmatched = new HashSet<String>() ;
+	private Set<String> unmatched = new HashSet<String>() ;
 	
 	/**
 	 * Save matched, no need to search multiples times the same token that had a match 
 	 */
-	private HashMap<String, HashSet<String[]>> matched = new HashMap<String, HashSet<String[]>>();
+	private Map<String, Set<List<String>>> matched = new HashMap<String, Set<List<String>>>();
 	
 	/**
 	 * Number of insertion, deletion of the Levenshtein distance. Max 2
@@ -109,13 +111,12 @@ public class LevenshteinTypoLucene implements ISynonym {
 	 * @throws IOException If the index is not found
 	 * @throws ParseException If the Lucene query fails
 	 */
-	private HashSet<String[]> searchIndexLeven(String term) throws IOException, ParseException {
+	private Set<List<String>> searchIndexLeven(String term) throws IOException, ParseException {
 		// return this : exact term and typos in term
-		HashSetStringArray synonyms = new HashSetStringArray(); // A customized HashSet of array
 
 		// don't search anything if less than 4 characters (to avoid noise)
-		if (term.length()<this.minNchar) { 
-			return(synonyms);
+		if (term.length() < this.minNchar) { 
+			return(ISynonym.no_synonyms);
 		}
 
 		int maxHits = 10; // number of maximum hits - results
@@ -127,21 +128,19 @@ public class LevenshteinTypoLucene implements ISynonym {
 		// if no hits return
 		if (hits.length == 0) {
 			addUnmatched(term);
-			return(synonyms);
+			return(ISynonym.no_synonyms);
 		}
 
 		// if hits, add the array of synonyms
+		Set<List<String>> synonyms = new HashSet<List<String>>();
 		for (int i = 0; i<hits.length ; i++) {
 			Document doc = searchIndex.getIsearcher().doc(hits[i].doc);
 			String bigram = doc.get(IndexBigramLucene.BIGRAM_FIELD);
 			logger.debug("detected synonyms : " + bigram);
 			String[] bigramArray = bigram.split(" ");
-			if (!synonyms.containsArray(bigramArray)) {
-				synonyms.add(bigramArray);
-			}
+			synonyms.add(Arrays.asList(bigramArray));
 		}
 		logger.debug("synonyms size : " + synonyms.size());
-		
 		addMatched(term, synonyms);
 		return(synonyms);
 	}
@@ -167,18 +166,18 @@ public class LevenshteinTypoLucene implements ISynonym {
 	 * @param token a token found in this index
 	 * @param synonyms a list of "synonyms" (aka lexical variants)
 	 */
-	private void addMatched(String token, HashSet<String[]> synonyms) {
+	private void addMatched(String token, Set<List<String>> synonyms) {
 		matched.put(token, synonyms);
 	}
 	
 	@Override
-	public HashSet<String[]> getSynonyms(String token) {
-		HashSet<String[]> output = new HashSet<String[]>();
+	public Set<List<String>> getSynonyms(String token) {
 		// if already searched and no matched
 		if (unmatched.contains(token)) {
-			return(output);
+			return(ISynonym.no_synonyms);
 		}
 		
+		Set<List<String>> output;
 		// if already searched and matched found 
 		if (matched.containsKey(token)) {
 			output = matched.get(token);
@@ -188,11 +187,11 @@ public class LevenshteinTypoLucene implements ISynonym {
 		// if it's the first time we searched this token :
 		try {
 			output = searchIndexLeven(token);
+			return(output);
 		} catch (IOException | ParseException e) {
 			logger.debug("an error occured while searching in the lucene index");
 			MyExceptions.logException(logger, e);
+			return(ISynonym.no_synonyms);
 		}
-		return(output);
 	}
-
 }

@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
+
 import org.junit.Test;
+
 import fr.erias.IAMsystem.detect.DetectionBackwardTest;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
+@Deprecated
 public class TokenTreeTest {
     
 	@Test

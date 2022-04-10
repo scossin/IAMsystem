@@ -3,23 +3,41 @@ package fr.erias.IAMsystem.detect;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
-import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizer.Tokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.TokenTree;
 
+@Deprecated
 public class DetectionTest {
 
+	public static ISynonym getCardiaquTypo() {
+		ISynonym levenshtein = new ISynonym() {
+			@Override
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
+				if (token.equals("cardiaqu")) {
+					String[] temp = {"cardiaque"};
+					synonym.add(Arrays.asList(temp));
+				}
+				return synonym;
+			}
+		};
+		return(levenshtein);
+	}
+	
 	public static SetTokenTree getSetTokenTreeTest() {
 		SetTokenTree setTokenTree = new SetTokenTree();
 		setTokenTree.addTokenTree(DetectionBackwardTest.getTokenTree("avc sylvien droit", "I63"));
@@ -47,16 +65,15 @@ public class DetectionTest {
 		// simulating a levenshtein distance : 
 		ISynonym levenshtein = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
 				if (token.equals("cardiaqu")) {
 					String[] temp = {"cardiaque"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 				}
 				return synonym;
 			}
 		};
-
 		// find synonyms with abbreviations and typos : 
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);

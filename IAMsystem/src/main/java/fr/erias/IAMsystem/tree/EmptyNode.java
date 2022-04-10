@@ -8,6 +8,8 @@ import fr.erias.IAMsystem.terminology.Term;
 
 public class EmptyNode implements INode {
 
+	private static final Set<INode> noNodes = new HashSet<INode>();
+	
 	public static final EmptyNode EMPTYNODE = new EmptyNode();
 	
 	private EmptyNode() {};
@@ -43,8 +45,8 @@ public class EmptyNode implements INode {
 	}
 
 	@Override
-	public Set<INode> gotoNodes(HashSet<String[]> setOfsynonyms) {
-		return new HashSet<INode>();
+	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms) {
+		return noNodes;
 	}
 
 	@Override
@@ -54,7 +56,6 @@ public class EmptyNode implements INode {
 
 	@Override
 	public void addChildNode(INode node) {
-		// TODO Auto-generated method stub
 		
 	}
 

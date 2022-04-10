@@ -3,7 +3,10 @@ package fr.erias.IAMsystem.detect;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
@@ -18,6 +21,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
 
+@Deprecated
 public class DetectionBackwardTest {
 
 	public static TokenTree getTokenTree(String label, String code) {
@@ -49,11 +53,11 @@ public class DetectionBackwardTest {
 	public void DetectionSaignementTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		ISynonym synonym = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
 				if (token.equals("saignements")) {
 					String[] temp = {"saignement"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 				}
 				return synonym;
 			}
@@ -79,11 +83,11 @@ public class DetectionBackwardTest {
 	public void DetectionSaignementMenopauseTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		ISynonym synonym = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
 				if (token.equals("saignements")) {
 					String[] temp = {"saignement"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 				}
 				return synonym;
 			}
@@ -109,11 +113,11 @@ public class DetectionBackwardTest {
 	public void DetectionSaignementMenopauseStopwordsTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		ISynonym synonym = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
 				if (token.equals("saignements")) {
 					String[] temp = {"saignement"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 				}
 				return synonym;
 			}
@@ -140,21 +144,32 @@ public class DetectionBackwardTest {
 		assertEquals(CTdetected.getCode(), "X2"); // the abces code
 	}
 	
+	ISynonym levenshtein = new ISynonym() {
+		@Override
+		public Set<List<String>> getSynonyms(String token) {
+			Set<List<String>> synonyms = new HashSet<List<String>>();
+			if (token.equals("cardiaqu")) {
+				String[] longForm = {"cardiaque"};
+				synonyms.add(Arrays.asList(longForm));
+			}
+			return synonyms;
+		}
+	};
 	@Test
 	public void DetectionAfterBackwardTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		ISynonym synonym = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonym = new HashSet<List<String>>();
 				if (token.equals("saignements")) {
 					String[] temp = {"saignement"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 				}
 				if (token.equals("anticoag")) {
 					String[] temp = {"anticoagulant"};
-					synonym.add(temp);
+					synonym.add(Arrays.asList(temp));
 					String[] temp2 = {"suite"}; // anticoag has 2 meanings possibles
-					synonym.add(temp2);
+					synonym.add(Arrays.asList(temp2));
 				}
 				return synonym;
 			}

@@ -52,10 +52,10 @@ public class Node implements INode {
 		return(node);
 	}
 	
-	public Set<INode> gotoNodes(HashSet<String[]> setOfsynonyms){
+	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms){
 		Set<INode> nodes = new HashSet<INode>();
-		for (String[] synonyms : setOfsynonyms) {
-			INode node = gotoNode(List.of(synonyms));
+		for (List<String> synonyms : setOfsynonyms) {
+			INode node = gotoNode(synonyms);
 			nodes.add(node);
 		}
 		nodes.remove(EmptyNode.EMPTYNODE);

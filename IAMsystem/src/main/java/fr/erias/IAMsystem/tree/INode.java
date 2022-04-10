@@ -18,7 +18,7 @@ public interface INode {
 	
 	public INode gotoNode(List<String> tokens);
 	
-	public Set<INode> gotoNodes(HashSet<String[]> setOfsynonyms);
+	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms);
 	
 	public boolean isAfinalState();
 	

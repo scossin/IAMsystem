@@ -1,6 +1,7 @@
 package fr.erias.IAMsystem.detect;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -18,7 +19,7 @@ import fr.erias.IAMsystem.tree.Trie;
 
 
 /**
- * This class extracts dictionary entries in a sentence and return a TreeSet of {@link CTcode} <br>
+ * This class extracts dictionary entries in a document and return a List of {@link CTcode} <br>
  * containing, for each dictionary entry detected, the start and endOffset of the entry in the sentence with its code (or URI)
  * @author Cossin Sebastien
  *
@@ -40,7 +41,7 @@ public class DetectCT implements IDetectCT {
 	/**
 	 * Set of synonyms: abbreviations, typos...
 	 */
-	private final HashSet<ISynonym> synonyms ;
+	private final Set<ISynonym> synonyms ;
 
 	/**
 	 * 
@@ -48,7 +49,7 @@ public class DetectCT implements IDetectCT {
 	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
-	public DetectCT(Trie trie, ITokenizerNormalizer tokenizerNormalizer, HashSet<ISynonym> synonyms) {
+	public DetectCT(Trie trie, ITokenizerNormalizer tokenizerNormalizer, Set<ISynonym> synonyms) {
 		this.trie = trie;
 		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
@@ -91,7 +92,7 @@ public class DetectCT implements IDetectCT {
 	 * Set of synonyms: abbreviations, typos...
 	 * @return a set of {@link ISynonym} that will search an alternative for each token
 	 */
-	public HashSet<ISynonym> getSynonyms (){
+	public Set<ISynonym> getSynonyms (){
 		return(this.synonyms);
 	}
 }
@@ -143,16 +144,16 @@ class TreeLocation {
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
 	 */
-
-	private HashSet<INode> nextStates(String token, HashSet<ISynonym> synonyms) {
+	private Set<INode> nextStates(String token, Set<ISynonym> synonyms) {
 		HashSet<INode> nextStates = new HashSet<INode>();
 
 		// find synonyms (typos and abbreviations) :
-		HashSet<String[]> currentSynonyms = new HashSet<String[]>(); // reinitializing synonyms
+		Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
 
 		// add the current token to currentSynonyms (will be used later)
 		String[] tokenInArray = {token};
-		currentSynonyms.add(tokenInArray);
+		currentSynonyms.add(Arrays.asList(tokenInArray));
+		
 		// find synonyms: 
 		for (ISynonym synonym : synonyms) {
 			currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
@@ -214,7 +215,7 @@ class TreeLocation {
 		}
 	}
 	
-	public void searchNextStates(TNoutput tnoutput, String token, HashSet<ISynonym> synonyms) {
+	public void searchNextStates(TNoutput tnoutput, String token, Set<ISynonym> synonyms) {
 		nodes = nextStates(token, synonyms);
 		logger.debug(" \t nextStates size: " + nodes.size());
 		if (pathFound(nodes)) {

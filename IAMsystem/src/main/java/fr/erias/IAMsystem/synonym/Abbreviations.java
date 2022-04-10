@@ -2,6 +2,9 @@ package fr.erias.IAMsystem.synonym;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
@@ -14,46 +17,45 @@ import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
  */
 public class Abbreviations implements ISynonym {
 	
-	private HashMap<String, HashSet<String[]>> abbreviations;
+	private Map<String, Set<List<String>>> abbreviations = new HashMap<String, Set<List<String>>>();
 	
 	/**
-	 * Create an instance of Abbreviations
+	 * Add an abbreviation
+	 * @param longFormTokens (ex : 'accident' 'vasculaire' 'cerebral'). See {@link ITokenizerNormalizer} to tokenize
+	 * @param shortForm (ex : 'avc')
 	 */
-	public Abbreviations() {
-		abbreviations = new HashMap<String, HashSet<String[]>>();
+	public void addAbbreviation(List<String> longFormTokens, String shortForm) {
+		createSetIfShortFormIsUnknown(shortForm);
+		Set<List<String>> longForms = abbreviations.get(shortForm);
+		longForms.add(longFormTokens);
+	}
+	
+	private void createSetIfShortFormIsUnknown(String shortForm) {
+		if (!abbreviations.containsKey(shortForm)) {
+			Set<List<String>> temp = new HashSet<List<String>>();
+			abbreviations.put(shortForm, temp);
+			return;
+		}
 	}
 	
 	/**
 	 * Add an abbreviation
-	 * @param tokensArray (ex : 'accident' 'vasculaire' 'cerebral'). See {@link ITokenizerNormalizer} to tokenize
-	 * @param abbreviation (ex : 'avc')
+	 * @param longFormTokens (ex : 'accident' 'vasculaire' 'cerebral'). See {@link ITokenizerNormalizer} to tokenize
+	 * @param shortForm (ex : 'avc')
 	 */
-	public void addAbbreviation(String[] tokensArray, String abbreviation) {
-		HashSet<String[]> temp = new HashSet<String[]>();
-		if (!abbreviations.containsKey(abbreviation)) {
-			temp.add(tokensArray);
-			abbreviations.put(abbreviation, temp);
-			return;
-		}
-		abbreviations.get(abbreviation).add(tokensArray);
+	public void addAbbreviation(String[] longFormTokens, String shortForm) {
+		addAbbreviation(List.of(longFormTokens), shortForm);
 	}
 	
 	/**
 	 * Add an abbreviation. Warning: {@link TokenizerWhiteSpace} is used to tokenize the term. 
 	 * See other ways to add abbreviations if you want to control this behavior. 
-	 * 
 	 * @param term (ex: 'accident vasculaire cerebral')
-	 * @param abbreviation (ex: 'avc') (not normalized)
+	 * @param shortForm (ex: 'avc') (not normalized)
 	 */
-	public void addAbbreviation(String term, String abbreviation) {
-		HashSet<String[]> temp = new HashSet<String[]>();
+	public void addAbbreviation(String term, String shortForm) {
 		String[] tokensArray = new TokenizerWhiteSpace().tokenize(term);
-		if (!abbreviations.containsKey(abbreviation)) {
-			temp.add(tokensArray);
-			abbreviations.put(abbreviation, temp);
-			return;
-		}
-		abbreviations.get(abbreviation).add(tokensArray);
+		addAbbreviation(tokensArray, shortForm);
 	}
 	
 	
@@ -70,14 +72,12 @@ public class Abbreviations implements ISynonym {
 		addAbbreviation(tokensArray, normalizedAbbreviation);
 	}
 	
-	/**
-	 * Retrieve synonyms stored by abbreviations
-	 */
-	public HashSet<String[]> getSynonyms(String token){
-		HashSet<String[]> arraySynonyms = new HashSet<String[]>();
+	@Override
+	public Set<List<String>> getSynonyms(String token){
 		if (abbreviations.containsKey(token)) {
-			arraySynonyms = abbreviations.get(token);
+			return(abbreviations.get(token));
+		} else {
+			return(ISynonym.no_synonyms);
 		}
-		return(arraySynonyms);
 	}
 }

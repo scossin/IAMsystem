@@ -11,6 +11,7 @@ import org.junit.Test;
 
 import fr.erias.IAMsystem.detect.DetectionBackwardTest;
 
+@Deprecated
 public class SetTokenTreeTest {
 	
 	public static SetTokenTree getSetTokenTreeTest() {

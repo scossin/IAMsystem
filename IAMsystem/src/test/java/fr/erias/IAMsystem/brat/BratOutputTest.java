@@ -4,13 +4,16 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CT;
 import fr.erias.IAMsystem.detect.DetectCT;
-import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
@@ -20,8 +23,6 @@ import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
-import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.TokenTree;
 import fr.erias.IAMsystem.tree.Trie;
 
 public class BratOutputTest {
@@ -47,13 +48,13 @@ public class BratOutputTest {
 		// Abbreviations : 
 		ISynonym abbreviations = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
-				if (token.equals("insuf")) {
-					String[] temp = {"insuffisance"};
-					synonym.add(temp);
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonyms = new HashSet<List<String>>();
+				if (token.equals("ins")) {
+					String[] longForm = {"insuffisance"};
+					synonyms.add(Arrays.asList(longForm));
 				}
-				return synonym;
+				return synonyms;
 			}
 		};
 
@@ -62,18 +63,18 @@ public class BratOutputTest {
 		// simulating a levenshtein distance : 
 		ISynonym levenshtein = new ISynonym() {
 			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
+			public Set<List<String>> getSynonyms(String token) {
+				Set<List<String>> synonyms = new HashSet<List<String>>();
 				if (token.equals("cardiaqu")) {
-					String[] temp = {"cardiaque"};
-					synonym.add(temp);
+					String[] longForm = {"cardiaque"};
+					synonyms.add(Arrays.asList(longForm));
 				}
-				return synonym;
+				return synonyms;
 			}
 		};
 
 		// find synonyms with abbreviations and typos : 
-		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
+		Set<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);
 		synonyms.add(levenshtein);
 

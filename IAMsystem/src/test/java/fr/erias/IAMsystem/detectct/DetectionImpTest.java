@@ -4,11 +4,14 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
+import fr.erias.IAMsystem.detect.DetectionTest;
 import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
@@ -57,20 +60,9 @@ public class DetectionImpTest {
 
 		// Levenshtein distance : 
 		// simulating a levenshtein distance : 
-		ISynonym levenshtein = new ISynonym() {
-			@Override
-			public HashSet<String[]> getSynonyms(String token) {
-				HashSet<String[]> synonym = new HashSet<String[]>();
-				if (token.equals("cardiaqu")) {
-					String[] temp = {"cardiaque"};
-					synonym.add(temp);
-				}
-				return synonym;
-			}
-		};
-
+		ISynonym levenshtein = DetectionTest.getCardiaquTypo();
 		// find synonyms with abbreviations and typos : 
-		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
+		Set<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(abbreviations);
 		synonyms.add(levenshtein);
 

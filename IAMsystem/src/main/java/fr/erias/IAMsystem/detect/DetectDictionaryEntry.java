@@ -3,6 +3,8 @@ package fr.erias.IAMsystem.detect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import java.util.TreeSet;
 
 import org.slf4j.Logger;
@@ -55,7 +57,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
 	}
-	
+
 	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
@@ -65,7 +67,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
 		String[] tokensArray = tnoutput.getTokens();
 		logger.debug(tokensArray.length + " tokens");
-		
+
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
 			logger.debug("current index: " + currentI);
@@ -84,7 +86,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 		if (treeLocation.getMonitorCandidates().isCurrentCandidate()) { // if the algorithm is currently exploring a candidate term :
 			addCandidateTerm(treeLocation, tnoutput);
 		}
-		
+
 		DetectOutput detectOutput = new DetectOutput(tnoutput, treeLocation.getCandidateTermsCode());
 		return(detectOutput);
 	}
@@ -166,9 +168,9 @@ public class DetectDictionaryEntry implements IDetectCT {
 		int startPosition = tnoutput.getTokenStartEndInSentence()[tokenStartPosition][0];
 		int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
 		String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
-		
+
 		logger.debug("CandidateTermString : " + candidateTermString);
-		
+
 		// create it
 		for (TokenTree tokenTree : previousTokenTrees) {
 			Term term =  tokenTree.getTerm();
@@ -188,7 +190,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 		int diff = treeLocation.getMonitorCandidates().getDiff();
 		treeLocation.setCurrentI(treeLocation.getCurrentI() - diff);
 	}
-	
+
 	/**
 	 * Get the terminology
 	 * @return the {@link SetTokenTree} containing the terminology
@@ -196,7 +198,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 	public SetTokenTree getSetTokenTree() {
 		return(this.setTokenTree);
 	}
-	
+
 	/**
 	 * Set of synonyms: abbreviations, typos...
 	 * @return a set of {@link ISynonym} that will search an alternative for each token
@@ -212,29 +214,29 @@ public class DetectDictionaryEntry implements IDetectCT {
  */
 
 class TreeLoc {
-	
+
 	protected final static Logger logger = LoggerFactory.getLogger(TreeLocation.class);
-	
+
 	/**
 	 * dictionary entry found = a {@link CandidateTerm} with a code
 	 */
 	private TreeSet<CTcode> candidateTermsCode = new TreeSet<CTcode>();
-	
+
 	/**
 	 * A set of synonyms (typos and abbreviations) for the current tokens
 	 */
 	private HashSet<String[]> currentSynonyms = new HashSet<String[]>();
-	
+
 	/**
 	 * The current location in the tree - the algorithm explores the tree
 	 */
 	private SetTokenTree tempSetTokenTree = null;
-	
+
 	/**
 	 * the ith token currently analyzed
 	 */
 	private int currentI = 0;
-	
+
 	/**
 	 * Handle how candidate term are found - keep track of codes, length...
 	 */
@@ -243,7 +245,7 @@ class TreeLoc {
 	public TreeLoc(SetTokenTree setTokenTree) {
 		reset(setTokenTree); // initialize
 	}
-	
+
 	/**
 	 * Re-initialize the algorithm for the next candidateTerm
 	 */
@@ -251,7 +253,7 @@ class TreeLoc {
 		this.setMonitorCandidates(new MonitorCandidates()); // will handle a new candidate term
 		this.tempSetTokenTree = setTokenTree; // the current location of the algorithm in the tree 
 	}
-	
+
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
 	 */
@@ -262,9 +264,14 @@ class TreeLoc {
 		// add the current token to currentSynonyms (will be used later)
 		String[] tokenInArray = {token};
 		currentSynonyms.add(tokenInArray);
+		
+		// find synonyms (deprecated: convert Set<List<String>> to HashSet<String[]>() 
 		// find synonyms: 
 		for (ISynonym synonym : synonyms) {
-			currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
+			Set<List<String>> setOfsynonyms = synonym.getSynonyms(token);
+			for (List<String> list : setOfsynonyms) {
+				currentSynonyms.add(list.toArray(new String[0]));
+			}
 		}
 
 		// if found by perfect match :
@@ -282,7 +289,7 @@ class TreeLoc {
 		}
 		monitorCandidates.setCurrentFound(currentFound);
 	}
-	
+
 	public TreeSet<CTcode> getCandidateTermsCode() {
 		return candidateTermsCode;
 	}
@@ -330,9 +337,9 @@ class TreeLoc {
  *
  */
 class MonitorCandidates{
-	
+
 	private final static Logger logger = LoggerFactory.getLogger(MonitorCandidates.class);
-	
+
 	/**
 	 * If the current token is found in the dictionary
 	 */
@@ -348,7 +355,7 @@ class MonitorCandidates{
 	 * lastTokenTree saves the last {@link TokenTree} or null if no code was found so far
 	 */
 	private HashSet<TokenTree> lastTokenTrees = new HashSet<TokenTree>();
-	
+
 	int lastTokenTreePosition = 0; // why not simply use the depth ? because => 
 	// term "avc" is length 1 but "accident vasculaire cerebral" is depth 3 in the tree ; depth in the tree is not equal to the candidateTokensArray length
 
@@ -387,7 +394,7 @@ class MonitorCandidates{
 			this.lastTokenTreePosition = candidateTokensList.size();
 		}
 	}
-	
+
 	public int getDiff() {
 		return(candidateTokensList.size() - lastTokenTreePosition);
 	}
@@ -406,7 +413,7 @@ class MonitorCandidates{
 		} else {
 			tempCandidateTokenList = candidateTokensList; // if not, it's just equal to candidateTokensList
 		}
-		
+
 		// number of stopwords to remove:
 		int numberOfTokens2remove = 0;
 		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
