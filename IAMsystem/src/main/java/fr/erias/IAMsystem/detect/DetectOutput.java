@@ -1,6 +1,6 @@
 package fr.erias.IAMsystem.detect;
 
-import java.util.TreeSet;
+import java.util.Collection;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -24,9 +24,9 @@ public class DetectOutput {
 	/**
 	 * dictionary entries detected
 	 */
-	private TreeSet<CTcode> candidateTermsCode;
+	private Collection<CTcode> candidateTermsCode;
 
-	public DetectOutput(TNoutput tnoutput, TreeSet<CTcode> candidateTermsCode) {
+	public DetectOutput(TNoutput tnoutput, Collection<CTcode> candidateTermsCode) {
 		this.tnoutput = tnoutput;
 		this.candidateTermsCode = candidateTermsCode;
 	}
@@ -35,7 +35,7 @@ public class DetectOutput {
 	 * Get dictionary entries detected
 	 * @return A set of dictionary entries detected stored in a {@link CTcode}
 	 */
-	public TreeSet<CTcode> getCTcodes(){
+	public Collection<CTcode> getCTcodes(){
 		return(candidateTermsCode);
 	}
 	
