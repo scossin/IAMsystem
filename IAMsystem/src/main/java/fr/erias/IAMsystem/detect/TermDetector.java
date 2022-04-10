@@ -12,7 +12,7 @@ import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
+import fr.erias.IAMsystem.tree.Trie;
 
 /**
  * A class that encapsulates everything
@@ -32,7 +32,7 @@ public class TermDetector {
 	/**
 	 * stores the terminology in a tree datastructure
 	 */
-	private SetTokenTree setTokenTree;
+	private Trie trie;
 	
 	/**
 	 * Offer the possibility to add synonym
@@ -44,7 +44,7 @@ public class TermDetector {
 	 */
 	public TermDetector() {
 		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
-		this.setTokenTree = new SetTokenTree();
+		this.trie = new Trie();
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class TermDetector {
 	 */
 	public void addTerm(String term, String code) {
 		Term newTerm = new Term(term,code,tokenizerNormalizer.getNormalizer());
-		SetTokenTreeBuilder.addTerm(newTerm, this.setTokenTree, this.tokenizerNormalizer);
+		trie.addTerm(newTerm, this.tokenizerNormalizer.getTokenizer(), this.tokenizerNormalizer.getNormalizer());
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class TermDetector {
 	 * @param terminology {@link Terminology}
 	 */
 	public void addTerminology(Terminology terminology) {
-		SetTokenTreeBuilder.loadTokenTree(terminology, this.setTokenTree, this.tokenizerNormalizer);
+		trie.addTerminology(terminology, this.tokenizerNormalizer.getTokenizer(), this.tokenizerNormalizer.getNormalizer());
 	}
 	
 	/**
@@ -75,7 +75,7 @@ public class TermDetector {
 		for (ISynonym synonym : this.synonyms) {
 			synonyms.add(synonym);
 		}
-		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(this.setTokenTree,this.tokenizerNormalizer,synonyms);
+		IDetectCT detectDictionaryEntry = new DetectCT(this.trie,this.tokenizerNormalizer,synonyms);
 		return(detectDictionaryEntry.detectCandidateTerm(sentence));
 	}
 	
@@ -136,18 +136,18 @@ public class TermDetector {
 	}
 	
 	/**
-	 * Retrieve the tree data structure of the terminology: {@link SetTokenTree}
+	 * Retrieve the tree data structure of the terminology: {@link Trie}
 	 * @return the setTokenTree
 	 */
-	public SetTokenTree getSetTokenTree() {
-		return(this.setTokenTree);
+	public Trie getTrie() {
+		return(this.trie);
 	}
 	
 	/**
 	 * Change the terminology by replace the {@link SetTokenTree}
 	 * @param setTokenTree a new {@link SetTokenTree}
 	 */
-	public void setSetTokenTree(SetTokenTree setTokenTree) {
-		this.setTokenTree = setTokenTree;
+	public void setTrie(Trie trie) {
+		this.trie = trie;
 	}
 }

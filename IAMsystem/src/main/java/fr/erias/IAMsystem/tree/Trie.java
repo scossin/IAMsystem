@@ -3,6 +3,7 @@ package fr.erias.IAMsystem.tree;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
+import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
@@ -50,6 +51,12 @@ public class Trie {
 			return;
 		}
 		addTerm(term, tokens_without_stopwords);
+	}
+	
+	public void addTerminology(Terminology terminology, ITokenizer tokenizer, INormalizer normalizer) {
+		for (Term term : terminology.getTerms()) {
+			addTerm(term, tokenizer, normalizer);
+		}
 	}
 	
 	public void addTerm(Term term, String[] tokens) {
