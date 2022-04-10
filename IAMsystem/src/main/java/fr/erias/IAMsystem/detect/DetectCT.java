@@ -2,8 +2,10 @@ package fr.erias.IAMsystem.detect;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -140,29 +142,37 @@ class TreeLocation {
 		this.nodes.add(rootNode);
 		candidateTokensList = new ArrayList<String>();
 	}
+	
+	private Map<String, Set<List<String>>> synonymsCache = new HashMap<String, Set<List<String>>>();
 
 	/**
 	 * Find synonyms (typos or abbreviations) for the current token
 	 */
 	private Set<INode> nextStates(String token, Set<ISynonym> synonyms) {
 		HashSet<INode> nextStates = new HashSet<INode>();
-
-		// find synonyms (typos and abbreviations) :
-		Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
-
-		// add the current token to currentSynonyms (will be used later)
-		String[] tokenInArray = {token};
-		currentSynonyms.add(Arrays.asList(tokenInArray));
-		
-		// find synonyms: 
-		for (ISynonym synonym : synonyms) {
-			currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
-		}
-
+		Set<List<String>> currentSynonyms = getSynonymsOfToken(token, synonyms);
 		for (INode currentState : nodes) {
 			nextStates.addAll(currentState.gotoNodes(currentSynonyms));
 		}
 		return(nextStates);
+	}
+	
+	private Set<List<String>> getSynonymsOfToken(String token, Set<ISynonym> synonyms) {
+		if (synonymsCache.containsKey(token)) {
+			return(synonymsCache.get(token));
+		} else {
+			// find synonyms (typos and abbreviations) :
+			Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
+			// add the current token to currentSynonyms (will be used later)
+			String[] tokenInArray = {token};
+			currentSynonyms.add(Arrays.asList(tokenInArray));
+			// find synonyms: 
+			for (ISynonym synonym : synonyms) {
+				currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
+			}
+			synonymsCache.put(token, currentSynonyms);
+			return(currentSynonyms);
+		}
 	}
 
 	private void saveTermIfAnyFinalState(TNoutput tnoutput, Set<INode> nextStates) {
