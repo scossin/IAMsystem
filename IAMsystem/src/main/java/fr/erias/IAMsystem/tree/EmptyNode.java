@@ -6,10 +6,13 @@ import java.util.Set;
 
 import fr.erias.IAMsystem.terminology.Term;
 
+/**
+ * The empty node doesn't belong to a trie (no parentNode, no childNode) 
+ * It represents the emptyset in the set of states of a final-state automata. 
+ * @author Sebastien Cossin
+ */
 public class EmptyNode implements INode {
 
-	private static final Set<INode> noNodes = new HashSet<INode>();
-	
 	public static final EmptyNode EMPTYNODE = new EmptyNode();
 	
 	private EmptyNode() {};
@@ -44,6 +47,8 @@ public class EmptyNode implements INode {
 		return -1;
 	}
 
+	private static final Set<INode> noNodes = new HashSet<INode>();
+	
 	@Override
 	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms) {
 		return noNodes;
@@ -61,7 +66,6 @@ public class EmptyNode implements INode {
 
 	@Override
 	public String getToken() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

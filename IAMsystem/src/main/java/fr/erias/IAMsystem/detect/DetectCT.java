@@ -41,8 +41,8 @@ public class DetectCT implements IDetectCT {
 	private final Set<ISynonym> synonyms ;
 
 	/**
-	 * 
-	 * @param setTokenTree A terminology stored in a tree datastructure. See {@link SetTokenTree}
+	 * Detects the terms of a terminology
+	 * @param trie A terminology stored in a tree datastructure. See {@link Trie}
 	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
@@ -76,7 +76,7 @@ public class DetectCT implements IDetectCT {
 
 	/**
 	 * Get the terminology
-	 * @return the {@link SetTokenTree} containing the terminology
+	 * @return the {@link Trie} containing the terminology
 	 */
 	public Trie getTrie() {
 		return(this.trie);
@@ -98,136 +98,62 @@ public class DetectCT implements IDetectCT {
 
 class TreeLocation {
 
-	/**
-	 * dictionary entry found = a {@link CandidateTerm} with a code
-	 */
-	private List<CTcode> candidateTermsCode = new ArrayList<CTcode>();
+
+	private final INode rootNode; // = the initial state. 
+
+	private int tokenAtInitialState = 0; // token 0 is in the initial state. 
+	// this number is set to the ith token if this token (re)starts at the initial state 
 
 	/**
-	 * The current location in the tree - the algorithm explores the tree
+	 * Current locations in the trie.
+	 * Initially it contains only the rootNode. 
+	 * Then it explores the trie given a token in input and its states change
 	 */
-	private Set<INode> nodes ;
+	private Set<INode> states ;
 
-	private int tokenAtInitialState = 0;
+	// stores all the CT detected
+	private List<CTcode> ctDetected = new ArrayList<CTcode>(); 
 
+	// keep track of the tokens of the document that were detected
 	private ArrayList<String> candidateTokensList = new ArrayList<String>();
 
-	private final INode rootNode;
+	// this cache avoids calling the set of ISynonym instances
+	private Map<String, Set<List<String>>> synonymsCache = new HashMap<String, Set<List<String>>>();
 
-	/**
-	 * the ith token currently analyzed
-	 */
+	// the ith token currently analyzed
 	private int currentI = 0;
 
 	public TreeLocation(INode rootNode) {
 		this.rootNode = rootNode;
-		setInitialState(); // initialize
+		setInitialState();
 	}
 
-	/**
-	 * Re-initialize the algorithm for the next candidateTerm
-	 */
 	public void setInitialState() {
-		this.nodes = new HashSet<INode>(); // the current location of the algorithm in the tree 
-		this.nodes.add(rootNode);
+		this.states = new HashSet<INode>();
+		this.states.add(rootNode);
 		candidateTokensList = new ArrayList<String>();
 	}
-	
-	private Map<String, Set<List<String>>> synonymsCache = new HashMap<String, Set<List<String>>>();
 
-	/**
-	 * Find synonyms (typos or abbreviations) for the current token
-	 */
-	private Set<INode> nextStates(String token, Set<ISynonym> synonyms) {
-		HashSet<INode> nextStates = new HashSet<INode>();
-		Set<List<String>> currentSynonyms = getSynonymsOfToken(token, synonyms);
-		for (INode currentState : nodes) {
-			nextStates.addAll(currentState.gotoNodes(currentSynonyms));
-		}
-		return(nextStates);
-	}
-	
-	private Set<List<String>> getSynonymsOfToken(String token, Set<ISynonym> synonyms) {
-		if (synonymsCache.containsKey(token)) {
-			return(synonymsCache.get(token));
-		} else {
-			// find synonyms (typos and abbreviations) :
-			Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
-			// add the current token to currentSynonyms (will be used later)
-			String[] tokenInArray = {token};
-			currentSynonyms.add(Arrays.asList(tokenInArray));
-			// find synonyms: 
-			for (ISynonym synonym : synonyms) {
-				currentSynonyms.addAll(synonym.getSynonyms(token)); // ex : typos and abbreviations
-			}
-			synonymsCache.put(token, currentSynonyms);
-			return(currentSynonyms);
-		}
-	}
-
-	private void saveTermIfAnyFinalState(TNoutput tnoutput, Set<INode> nextStates) {
-		for (INode state : nextStates) {
-			if (!state.isAfinalState()) {
-				continue;
-			}
-			Term term =  state.getTerm();
-			int tokenStartPosition = tokenAtInitialState;
-			int tokenEndPosition = getCurrentI();
-			int startPosition = tnoutput.getTokenStartEndInSentence()[tokenStartPosition][0];
-			int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
-			String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
-
-			String[] candidateTokenArray = candidateTokensList.toArray(new String[candidateTokensList.size()]);
-			// create it
-			CTcode candidateTerm = new CTcode(candidateTermString, 
-					candidateTokenArray,
-					startPosition, 
-					endPosition,
-					term,
-					tokenStartPosition,
-					tokenEndPosition);
-			// finally add it
-			addCandidateTerm(candidateTerm);
-		}
-	}
-	
-	private void addCandidateTerm(CTcode candidateTerm) {
-		while (iNeed2removeLastCT(candidateTerm)) {
-			candidateTermsCode.remove(candidateTermsCode.size() - 1);
-		}
-		candidateTermsCode.add(candidateTerm);
-	}
-	
-	private boolean iNeed2removeLastCT(CTcode candidateTerm) {
-		if (candidateTermsCode.isEmpty()) {
-			return(false);
-		}
-		CTcode lastCT = candidateTermsCode.get(candidateTermsCode.size() - 1);
-		if (lastCT.getStartPosition() == candidateTerm.getStartPosition() && 
-				lastCT.getEndPosition() < candidateTerm.getEndPosition()) {
-			return true;
-		} else {
-			return(false);
-		}
-	}
-	
 	public void searchNextStates(TNoutput tnoutput, String token, Set<ISynonym> synonyms) {
-		nodes = nextStates(token, synonyms);
-		if (pathFound(nodes)) {
+		states = nextStates(token, synonyms);
+		if (pathFound(states)) {
 			candidateTokensList.add(token);
-			saveTermIfAnyFinalState(tnoutput, nodes);
+			saveTermIfAnyFinalState(tnoutput, states);
 			nextToken();
 			return;
 		} 
-		// no path found at initial state => try to find a path at the next token
+		
 		if (isTheInitialState()) {
-			nextToken();
+			nextToken(); // no path found at initial state => try to find a path at the next token
 		} 
-		// no path at another state => go to the initial state and try to find a path with the same token
+		
+		// currently in another state=> go to the initial state and 
 		setInitialState();
 		tokenAtInitialState = getCurrentI();
+		// nextToken() is not called to try to find a path with the same token at the initial state
 	}
 	
+	// stopword: if the algorithm is in the initial state ignores it, otherwise add it.  
 	public void addStopword(String token) {
 		if (isTheInitialState()) {
 			nextToken();
@@ -238,10 +164,84 @@ class TreeLocation {
 		}
 	}
 	
+	// From the current states, try to find new states given a token and a set of string mapping functions
+	private Set<INode> nextStates(String token, Set<ISynonym> synonyms) {
+		Set<INode> nextStates = new HashSet<INode>();
+		Set<List<String>> currentSynonyms = getSynonymsOfToken(token, synonyms);
+		for (INode currentState : states) {
+			nextStates.addAll(currentState.gotoNodes(currentSynonyms));
+		}
+		return(nextStates);
+	}
+
+	private Set<List<String>> getSynonymsOfToken(String token, Set<ISynonym> synonyms) {
+		if (synonymsCache.containsKey(token)) {
+			return(synonymsCache.get(token));
+		} else {
+			// find synonyms (typos, abbreviations...):
+			Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
+			String[] tokenInArray = {token};
+			currentSynonyms.add(Arrays.asList(tokenInArray));
+			// find synonyms: 
+			for (ISynonym synonym : synonyms) {
+				currentSynonyms.addAll(synonym.getSynonyms(token));
+			}
+			synonymsCache.put(token, currentSynonyms);
+			return(currentSynonyms);
+		}
+	}
+
+	private void saveTermIfAnyFinalState(TNoutput tnoutput, Set<INode> nextStates) {
+		for (INode state : nextStates) {
+			if (!state.isAfinalState()) { // only final states contain a term of the terminology
+				continue;
+			}
+			Term term =  state.getTerm();
+			int tokenStartPosition = tokenAtInitialState;
+			int tokenEndPosition = getCurrentI();
+			int startPosition = tnoutput.getTokenStartEndInSentence()[tokenStartPosition][0];
+			int endPosition = tnoutput.getTokenStartEndInSentence()[tokenEndPosition][1]; // 
+			String candidateTermString = tnoutput.getOriginalSentence().substring(startPosition, endPosition + 1); 
+
+			String[] candidateTokenArray = candidateTokensList.toArray(new String[candidateTokensList.size()]);
+			CTcode candidateTerm = new CTcode(candidateTermString, 
+					candidateTokenArray,
+					startPosition, 
+					endPosition,
+					term,
+					tokenStartPosition,
+					tokenEndPosition);
+			addCandidateTerm(candidateTerm);
+		}
+	}
+
+	private void addCandidateTerm(CTcode candidateTerm) {
+		while (iNeed2removeLastCT(candidateTerm)) {
+			ctDetected.remove(ctDetected.size() - 1); // remove the latest
+		}
+		ctDetected.add(candidateTerm);
+	}
+
+	private boolean iNeed2removeLastCT(CTcode candidateTerm) {
+		// We eventually need to remove the lastCT because IAMsystem keeps only the longest CT
+		// from a CT, it's possible to retrieve all the terms that are prefix of this CT
+		// We check if the previous CT has the same start but not the same end position
+		if (ctDetected.isEmpty()) {
+			return(false);
+		}
+		CTcode lastCT = ctDetected.get(ctDetected.size() - 1);
+		if (lastCT.getStartPosition() == candidateTerm.getStartPosition() && 
+				lastCT.getEndPosition() < candidateTerm.getEndPosition()) {
+			return true;
+		} else {
+			return(false);
+		}
+	}
+
 	public boolean isTheInitialState() {
 		return getCurrentI() == tokenAtInitialState;
 	}
-	
+
 	public void nextToken() {
 		this.currentI = this.currentI + 1;
 	}
@@ -251,7 +251,7 @@ class TreeLocation {
 	}
 
 	public List<CTcode> getCandidateTermsCode() {
-		return candidateTermsCode;
+		return ctDetected;
 	}
 
 	public int getCurrentI() {

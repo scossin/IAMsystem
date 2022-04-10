@@ -21,7 +21,7 @@ public class TrieTest {
 		Trie trie = new Trie();
 		Term term = new Term("insuffisance cardiaque aigue congestive", "I51");
 		trie.addTerm(term, tokenizer, normalizer);
-		assertTrue(trie.getMaxNodeNumber() == 5);
+		assertTrue(trie.getNumberOfNodes() == 5);
 		
 		String[] tokens = {"insuffisance","cardiaque","aigue"};
 		Node nodeAigue = (Node) trie.getInitialState().gotoNode(List.of(tokens));
@@ -32,7 +32,7 @@ public class TrieTest {
 		trie.addTerm(term1, tokenizer, normalizer);
 		assertTrue(nodeAigue.isAfinalState() == true);
 		assertTrue(nodeAigue.getTerm().getCode().equals("I50"));
-		assertTrue(trie.getMaxNodeNumber() == 5);
+		assertTrue(trie.getNumberOfNodes() == 5);
 		
 		String[] tokens2 = {"insuffisance","cardiaqu"};
 		INode empty = trie.getInitialState().gotoNode(List.of(tokens2));

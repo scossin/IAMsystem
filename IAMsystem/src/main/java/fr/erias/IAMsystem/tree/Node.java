@@ -11,24 +11,33 @@ import java.util.Set;
 import fr.erias.IAMsystem.terminology.Term;
 
 /**
- * Nodes of a trie. 
+ * This class is used to build the nodes of a {@link Trie}. 
  * @author Sebastien Cossin
  *
  */
 public class Node implements INode {
 	
 	private final INode parentNode; 
-	private final int nodeNumber; // in a trie, each node is unique and assigned a unique number
-	private final String token;
-	private Term term;
-	private final Map<String, INode> childNodes = new HashMap<String, INode>();
+	private final int nodeNumber; // in a trie, each node is unique and is assigned a unique number
+	private final String token; // each node has a token (not unique in the trie)
+	private Term term; // only if the node is a leaf
+	private final Map<String, INode> childNodes = new HashMap<String, INode>(); // 0 if the node is a leaf
 	
+	// package private used to build the rootNode 
+	// (the rootNode has no parentNode so parentNode.addChildNode throws a NULLException)
 	Node(String token, int nodeNumber) {
 		this.token = token;
 		this.parentNode = null;
 		this.nodeNumber = nodeNumber;
 	}
 	
+	/**
+	 * Node constructor
+	 * @param token a token of a term
+	 * @param parentNode For the ith token of a term, the parentNode is the (i-1)th token of the term. 
+	 * The rootNode if the token is the first token of the term. 
+	 * @param nodeNumber a unique number that identifies a node in the trie
+	 */
 	public Node(String token, INode parentNode, int nodeNumber) {
 		this.token = token;
 		this.parentNode = parentNode;
@@ -36,14 +45,17 @@ public class Node implements INode {
 		parentNode.addChildNode(this);
 	}
 	
+	@Override
 	public boolean hasTransitionTo(String token) {
 		return childNodes.containsKey(token);
 	}
 	
+	@Override
 	public INode gotoNode(String token) {
 		return childNodes.getOrDefault(token, EmptyNode.EMPTYNODE);
 	}
 	
+	@Override
 	public INode gotoNode(List<String> tokens) {
 		INode node = this;
 		for (String token : tokens) {
@@ -52,6 +64,7 @@ public class Node implements INode {
 		return(node);
 	}
 	
+	@Override
 	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms){
 		Set<INode> nodes = new HashSet<INode>();
 		for (List<String> synonyms : setOfsynonyms) {
@@ -62,31 +75,41 @@ public class Node implements INode {
 		return(nodes);
 	}
 	
+	@Override
 	public void addChildNode(INode childNode) {
 		String token = childNode.getToken();
 		childNodes.put(token, childNode);
 	}
 	
+	@Override
 	public boolean isAfinalState() {
 		return term != null;
 	}
 	
+	@Override
 	public Term getTerm() {
 		return(term);
 	}
 	
+	@Override
 	public void setTerm(Term term) {
 		this.term = term;
 	}
 	
+	@Override
 	public String getToken() {
 		return token;
 	}
 
+	@Override
 	public INode getParentNode() {
 		return parentNode;
 	}
 	
+	/**
+	 * Retrieve all the tokens from the root to this node
+	 * @return the sequence of tokens
+	 */
 	public List<String> getTokenSequence() {
 		List<String> sequence = new ArrayList<String>();
 		sequence.add(token);
@@ -100,6 +123,9 @@ public class Node implements INode {
 		return(sequence);
 	}
 	
+	/**
+	 * Get the unique number that identifies this node in the trie
+	 */
 	public int getNodeNumber() {
 		return nodeNumber;
 	}

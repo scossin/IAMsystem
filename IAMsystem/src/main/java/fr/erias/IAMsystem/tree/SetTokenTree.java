@@ -29,7 +29,7 @@ public class SetTokenTree {
 	private HashSet<TokenTree> previousTokenTrees = new HashSet<TokenTree>();
 
 	/**
-	 * @Deprecated use Trie class and DetectCT class
+	 * use Trie class and DetectCT class
 	 * Construct an empty SetTokenTree. 
 	 */
 	@Deprecated

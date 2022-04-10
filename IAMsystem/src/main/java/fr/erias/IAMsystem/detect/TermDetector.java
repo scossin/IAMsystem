@@ -132,15 +132,15 @@ public class TermDetector {
 	
 	/**
 	 * Retrieve the tree data structure of the terminology: {@link Trie}
-	 * @return the setTokenTree
+	 * @return the trie
 	 */
 	public Trie getTrie() {
 		return(this.trie);
 	}
 	
 	/**
-	 * Change the terminology by replace the {@link SetTokenTree}
-	 * @param setTokenTree a new {@link SetTokenTree}
+	 * Change the terminology by replace the {@link Trie}
+	 * @param trie a new {@link Trie}
 	 */
 	public void setTrie(Trie trie) {
 		this.trie = trie;
