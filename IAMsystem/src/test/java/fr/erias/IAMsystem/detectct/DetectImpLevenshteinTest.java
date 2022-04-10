@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.detectimp;
+package fr.erias.IAMsystem.detectct;
 
 import static org.junit.Assert.assertEquals;
 

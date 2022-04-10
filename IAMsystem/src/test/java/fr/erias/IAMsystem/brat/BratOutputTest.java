@@ -9,34 +9,34 @@ import java.util.HashSet;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
 import fr.erias.IAMsystem.ct.CT;
+import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
+import fr.erias.IAMsystem.normalizer.INormalizer;
+import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
+import fr.erias.IAMsystem.tree.Trie;
 
 public class BratOutputTest {
-	public static SetTokenTree getSetTokenTreeTest() {
-		SetTokenTree setTokenTree = new SetTokenTree();
-		// first term of the terminology
+	
+	public static Trie getTrieTest() {
+		Trie trie = new Trie();
 		Term term = new Term("avc sylvien droit","I63");
 		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		String[] tokensArray = tokenizer.tokenize(term.getLabel());
-		TokenTree tokenTree = new TokenTree(null,tokensArray,term);
-		setTokenTree.addTokenTree(tokenTree);
-
+		INormalizer normalizer = new Normalizer();
+		
+		trie.addTerm(term, tokenizer, normalizer);
 		// second term of the terminology
 		term = new Term("insuffisance cardiaque aigue","I50");
-		tokensArray = tokenizer.tokenize(term.getLabel());
-		tokenTree = new TokenTree(null,tokensArray,term);
-		setTokenTree.addTokenTree(tokenTree);
-		
-		return(setTokenTree);
+		trie.addTerm(term, tokenizer, normalizer);
+		return(trie);
 	}
 
 	@Test
@@ -77,11 +77,9 @@ public class BratOutputTest {
 		synonyms.add(abbreviations);
 		synonyms.add(levenshtein);
 
-		// load the dictionary :
-		SetTokenTree tokenTreeSet0 = getSetTokenTreeTest();
 
 		// class that detects dictionary entries
-		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
+		IDetectCT detectDictionaryEntry = new DetectCT(getTrieTest(),
 				tokenizerNormalizer,synonyms);
 		
 		String sentence = "Insuf.            cardiaqu aigue et AVC hémorragiQUE";
