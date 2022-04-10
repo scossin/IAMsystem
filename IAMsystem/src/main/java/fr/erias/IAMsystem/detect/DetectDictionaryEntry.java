@@ -59,7 +59,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
-		TreeLocation treeLocation = new TreeLocation(this.setTokenTree);
+		TreeLoc treeLocation = new TreeLoc(this.setTokenTree);
 
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
@@ -94,7 +94,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 	 * @param token an available token at the current location
 	 * @param treeLocation currentTreeLocation
 	 */
-	private void changeTreeLocation(String token, TreeLocation treeLocation) {
+	private void changeTreeLocation(String token, TreeLoc treeLocation) {
 		// add the token to the array of tokens :
 		treeLocation.getMonitorCandidates().addToken(token, treeLocation.getTempSetTokenTree()); // important! : tempSetTokenTree is passed here before modification below: (to keep track of previous tempSetToken with codes)
 		// the algorithm change its current location in the tree : 
@@ -108,7 +108,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 	 * @param TNoutput tnoutput: needed for private function addCandidateTerm
 	 * @throws UnfoundTokenInSentence
 	 */
-	private void setCurrentCandidate(String token, TreeLocation treeLocation, TNoutput tnoutput) {
+	private void setCurrentCandidate(String token, TreeLoc treeLocation, TNoutput tnoutput) {
 		// case not currently exploring the tree, no previous token was detected : nothing to do. => Next token
 		if (!treeLocation.getMonitorCandidates().isCurrentCandidate()) {
 			logger.debug("\t not a currentCandidate, go to next token");
@@ -139,7 +139,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 	 * @param treeLocation currentTreeLocation
 	 * @throws UnfoundTokenInSentence 
 	 */
-	private void addCandidateTerm(TreeLocation treeLocation, TNoutput tnoutput) {
+	private void addCandidateTerm(TreeLoc treeLocation, TNoutput tnoutput) {
 		// current position 
 		// last token can be a stopword. We need to remove it : 
 
@@ -211,7 +211,7 @@ public class DetectDictionaryEntry implements IDetectCT {
  * A private class to keep track of the currentTreeLocation, candidate terms detected ...
  */
 
-class TreeLocation {
+class TreeLoc {
 	
 	protected final static Logger logger = LoggerFactory.getLogger(TreeLocation.class);
 	
@@ -240,7 +240,7 @@ class TreeLocation {
 	 */
 	private MonitorCandidates monitorCandidates = new MonitorCandidates();
 
-	public TreeLocation(SetTokenTree setTokenTree) {
+	public TreeLoc(SetTokenTree setTokenTree) {
 		reset(setTokenTree); // initialize
 	}
 	

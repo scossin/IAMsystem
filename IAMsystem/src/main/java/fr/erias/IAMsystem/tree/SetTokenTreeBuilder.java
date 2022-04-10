@@ -15,6 +15,7 @@ public class SetTokenTreeBuilder {
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
 	 * @return a {@link SetTokenTree} 
 	 */
+	@Deprecated
 	public static SetTokenTree loadTokenTree(Terminology terminology, SetTokenTree tokenTreeSet0, ITokenizerNormalizer tokenizerNormalizer) {
 		for (Term term : terminology.getTerms()) {
 			addTerm(term, tokenTreeSet0, tokenizerNormalizer);
@@ -29,6 +30,7 @@ public class SetTokenTreeBuilder {
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
 	 * @return a {@link SetTokenTree}
 	 */
+	@Deprecated
 	public static SetTokenTree addTerm(Term term, SetTokenTree tokenTreeSet0, ITokenizerNormalizer tokenizerNormalizer) {
 		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		String normalizedLabel = term.getNormalizedLabel();
@@ -51,6 +53,7 @@ public class SetTokenTreeBuilder {
 	 * @param tokenizerNormalizer an instance to normalize and tokenize {@link TokenizerNormalizer}
 	 * @return a {@link SetTokenTree}
 	 */
+	@Deprecated
 	public static SetTokenTree loadTokenTree(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
 		SetTokenTree setTokenTree0 = new SetTokenTree();
 		return(loadTokenTree(terminology, setTokenTree0, tokenizerNormalizer));

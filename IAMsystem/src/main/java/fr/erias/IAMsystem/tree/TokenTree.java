@@ -38,11 +38,13 @@ public class TokenTree {
 	private final String token ;
 
 	/**
+	 * @Deprecated: use Trie class with DetectCT
 	 * Create a new TokenTree
 	 * @param tokenTreeParent The tokenTree instance of this object or null if the token is the first (e.g. the value is null)
 	 * @param tokensArray A String array of tokens ; the results of tokenization of a term
 	 * @param term a {@link Term} of a terminology
 	 */
+	@Deprecated
 	public TokenTree(TokenTree tokenTreeParent, String[] tokensArray, Term term) {
 		this.tokenTreeParent = tokenTreeParent;
 		this.token = tokensArray[0];
