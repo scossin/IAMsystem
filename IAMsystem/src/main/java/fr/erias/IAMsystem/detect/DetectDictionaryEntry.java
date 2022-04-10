@@ -45,11 +45,11 @@ public class DetectDictionaryEntry implements IDetectCT {
 	private final HashSet<ISynonym> synonyms ;
 
 	/**
-	 * 
 	 * @param setTokenTree A terminology stored in a tree datastructure. See {@link SetTokenTree}
 	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
 	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
 	 */
+	@Deprecated
 	public DetectDictionaryEntry(SetTokenTree setTokenTree, ITokenizerNormalizer tokenizerNormalizer, HashSet<ISynonym> synonyms) {
 		this.setTokenTree = setTokenTree;
 		this.tokenizerNormalizer = tokenizerNormalizer ;
