@@ -5,6 +5,7 @@ import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 
 /**
  * IAMsystem algorithm utilizes a finate-state automata. <br>
@@ -67,6 +68,15 @@ public class Trie {
 	}
 	
 	/**
+	 * Add a term of a terminology. 
+	 * @param term a term of a terminology
+	 * @param tokenizerNormalizer to tokenize and normalize the labels of the terms
+	 */
+	public void addTerm(Term term, ITokenizerNormalizer tokenizerNormalizer) {
+		addTerm(term, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer());
+	}
+	
+	/**
 	 * add every term of a terminology
 	 * @param terminology a {@link Terminology}
 	 * @param tokenizer to tokenize the labels of the terms
@@ -75,6 +85,17 @@ public class Trie {
 	public void addTerminology(Terminology terminology, ITokenizer tokenizer, INormalizer normalizer) {
 		for (Term term : terminology.getTerms()) {
 			addTerm(term, tokenizer, normalizer);
+		}
+	}
+	
+	/**
+	 * add every term of a terminology
+	 * @param terminology a {@link Terminology}
+	 * @param tokenizerNormalizer to tokenize and normalize the labels of the terms
+	 */
+	public void addTerminology(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
+		for (Term term : terminology.getTerms()) {
+			addTerm(term, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer());
 		}
 	}
 	
