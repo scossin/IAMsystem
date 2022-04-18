@@ -107,6 +107,33 @@ public class DetectionImpTest {
 	}
 	
 	@Test
+	public void detectOverlappingTerms() throws IOException, UnfoundTokenInSentence, ParseException{
+		// find synonyms with abbreviations and typos : 
+		Set<ISynonym> synonyms = new HashSet<ISynonym>();
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+
+		INormalizer normalizer = new Normalizer();
+		ITokenizer tokenizer = new TokenizerWhiteSpace();
+		Trie trie = new Trie();
+		Term term1 = new Term("insuffisance cardiaque", "I60");
+		Term term2 = new Term("insuffisance cardiaque aigue", "I61");
+		trie.addTerm(term1, tokenizer, normalizer);
+		trie.addTerm(term2, tokenizer, normalizer);
+		// class that detects dictionary entries
+		DetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,synonyms);
+		
+		String sentence = "insuffisance cardiaque aigue";
+		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
+		
+		// only one match : 
+		assertEquals(detectOutput.getCTcodes().size(), 1);
+
+		detectDictionaryEntry.setKeepOverlappingTerms(true);
+		detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
+		assertEquals(detectOutput.getCTcodes().size(), 2);
+	}
+	
+	@Test
 	public void detectDeadEndTest() {
 		INormalizer normalizer = new Normalizer();
 		ITokenizer tokenizer = new TokenizerWhiteSpace();

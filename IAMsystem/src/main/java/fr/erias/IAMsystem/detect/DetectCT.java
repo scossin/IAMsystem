@@ -40,7 +40,9 @@ public class DetectCT implements IDetectCT {
 	private final Set<ISynonym> synonyms ;
 	
 	private CacheSyn cacheSyn; // a cache of synonyms
-
+	
+	private boolean keepOverlappingTerms; 
+	
 	/**
 	 * Detects the terms of a terminology
 	 * @param trie A terminology stored in a tree datastructure. See {@link Trie}
@@ -52,12 +54,13 @@ public class DetectCT implements IDetectCT {
 		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
 		this.cacheSyn = new CacheSyn(synonyms);
+		this.keepOverlappingTerms = false;
 	}
 	
 	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
-		TreeLocation treeLocation = new TreeLocation(trie.getInitialState());
+		TreeLocation treeLocation = new TreeLocation(trie.getInitialState(), keepOverlappingTerms);
 
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
@@ -99,6 +102,22 @@ public class DetectCT implements IDetectCT {
 	public void setCacheSynonyms(CacheSyn cacheSyn) {
 		this.cacheSyn = cacheSyn;
 	}
+	
+	/**
+	 * Default to false: overlapping terms are not returned
+	 * @param keepOverlappingTerms true if you want the algorithm to return overlapping terms
+	 */
+	public void setKeepOverlappingTerms(boolean keepOverlappingTerms) {
+		this.keepOverlappingTerms = keepOverlappingTerms;
+	}
+	
+	/**
+	 * get keepOverlappingTerms variable value
+	 * @return true if the algorithm returns overlapping terms
+	 */
+	public boolean getOverlappingTerms() {
+		return(this.keepOverlappingTerms);
+	}
 }
 
 
@@ -128,9 +147,12 @@ class TreeLocation {
 
 	// the ith token currently analyzed
 	private int currentI = 0;
-
-	public TreeLocation(INode rootNode) {
+	
+	private final boolean keepOverlappingTerms;
+	
+	public TreeLocation(INode rootNode, boolean keepOverlappingTerms) {
 		this.rootNode = rootNode;
+		this.keepOverlappingTerms = keepOverlappingTerms;
 		setInitialState();
 	}
 
@@ -210,8 +232,11 @@ class TreeLocation {
 		}
 		ctDetected.add(candidateTerm);
 	}
-
+	
 	private boolean iNeed2removeLastCT(CTcode candidateTerm) {
+		if (keepOverlappingTerms) {
+			return(false);
+		}
 		// We eventually need to remove the lastCT because IAMsystem keeps only the longest CT
 		// from a CT, it's possible to retrieve all the terms that are prefix of this CT
 		// We check if the previous CT has the same start but not the same end position
