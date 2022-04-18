@@ -1,14 +1,13 @@
 package fr.erias.IAMsystem.detect;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import fr.erias.IAMsystem.ct.CTcode;
+import fr.erias.IAMsystem.stopwords.IStopwords;
+import fr.erias.IAMsystem.synonym.CacheSyn;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
@@ -39,6 +38,8 @@ public class DetectCT implements IDetectCT {
 	 * Set of synonyms: abbreviations, typos...
 	 */
 	private final Set<ISynonym> synonyms ;
+	
+	private CacheSyn cacheSyn; // a cache of synonyms
 
 	/**
 	 * Detects the terms of a terminology
@@ -50,8 +51,9 @@ public class DetectCT implements IDetectCT {
 		this.trie = trie;
 		this.tokenizerNormalizer = tokenizerNormalizer ;
 		this.synonyms = synonyms;
+		this.cacheSyn = new CacheSyn(synonyms);
 	}
-
+	
 	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
 		// re-initialize :
@@ -60,14 +62,14 @@ public class DetectCT implements IDetectCT {
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
 		String[] tokensArray = tnoutput.getTokens();
-
+		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
 			String token = tokensArray[currentI];
-			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(token)) {
+			if (stopwords.isStopWord(token)) {
 				treeLocation.addStopword(token);
 			} else {
-				treeLocation.searchNextStates(tnoutput, token, synonyms); // search synonyms (abbreviations, typos...)
+				treeLocation.searchNextStates(tnoutput, token, cacheSyn); // search synonyms (abbreviations, typos...)
 			}
 		}
 		DetectOutput detectOutput = new DetectOutput(tnoutput, treeLocation.getCandidateTermsCode());
@@ -89,6 +91,14 @@ public class DetectCT implements IDetectCT {
 	public Set<ISynonym> getSynonyms (){
 		return(this.synonyms);
 	}
+	
+	/**
+	 * Change default {@link CacheSyn}
+	 * @param cacheSyn to store synonyms in cache
+	 */
+	public void setCacheSynonyms(CacheSyn cacheSyn) {
+		this.cacheSyn = cacheSyn;
+	}
 }
 
 
@@ -97,7 +107,6 @@ public class DetectCT implements IDetectCT {
  */
 
 class TreeLocation {
-
 
 	private final INode rootNode; // = the initial state. 
 
@@ -117,9 +126,6 @@ class TreeLocation {
 	// keep track of the tokens of the document that were detected
 	private ArrayList<String> candidateTokensList = new ArrayList<String>();
 
-	// this cache avoids calling the set of ISynonym instances
-	private Map<String, Set<List<String>>> synonymsCache = new HashMap<String, Set<List<String>>>();
-
 	// the ith token currently analyzed
 	private int currentI = 0;
 
@@ -134,7 +140,7 @@ class TreeLocation {
 		candidateTokensList = new ArrayList<String>();
 	}
 
-	public void searchNextStates(TNoutput tnoutput, String token, Set<ISynonym> synonyms) {
+	public void searchNextStates(TNoutput tnoutput, String token, ISynonym synonyms) {
 		states = nextStates(token, synonyms);
 		if (pathFound(states)) {
 			candidateTokensList.add(token);
@@ -165,30 +171,13 @@ class TreeLocation {
 	}
 	
 	// From the current states, try to find new states given a token and a set of string mapping functions
-	private Set<INode> nextStates(String token, Set<ISynonym> synonyms) {
+	private Set<INode> nextStates(String token, ISynonym synonyms) {
 		Set<INode> nextStates = new HashSet<INode>();
-		Set<List<String>> currentSynonyms = getSynonymsOfToken(token, synonyms);
+		Set<List<String>> currentSynonyms = synonyms.getSynonyms(token);
 		for (INode currentState : states) {
 			nextStates.addAll(currentState.gotoNodes(currentSynonyms));
 		}
 		return(nextStates);
-	}
-
-	private Set<List<String>> getSynonymsOfToken(String token, Set<ISynonym> synonyms) {
-		if (synonymsCache.containsKey(token)) {
-			return(synonymsCache.get(token));
-		} else {
-			// find synonyms (typos, abbreviations...):
-			Set<List<String>> currentSynonyms = new HashSet<List<String>>(); // reinitializing synonyms
-			String[] tokenInArray = {token};
-			currentSynonyms.add(Arrays.asList(tokenInArray));
-			// find synonyms: 
-			for (ISynonym synonym : synonyms) {
-				currentSynonyms.addAll(synonym.getSynonyms(token));
-			}
-			synonymsCache.put(token, currentSynonyms);
-			return(currentSynonyms);
-		}
 	}
 
 	private void saveTermIfAnyFinalState(TNoutput tnoutput, Set<INode> nextStates) {
