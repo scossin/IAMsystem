@@ -36,7 +36,7 @@ public class TermDetector implements IDetectCT {
 	/**
 	 * Term detector
 	 */
-	private final IDetectCT detector;
+	private IDetectCT detector;
 	
 	/**
 	 * Constructor
@@ -86,6 +86,8 @@ public class TermDetector implements IDetectCT {
 	 */
 	public void addSynonym(ISynonym synonym) {
 		this.synonyms.add(synonym);
+		// create a new detector to reset the cacheSyn 
+		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.synonyms);
 	}
 	
 	/**
