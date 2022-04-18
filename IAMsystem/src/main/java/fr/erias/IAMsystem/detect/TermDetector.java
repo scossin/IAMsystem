@@ -8,7 +8,6 @@ import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
-import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.Trie;
 
 /**
@@ -17,29 +16,36 @@ import fr.erias.IAMsystem.tree.Trie;
  * @author Cossin Sebastien
  *
  */
-public class TermDetector {
+public class TermDetector implements IDetectCT {
 	
 	/**
 	 * normalizes terms and textual content. It stores the stopwords instances
 	 */
-	private ITokenizerNormalizer tokenizerNormalizer;
+	private final ITokenizerNormalizer tokenizerNormalizer;
 	
 	/**
 	 * stores the terminology in a tree datastructure
 	 */
-	private Trie trie;
+	private final Trie trie;
 	
 	/**
 	 * Offer the possibility to add synonym
 	 */
-	private Set<ISynonym> synonyms = new HashSet<ISynonym>();
+	private final Set<ISynonym> synonyms;
+	
+	/**
+	 * Term detector
+	 */
+	private final IDetectCT detector;
 	
 	/**
 	 * Constructor
 	 */
 	public TermDetector() {
+		this.synonyms = new HashSet<ISynonym>();
 		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
 		this.trie = new Trie();
+		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.synonyms);
 	}
 
 	/**
@@ -62,16 +68,16 @@ public class TermDetector {
 	
 	/**
 	 * Detect candidate terms, return a {@link DetectOutput}
-	 * @param sentence textual content to analyze
+	 * @param document textual content to analyze
 	 * @return A set of CandidateTerm (CT) detected
 	 */
-	public DetectOutput detect(String sentence) {
-		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
-		for (ISynonym synonym : this.synonyms) {
-			synonyms.add(synonym);
-		}
-		IDetectCT detectDictionaryEntry = new DetectCT(this.trie,this.tokenizerNormalizer,synonyms);
-		return(detectDictionaryEntry.detectCandidateTerm(sentence));
+	public DetectOutput detect(String document) {
+		return(detector.detectCandidateTerm(document));
+	}
+	
+	@Override
+	public DetectOutput detectCandidateTerm(String document) {
+		return(detector.detectCandidateTerm(document));
 	}
 	
 	/**
@@ -80,14 +86,6 @@ public class TermDetector {
 	 */
 	public void addSynonym(ISynonym synonym) {
 		this.synonyms.add(synonym);
-	}
-	
-	/**
-	 * Change the set of {@link ISynonym} ; default an empty set
-	 * @param synonyms set of {@link ISynonym}
-	 */
-	public void setSynonyms(Set<ISynonym> synonyms) {
-		this.synonyms = synonyms;
 	}
 	
 	/**
@@ -104,14 +102,6 @@ public class TermDetector {
 	 */
 	public ITokenizerNormalizer getTokenizerNormalizer() {
 		return(this.tokenizerNormalizer);
-	}
-	
-	/**
-	 * set the {@link ITokenizerNormalizer}
-	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
-	 */
-	public void setTokenizerNormalizer(ITokenizerNormalizer tokenizerNormalizer){
-		this.tokenizerNormalizer = tokenizerNormalizer;
 	}
 	
 	/**
@@ -136,13 +126,5 @@ public class TermDetector {
 	 */
 	public Trie getTrie() {
 		return(this.trie);
-	}
-	
-	/**
-	 * Change the terminology by replace the {@link Trie}
-	 * @param trie a new {@link Trie}
-	 */
-	public void setTrie(Trie trie) {
-		this.trie = trie;
 	}
 }
