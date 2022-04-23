@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.HashSet;
+
 import com.pengyifan.brat.BratDocument;
+
 import fr.erias.IAMsystem.brat.BratDocumentWriter;
 import fr.erias.IAMsystem.brat.CTbrat;
 import fr.erias.IAMsystem.ct.CTcode;
-import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
+import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
+import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
@@ -23,8 +26,7 @@ import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
-import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
+import fr.erias.IAMsystem.tree.Trie;
 
 /**
  * In this example we:
@@ -90,14 +92,15 @@ public class Example2 {
 		synonyms.add(getAbbreviations(tokenizerNormalizer));
 
 		// transform the terminology to a tree datastructure
-		SetTokenTree tokenTreeSet0 = SetTokenTreeBuilder.loadTokenTree(terminology,tokenizerNormalizer);
+		Trie trie = new Trie();
+		trie.addTerminology(terminology, tokenizerNormalizer);
 
 		// add another term to the terminology
 		Term term = new Term("accident vasculaire cérébral","I64",tokenizerNormalizer.getNormalizer());
-		SetTokenTreeBuilder.addTerm(term, tokenTreeSet0, tokenizerNormalizer);
+		trie.addTerm(term, tokenizerNormalizer);
 
 		// create a dectector: 
-		DetectDictionaryEntry detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,tokenizerNormalizer,synonyms);
+		IDetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,synonyms);
 
 		// detect terms in the sentence
 		String sentence = "le patient prend de l'ac acetylsalicilique, du paracetamol codéiné et du kardegik (KDG) pour un avc";

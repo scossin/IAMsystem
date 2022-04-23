@@ -55,7 +55,7 @@ public class TermDetector implements IDetectCT {
 	 */
 	public void addTerm(String term, String code) {
 		Term newTerm = new Term(term,code,tokenizerNormalizer.getNormalizer());
-		trie.addTerm(newTerm, this.tokenizerNormalizer.getTokenizer(), this.tokenizerNormalizer.getNormalizer());
+		trie.addTerm(newTerm, this.tokenizerNormalizer);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class TermDetector implements IDetectCT {
 	 * @param terminology {@link Terminology}
 	 */
 	public void addTerminology(Terminology terminology) {
-		trie.addTerminology(terminology, this.tokenizerNormalizer.getTokenizer(), this.tokenizerNormalizer.getNormalizer());
+		trie.addTerminology(terminology, this.tokenizerNormalizer);
 	}
 	
 	/**

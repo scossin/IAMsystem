@@ -2,8 +2,9 @@ package fr.erias.IAMsystem.example;
 
 import java.util.HashSet;
 
-import fr.erias.IAMsystem.detect.DetectDictionaryEntry;
+import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
+import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -14,8 +15,7 @@ import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
-import fr.erias.IAMsystem.tree.SetTokenTree;
-import fr.erias.IAMsystem.tree.SetTokenTreeBuilder;
+import fr.erias.IAMsystem.tree.Trie;
 
 /**
  * In this example we don't use TermDetector:
@@ -66,7 +66,8 @@ public class Example1 {
 		terminology.addTerm("covid positive", "covidPosCode", normalizer);
 		
 		// convert Terminology to a tree data structure:
-		SetTokenTree setTokenTree = SetTokenTreeBuilder.loadTokenTree(terminology, tokenizerNormalizer);
+		Trie trie = new Trie();
+		trie.addTerminology(terminology, tokenizer, normalizer);
 		
 		// optional: add synonyms (abbreviations etc...)
 		Abbreviations abbreviations = new Abbreviations();
@@ -77,7 +78,7 @@ public class Example1 {
 		synonyms.add(abbreviations);
 		
 		//
-		DetectDictionaryEntry detect = new DetectDictionaryEntry(setTokenTree, tokenizerNormalizer, synonyms);
+		IDetectCT detect = new DetectCT(trie, tokenizerNormalizer, synonyms);
 		sentence = "le patient a une PCR Covid   +";
 		// detectOutput:
 		DetectOutput detectOutput = detect.detectCandidateTerm(sentence);
