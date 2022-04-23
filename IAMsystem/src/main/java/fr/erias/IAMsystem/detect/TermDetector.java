@@ -50,12 +50,20 @@ public class TermDetector implements IDetectCT {
 
 	/**
 	 * Add a term of a terminology
-	 * @param term the label of a term (it will be normalized)
+	 * @param label the label of a term (it will be normalized)
 	 * @param code the code of the term
 	 */
-	public void addTerm(String term, String code) {
-		Term newTerm = new Term(term,code,tokenizerNormalizer.getNormalizer());
+	public void addTerm(String label, String code) {
+		Term newTerm = new Term(label,code,tokenizerNormalizer.getNormalizer());
 		trie.addTerm(newTerm, this.tokenizerNormalizer);
+	}
+	
+	/**
+	 * Add a term of a terminology
+	 * @param term a {@link Term}
+	 */
+	public void addTerm(Term term) {
+		trie.addTerm(term, this.tokenizerNormalizer);
 	}
 	
 	/**
