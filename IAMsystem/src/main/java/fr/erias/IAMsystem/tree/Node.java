@@ -1,6 +1,7 @@
 package fr.erias.IAMsystem.tree;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -154,4 +155,9 @@ public class Node implements INode {
     public int hashCode() {
         return(this.getNodeNumber());
     }
+
+	@Override
+	public Collection<INode> getChildNodes() {
+		return this.childNodes.values();
+	}
 }
