@@ -3,19 +3,14 @@ package fr.erias.IAMsystem.synonym;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.queryparser.classic.ParseException;
 import org.apache.lucene.search.Query;
 import org.apache.lucene.search.ScoreDoc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.lucene.SearchIndex;
 
@@ -26,22 +21,10 @@ import fr.erias.IAMsystem.lucene.SearchIndex;
  */
 public class LevenshteinTypoLucene implements ISynonym {
 	
-	final static Logger logger = LoggerFactory.getLogger(LevenshteinTypoLucene.class);
-	
 	/**
 	 * A lucene search engine to perform Levenshtein distance
 	 */
 	private SearchIndex searchIndex = null;
-	
-	/**
-	 * Save unmatched, no need to search multiples times the same token that had no match
-	 */
-	private Set<String> unmatched = new HashSet<String>() ;
-	
-	/**
-	 * Save matched, no need to search multiples times the same token that had a match 
-	 */
-	private Map<String, Set<List<String>>> matched = new HashMap<String, Set<List<String>>>();
 	
 	/**
 	 * Number of insertion, deletion of the Levenshtein distance. Max 2
@@ -85,10 +68,10 @@ public class LevenshteinTypoLucene implements ISynonym {
 	
 	public void setMaxEdits(int maxEdits) {
 		if (maxEdits > 2) {
-			logger.info("impossible to set maxEdits greater than 2");
+			System.err.println("impossible to set maxEdits greater than 2");
 			this.maxEdits = 2;
 		} else if (maxEdits < 1) {
-			logger.info("impossible to set maxEdits lower than 1"); // 0 means exact match
+			System.err.println("impossible to set maxEdits lower than 1"); // 0 means exact match
 			this.maxEdits = 1;
 		} else {
 			this.maxEdits = maxEdits;
@@ -111,8 +94,6 @@ public class LevenshteinTypoLucene implements ISynonym {
 	 * @throws ParseException If the Lucene query fails
 	 */
 	private Set<List<String>> searchIndexLeven(String term) throws IOException, ParseException {
-		// return this : exact term and typos in term
-
 		// don't search anything if less than 4 characters (to avoid noise)
 		if (term.length() < this.minNchar) { 
 			return(ISynonym.no_synonyms);
@@ -126,7 +107,6 @@ public class LevenshteinTypoLucene implements ISynonym {
 
 		// if no hits return
 		if (hits.length == 0) {
-			addUnmatched(term);
 			return(ISynonym.no_synonyms);
 		}
 
@@ -135,55 +115,15 @@ public class LevenshteinTypoLucene implements ISynonym {
 		for (int i = 0; i<hits.length ; i++) {
 			Document doc = searchIndex.getIsearcher().doc(hits[i].doc);
 			String bigram = doc.get(IndexBigramLucene.BIGRAM_FIELD);
-			logger.debug("detected synonyms : " + bigram);
 			String[] bigramArray = bigram.split(" ");
 			synonyms.add(Arrays.asList(bigramArray));
 		}
-		logger.debug("synonyms size : " + synonyms.size());
-		addMatched(term, synonyms);
 		return(synonyms);
-	}
-	
-	/**
-	 * Add an unmatched token that was not found in the Lucene Index
-	 * @param token an unmatched token
-	 */
-	private void addUnmatched(String token) {
-		unmatched.add(token);
-	}
-	
-	/**
-	 * Add a set of unmatched terms - words that won't be matched or we don't want to be matched
-	 * @param tokensSet A set of tokens
-	 */
-	public void addUnmatched(Set<String> tokensSet) {
-		unmatched.addAll(tokensSet);
-	}
-	
-	/**
-	 * Add a matched token that was found in the Lucene Index
-	 * @param token a token found in this index
-	 * @param synonyms a list of "synonyms" (aka lexical variants)
-	 */
-	private void addMatched(String token, Set<List<String>> synonyms) {
-		matched.put(token, synonyms);
 	}
 	
 	@Override
 	public Set<List<String>> getSynonyms(String token) {
-		// if already searched and no matched
-		if (unmatched.contains(token)) {
-			return(ISynonym.no_synonyms);
-		}
-		
 		Set<List<String>> output;
-		// if already searched and matched found 
-		if (matched.containsKey(token)) {
-			output = matched.get(token);
-			return(output);
-		}
-		
-		// if it's the first time we searched this token :
 		try {
 			output = searchIndexLeven(token);
 			return(output);
