@@ -1,6 +1,11 @@
 package fr.erias.IAMsystemFR.synonyms;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoder;
+
 /**
+ * A FrenchStemmer ADAPTED from: 
+ * 
  * Copyright 2001-2005 The Apache Software Foundation
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,10 +27,10 @@ package fr.erias.IAMsystemFR.synonyms;
  * refer to http://snowball.sourceforge.net/french/stemmer.html<br>
  * (French stemming algorithm) for details
  *
- * @author    Patrick Talbot
+ * @author Patrick Talbot
  */
 
-public class FrenchStemmer {
+public class FrenchStemmer implements StringEncoder {
 
 	/**
 	 * 
@@ -725,5 +730,15 @@ public class FrenchStemmer {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public Object encode(Object source) throws EncoderException {
+		return new EncoderException();
+	}
+
+	@Override
+	public String encode(String source) throws EncoderException {
+		return this.stem(source);
 	}
 }
