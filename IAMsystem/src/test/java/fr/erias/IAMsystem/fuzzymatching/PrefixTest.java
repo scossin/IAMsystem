@@ -2,33 +2,21 @@ package fr.erias.IAMsystem.fuzzymatching;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
 
-import fr.erias.IAMsystem.ct.CTcode;
-import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
-import fr.erias.IAMsystem.detect.DetectionTest;
-import fr.erias.IAMsystem.detect.IDetectCT;
 import fr.erias.IAMsystem.detect.TermDetector;
-import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
-import fr.erias.IAMsystem.synonym.Abbreviations;
-import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.synonym.Prefix;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
-import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
 public class PrefixTest {
@@ -64,7 +52,7 @@ public class PrefixTest {
 	}
 
 	@Test
-	public void synonymsSizeTest() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void synonymsSizeTest() {
 		// insuffisanc is searched and has 11 characters  
 		assertEquals(getPrefixSize(12, 1000), 0); // because insuffisanc.length < 12
 		assertEquals(getPrefixSize(11, 1000), 3); // insuffisanc, insuffisance and insuffisances
@@ -73,7 +61,7 @@ public class PrefixTest {
 	}
 	
 	@Test
-	public void detectionTest() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void detectionTest() {
 		// insuffisanc is searched and has 11 characters  
 		TermDetector termDetector = new TermDetector();
 		Term term3 = new Term ("insuffisance cardiaque aigue", "I50");

@@ -2,18 +2,16 @@ package fr.erias.IAMsystem.detectct;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.DetectionTest;
 import fr.erias.IAMsystem.detect.IDetectCT;
-import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -46,7 +44,7 @@ public class DetectCTTest {
 	}
 
 	@Test
-	public void detectTrieTest() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void detectTrieTest() {
 		// Tokenizer
 		HashSet<String> stopwordsSet = new HashSet<String>();
 		stopwordsSet.add("de");
@@ -107,7 +105,7 @@ public class DetectCTTest {
 	}
 	
 	@Test
-	public void detectOverlappingTerms() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void detectOverlappingTerms() {
 		// find synonyms with abbreviations and typos : 
 		Set<ISynonym> synonyms = new HashSet<ISynonym>();
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
