@@ -12,6 +12,7 @@ import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.DetectionTest;
 import fr.erias.IAMsystem.detect.IDetectCT;
+import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -105,7 +106,7 @@ public class DetectCTTest {
 	}
 	
 	@Test
-	public void detectOverlappingTerms() {
+	public void detectOverlappingTermsTest() {
 		// find synonyms with abbreviations and typos : 
 		Set<ISynonym> synonyms = new HashSet<ISynonym>();
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
@@ -153,5 +154,12 @@ public class DetectCTTest {
 		// a is a deadend
 		// The algorithm restarts at token 'a' (not 'triple' and it's not detected). 
 		// This is the only detection difference with IAMsystem 1.1.0 that used TokenTree method. 
+	}
+	
+	@Test
+	public void detectEmptyStringTest() {
+		TermDetector detector = new TermDetector();
+		DetectOutput output = detector.detect(""); // was throwing an exception
+		assertEquals(output.getCTcodes().size(),0);
 	}
 }
