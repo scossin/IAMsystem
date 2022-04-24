@@ -26,7 +26,7 @@ Add the dependency to your pom.xml to download it from the Maven Repository:
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 </dependency>
 ```
 
@@ -56,6 +56,14 @@ If you notice a problem, please open an issue.
 ## Reference
 *    Cossin S, Jouhet V, Mougin F, Diallo G, Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. https://arxiv.org/abs/1807.03674
 *    Cossin S and Jouhet V. IAM at CLEF eHealth 2020: Concept Annotation in Spanish Electronic Health Records.  http://www.dei.unipd.it/~ferro/CLEF-WN-Drafts/CLEF2020/paper_198.pdf
+
+### Release note:
+
+| Version    |                                                                                                        |
+|------------|--------------------------------------------------------------------------------------------------------|
+|   0.0.1    | First publication of the algorithm (November 2018)                                                     |
+|   1.0.0    | First major modification. Change the output object of the detector (December 2020), add TermDetector   |
+|   1.2.0    | Re-implement the trie and add a cache mechanism to improve performance                     		      |
 
 ## Demo
 *    Detect French UMLS concepts: https://www.erias.fr/detectUMLS/
