@@ -90,7 +90,7 @@ public class Prefix implements ISynonym {
 	}
 
 	private void addToken(String token) {
-		Term term = new Term(token,"TOKEN"); // the code doesn't matter
+		Term term = new Term(token,"TOKEN"); // the code of the term doesn't matter
 		trie.addTerm(term, charTokenizer, normalizer);
 	}
 
@@ -109,7 +109,7 @@ public class Prefix implements ISynonym {
 		String[] tokensArray = tokenizer.tokenize(normalizeLabel);
 		tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
 		for (String token : tokensArray) {
-			if (token.length() < this.minPrefixLength) { // we won't search for a typo index if the word is less than minPrefixSize
+			if (tokenLengthLessThanMinSize(token)) {
 				continue;
 			}
 			uniqueTokens.add(token);
@@ -129,10 +129,14 @@ public class Prefix implements ISynonym {
 
 	@Override
 	public Set<List<String>> getSynonyms(String token) {
-		if (token.length() < this.minPrefixLength) {
+		if (tokenLengthLessThanMinSize(token)) {
 			return ISynonym.no_synonyms;
 		}
 		return(getTokenStartingWith(token));
+	}
+	
+	private boolean tokenLengthLessThanMinSize(String token) {
+		return token.length() < this.minPrefixLength;
 	}
 }
 
