@@ -10,6 +10,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
+import java.util.Set;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.normalizer.INormalizer;
@@ -18,7 +20,7 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
 /**
  * This class represents a terminology (a set of terms)
- * The terminology is then compressed in a tree data structure with SetTokenTree
+ * The terminology is then stored in a {@link Trie}
  * 
  * @author Cossin Sebastien
  */
@@ -26,18 +28,9 @@ public class Terminology {
 	
 	final static Logger logger = LoggerFactory.getLogger(Terminology.class);
 	
-	/**
-	 * HashSet of terms
-	 */
-	private HashSet<Term> terms = new HashSet<Term>();
+	private Set<Term> terms = new HashSet<Term>();
 	
-
-	/**
-	 * Default constructor
-	 */
-	public Terminology() {
-		
-	}
+	public Terminology() {};
 	
 	/**
 	 * Add a term to the terminology
@@ -47,6 +40,14 @@ public class Terminology {
 	 */
 	public void addTerm(String label, String code, INormalizer normalizer) {
 		Term term = new Term(label, code, normalizer);
+		terms.add(term);
+	}
+	
+	/**
+	 * Add a term to the terminology
+	 * @param term a {@link Term}
+	 */
+	public void addTerm(Term term) {
 		terms.add(term);
 	}
 	
@@ -140,7 +141,7 @@ public class Terminology {
 	 * Retrieve all the terms of a terminology
 	 * @return the set of terms
 	 */
-	public HashSet<Term> getTerms() {
+	public Set<Term> getTerms() {
 		return(this.terms);
 	}
 	
