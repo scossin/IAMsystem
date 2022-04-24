@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.detectct;
+package fr.erias.IAMsystem.fuzzymatching;
 
 import static org.junit.Assert.assertEquals;
 

@@ -62,7 +62,7 @@ public class StringEncoderSynTest {
 	public void detectBeiderMorseEncoderTest() throws EncoderException {
 		TermDetector termDetector = new TermDetector();
 		BeiderMorseEncoder morseEncoder = new BeiderMorseEncoder();
-		morseEncoder.setRuleType(RuleType.EXACT); // defalut APPROX
+		morseEncoder.setRuleType(RuleType.EXACT); // default APPROX
 		morseEncoder.setMaxPhonemes(10);
 		// the pipe | is the separator in BeiderMorseEncoder 
 		StringEncoderSyn encoder = new StringEncoderSyn(morseEncoder, 5, "\\|"); 

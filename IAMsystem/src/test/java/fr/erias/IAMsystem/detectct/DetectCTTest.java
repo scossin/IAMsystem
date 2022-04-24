@@ -26,7 +26,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
-public class DetectionImpTest {
+public class DetectCTTest {
 
 	public static Trie getTrieTest() {
 		INormalizer normalizer = new Normalizer();
