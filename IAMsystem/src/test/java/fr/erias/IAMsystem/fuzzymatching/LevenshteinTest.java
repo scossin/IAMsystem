@@ -1,4 +1,4 @@
-package fr.erias.IAMsystem.detect;
+package fr.erias.IAMsystem.fuzzymatching;
 
 import static org.junit.Assert.assertEquals;
 
@@ -7,10 +7,12 @@ import java.io.IOException;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.ct.CTcode;
+import fr.erias.IAMsystem.detect.DetectOutput;
+import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.lucene.IndexBigramLucene;
 import fr.erias.IAMsystem.synonym.LevenshteinTypoLucene;
 import fr.erias.IAMsystem.terminology.Terminology;
-public class DetectionLevenshteinTest {
+public class LevenshteinTest {
 
 	
 	@Test

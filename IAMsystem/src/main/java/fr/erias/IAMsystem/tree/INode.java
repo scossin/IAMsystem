@@ -1,5 +1,6 @@
 package fr.erias.IAMsystem.tree;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -78,5 +79,11 @@ public interface INode {
 	 * @return its number
 	 */
 	public int getNodeNumber();
+	
+	/**
+	 * get the child nodes
+	 * @return a collection of child nodes of a node, empty if it's a leaf
+	 */
+	public Collection<INode> getChildNodes();
 	
 }

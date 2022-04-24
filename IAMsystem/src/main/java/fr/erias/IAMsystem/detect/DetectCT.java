@@ -59,6 +59,8 @@ public class DetectCT implements IDetectCT {
 	
 	@Override
 	public DetectOutput detectCandidateTerm(String sentence) {
+		if (sentence.isEmpty()) return emptyOutput();
+		
 		// re-initialize :
 		TreeLocation treeLocation = new TreeLocation(trie.getInitialState(), keepOverlappingTerms);
 
@@ -76,6 +78,18 @@ public class DetectCT implements IDetectCT {
 			}
 		}
 		DetectOutput detectOutput = new DetectOutput(tnoutput, treeLocation.getCandidateTermsCode());
+		return(detectOutput);
+	}
+	
+	private DetectOutput emptyOutput() {
+		String normalizedSentence = "";
+		String originalSentence = normalizedSentence;
+		String[] tokens = {};
+		String[] tokensOriginal = tokens;
+		int [][] tokensStartEnd = {};
+		TNoutput tnoutpout = new TNoutput(originalSentence,normalizedSentence,tokens,tokensOriginal,tokensStartEnd);
+		ArrayList<CTcode> nocodes = new ArrayList<>(0);
+		DetectOutput detectOutput = new DetectOutput(tnoutpout, nocodes);
 		return(detectOutput);
 	}
 

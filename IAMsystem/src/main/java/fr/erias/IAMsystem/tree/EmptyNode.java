@@ -1,5 +1,7 @@
 package fr.erias.IAMsystem.tree;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -72,5 +74,10 @@ public class EmptyNode implements INode {
 	@Override
 	public INode getParentNode() {
 		return null;
+	}
+
+	@Override
+	public Collection<INode> getChildNodes() {
+		return new ArrayList<INode>(0);
 	}
 }

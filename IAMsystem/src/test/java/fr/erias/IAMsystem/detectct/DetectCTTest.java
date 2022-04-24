@@ -2,18 +2,17 @@ package fr.erias.IAMsystem.detectct;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.apache.lucene.queryparser.classic.ParseException;
 import org.junit.Test;
+
 import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.DetectionTest;
 import fr.erias.IAMsystem.detect.IDetectCT;
-import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
+import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -26,7 +25,7 @@ import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
-public class DetectionImpTest {
+public class DetectCTTest {
 
 	public static Trie getTrieTest() {
 		INormalizer normalizer = new Normalizer();
@@ -46,7 +45,7 @@ public class DetectionImpTest {
 	}
 
 	@Test
-	public void detectTrieTest() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void detectTrieTest() {
 		// Tokenizer
 		HashSet<String> stopwordsSet = new HashSet<String>();
 		stopwordsSet.add("de");
@@ -107,7 +106,7 @@ public class DetectionImpTest {
 	}
 	
 	@Test
-	public void detectOverlappingTerms() throws IOException, UnfoundTokenInSentence, ParseException{
+	public void detectOverlappingTermsTest() {
 		// find synonyms with abbreviations and typos : 
 		Set<ISynonym> synonyms = new HashSet<ISynonym>();
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
@@ -155,5 +154,12 @@ public class DetectionImpTest {
 		// a is a deadend
 		// The algorithm restarts at token 'a' (not 'triple' and it's not detected). 
 		// This is the only detection difference with IAMsystem 1.1.0 that used TokenTree method. 
+	}
+	
+	@Test
+	public void detectEmptyStringTest() {
+		TermDetector detector = new TermDetector();
+		DetectOutput output = detector.detect(""); // was throwing an exception
+		assertEquals(output.getCTcodes().size(),0);
 	}
 }
