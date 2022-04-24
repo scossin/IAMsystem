@@ -1,4 +1,4 @@
-package fr.erias.IAMsystemFR.stemmer;
+package fr.erias.IAMsystemFR.synonyms;
 
 import static org.junit.Assert.assertEquals;
 
