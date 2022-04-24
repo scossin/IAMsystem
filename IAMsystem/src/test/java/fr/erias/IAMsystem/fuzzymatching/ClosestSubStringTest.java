@@ -20,7 +20,7 @@ public class ClosestSubStringTest {
 		TermDetector termDetector = new TermDetector();
 		PrefixTrie prefixTrie = new PrefixTrie(5);
 		ClosestSubString closestSub = new ClosestSubString(prefixTrie, 1);
-		termDetector.addSynonym(closestSub);
+		termDetector.addFuzzyAlgorithm(closestSub);
 		Term term = new Term ("ulcere gastrique", "I50");
 		termDetector.addTerm(term);
 		prefixTrie.addTerm(term, new StopwordsImpl());
@@ -33,7 +33,7 @@ public class ClosestSubStringTest {
 		TermDetector termDetector = new TermDetector();
 		PrefixTrie prefixTrie = new PrefixTrie(5);
 		ClosestSubString closestSub = new ClosestSubString(prefixTrie, 1);
-		termDetector.addSynonym(closestSub);
+		termDetector.addFuzzyAlgorithm(closestSub);
 		Term term = new Term ("ulcere gastrique", "I50");
 		termDetector.addTerm(term);
 		prefixTrie.addTerm(term, new StopwordsImpl());

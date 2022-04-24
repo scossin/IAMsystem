@@ -75,16 +75,16 @@ public class DetectionTest {
 			}
 		};
 		// find synonyms with abbreviations and typos : 
-		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
-		synonyms.add(abbreviations);
-		synonyms.add(levenshtein);
+		HashSet<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
+		fuzzyAlgorithms.add(abbreviations);
+		fuzzyAlgorithms.add(levenshtein);
 
 		// load the dictionary :
 		SetTokenTree tokenTreeSet0 = getSetTokenTreeTest();
 
 		// class that detects dictionary entries
 		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(tokenTreeSet0,
-				tokenizerNormalizer,synonyms);
+				tokenizerNormalizer,fuzzyAlgorithms);
 		
 		String sentence = "Insuf.            cardiaqu aigue";
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);

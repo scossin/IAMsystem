@@ -61,13 +61,13 @@ public class DetectCTTest {
 		// simulating a levenshtein distance : 
 		ISynonym levenshtein = DetectionTest.getCardiaquTypo();
 		// find synonyms with abbreviations and typos : 
-		Set<ISynonym> synonyms = new HashSet<ISynonym>();
-		synonyms.add(abbreviations);
-		synonyms.add(levenshtein);
+		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
+		fuzzyAlgorithms.add(abbreviations);
+		fuzzyAlgorithms.add(levenshtein);
 
 		// class that detects dictionary entries
 		IDetectCT detectDictionaryEntry = new DetectCT(getTrieTest(),
-				tokenizerNormalizer,synonyms);
+				tokenizerNormalizer,fuzzyAlgorithms);
 		
 		String sentence = "Insuf.            cardiaqu aigue";
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
@@ -108,7 +108,7 @@ public class DetectCTTest {
 	@Test
 	public void detectOverlappingTermsTest() {
 		// find synonyms with abbreviations and typos : 
-		Set<ISynonym> synonyms = new HashSet<ISynonym>();
+		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 
 		INormalizer normalizer = new Normalizer();
@@ -119,7 +119,7 @@ public class DetectCTTest {
 		trie.addTerm(term1, tokenizer, normalizer);
 		trie.addTerm(term2, tokenizer, normalizer);
 		// class that detects dictionary entries
-		DetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,synonyms);
+		DetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,fuzzyAlgorithms);
 		
 		String sentence = "insuffisance cardiaque aigue";
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
@@ -143,9 +143,9 @@ public class DetectCTTest {
 		trie.addTerm(term1, tokenizer, normalizer);
 		trie.addTerm(term2, tokenizer, normalizer);
 		trie.addTerm(term3, tokenizer, normalizer);
-		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
+		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
-		IDetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,synonyms);
+		IDetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,fuzzyAlgorithms);
 		String sentence = "syndrome triple x"; 
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);
 		assertEquals(detectOutput.getCTcodes().size(),1);

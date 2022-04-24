@@ -31,7 +31,7 @@ public class TermDetector implements IDetectCT {
 	/**
 	 * Offer the possibility to add synonym
 	 */
-	private final Set<ISynonym> synonyms;
+	private final Set<ISynonym> fuzzyAlgorithms;
 	
 	/**
 	 * Term detector
@@ -42,10 +42,10 @@ public class TermDetector implements IDetectCT {
 	 * Constructor
 	 */
 	public TermDetector() {
-		this.synonyms = new HashSet<ISynonym>();
+		this.fuzzyAlgorithms = new HashSet<ISynonym>();
 		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
 		this.trie = new Trie();
-		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.synonyms);
+		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.fuzzyAlgorithms);
 	}
 
 	/**
@@ -89,21 +89,40 @@ public class TermDetector implements IDetectCT {
 	}
 	
 	/**
-	 * Add a class that handles synonymy. For example {@link fr.erias.IAMsystem.synonym.Abbreviations}, {@link fr.erias.IAMsystem.synonym.LevenshteinTypoLucene} or a customize class that implements {@link ISynonym}
+	 * Add a class that handles approximate string matching. <br>
+	 * For example {@link fr.erias.IAMsystem.synonym.Abbreviations} or {@link fr.erias.IAMsystem.synonym.LevenshteinTypoLucene} or a customize class that implements {@link ISynonym}
+	 * @param fuzzyAlgorithm an implementation of a {@link ISynonym} to find alternatives to a token
+	 */
+	public void addFuzzyAlgorithm(ISynonym fuzzyAlgorithm) {
+		this.fuzzyAlgorithms.add(fuzzyAlgorithm);
+		// create a new detector to reset the cacheSyn 
+		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.fuzzyAlgorithms);
+	}
+	
+	/**
+	 * Method renamed 'addFuzzyAlgorithm' ; this method will be removed in future releases
 	 * @param synonym an implementation of a {@link ISynonym} to find alternatives to a token
 	 */
+	@Deprecated
 	public void addSynonym(ISynonym synonym) {
-		this.synonyms.add(synonym);
-		// create a new detector to reset the cacheSyn 
-		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.synonyms);
+		addFuzzyAlgorithm(synonym);
 	}
 	
 	/**
 	 * Retrieve the set of {@link ISynonym}
 	 * @return set of {@link ISynonym}
 	 */
+	public Set<ISynonym> getFuzzyAlgorithms() {
+		return(this.fuzzyAlgorithms);
+	}
+	
+	/**
+	 * Method renamed 'getFuzzyAlgorithms' ; this method will be removed in future releases
+	 * @return set of {@link ISynonym}
+	 */
+	@Deprecated
 	public Set<ISynonym> getSynonyms() {
-		return(this.synonyms);
+		return(this.fuzzyAlgorithms);
 	}
 	
 	/**

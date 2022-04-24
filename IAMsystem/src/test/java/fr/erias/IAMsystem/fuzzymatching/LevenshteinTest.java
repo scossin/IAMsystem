@@ -24,8 +24,8 @@ public class LevenshteinTest {
 		
 		IndexBigramLucene.IndexLuceneUniqueTokensBigram(terminology, termDetector.getTokenizerNormalizer());
 		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene();
-		termDetector.addSynonym(levenshteinTypoLucene);
-		assertEquals(termDetector.getSynonyms().size(), 1); // check it was correctly added
+		termDetector.addFuzzyAlgorithm(levenshteinTypoLucene);
+		assertEquals(termDetector.getFuzzyAlgorithms().size(), 1); // check it was correctly added
 		DetectOutput detectOutput = termDetector.detect("gastroenteritee");
 		
 		assertEquals(detectOutput.getCTcodes().size(), 1);

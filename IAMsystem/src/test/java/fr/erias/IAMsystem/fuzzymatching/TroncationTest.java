@@ -71,7 +71,7 @@ public class TroncationTest {
 		termDetector.addTerm(term3);
 		Troncation troncation = new Troncation(prefixTrie, 2);
 		prefixTrie.addTerm(term3, new StopwordsImpl());
-		termDetector.addSynonym(troncation);
+		termDetector.addFuzzyAlgorithm(troncation);
 		DetectOutput output = termDetector.detect("insuffisan cardiaq aig");
 		assertEquals(output.getCTcodes().size(), 1);
 	}

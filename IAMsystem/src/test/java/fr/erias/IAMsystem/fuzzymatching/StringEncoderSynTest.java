@@ -22,7 +22,7 @@ public class StringEncoderSynTest {
 		TermDetector termDetector = new TermDetector();
 		StringEncoder stringEncoder = new Soundex();
 		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, 5);
-		termDetector.addSynonym(encoder);
+		termDetector.addFuzzyAlgorithm(encoder);
 		Term term = new Term("amoxicilline","A522"); // A522 is the soundex code
 		termDetector.addTerm(term);
 		encoder.addTerm(term, termDetector.getTokenizerNormalizer());
@@ -36,7 +36,7 @@ public class StringEncoderSynTest {
 		StringEncoder stringEncoder = new Soundex();
 		int minLengthToken = "amoxicilline".length() + 1 ;
 		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, minLengthToken);
-		termDetector.addSynonym(encoder);
+		termDetector.addFuzzyAlgorithm(encoder);
 		Term term = new Term("amoxicilline","A522");
 		termDetector.addTerm(term);
 		encoder.addTerm(term, termDetector.getTokenizerNormalizer());
@@ -50,7 +50,7 @@ public class StringEncoderSynTest {
 		TermDetector termDetector = new TermDetector();
 		StringEncoder stringEncoder = new Metaphone();
 		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, 5);
-		termDetector.addSynonym(encoder);
+		termDetector.addFuzzyAlgorithm(encoder);
 		Term term = new Term("amoxicilline","AMKS"); // AMKS is metaphone code
 		termDetector.addTerm(term);
 		encoder.addTerm(term, termDetector.getTokenizerNormalizer());
@@ -66,7 +66,7 @@ public class StringEncoderSynTest {
 		morseEncoder.setMaxPhonemes(10);
 		// the pipe | is the separator in BeiderMorseEncoder 
 		StringEncoderSyn encoder = new StringEncoderSyn(morseEncoder, 5, "\\|"); 
-		termDetector.addSynonym(encoder);
+		termDetector.addFuzzyAlgorithm(encoder);
 		Term term = new Term("keratocone","x"); // encoded: keratokone|keratotsone
 		termDetector.addTerm(term);
 		encoder.addTerm(term, termDetector.getTokenizerNormalizer());

@@ -18,7 +18,7 @@ public class AbbreviationTest {
 		termDetector.addTerm(term3);
 		Abbreviations abbreviations = new Abbreviations();
 		abbreviations.addAbbreviation("insuffisance", "insuf",termDetector.getTokenizerNormalizer());
-		termDetector.addSynonym(abbreviations);
+		termDetector.addFuzzyAlgorithm(abbreviations);
 		DetectOutput output = termDetector.detect("insuf cardiaque aigue");
 		assertEquals(output.getCTcodes().size(), 1);
 	}

@@ -35,9 +35,9 @@ public class DetectCT implements IDetectCT {
 	private final ITokenizerNormalizer tokenizerNormalizer;
 
 	/**
-	 * Set of synonyms: abbreviations, typos...
+	 * Set of fuzzyAlgorithms: abbreviations, Levenshtein, soundex...
 	 */
-	private final Set<ISynonym> synonyms ;
+	private final Set<ISynonym> fuzzyAlgorithms ;
 	
 	private CacheSyn cacheSyn; // a cache of synonyms
 	
@@ -47,13 +47,13 @@ public class DetectCT implements IDetectCT {
 	 * Detects the terms of a terminology
 	 * @param trie A terminology stored in a tree datastructure. See {@link Trie}
 	 * @param tokenizerNormalizer to normalize and tokenize terms in the sentence
-	 * @param synonyms For each token, find synonym tokens (ex : abbreviations or typos or real synonym). See the inferface : {@link ISynonym}
+	 * @param fuzzyAlgorithms they find a matching token in the terminolog. See the interface : {@link ISynonym}
 	 */
-	public DetectCT(Trie trie, ITokenizerNormalizer tokenizerNormalizer, Set<ISynonym> synonyms) {
+	public DetectCT(Trie trie, ITokenizerNormalizer tokenizerNormalizer, Set<ISynonym> fuzzyAlgorithms) {
 		this.trie = trie;
 		this.tokenizerNormalizer = tokenizerNormalizer ;
-		this.synonyms = synonyms;
-		this.cacheSyn = new CacheSyn(synonyms);
+		this.fuzzyAlgorithms = fuzzyAlgorithms;
+		this.cacheSyn = new CacheSyn(fuzzyAlgorithms);
 		this.keepOverlappingTerms = false;
 	}
 	
@@ -102,16 +102,25 @@ public class DetectCT implements IDetectCT {
 	}
 
 	/**
-	 * Set of synonyms: abbreviations, typos...
+	 * Set of fuzzyAlgorithms: abbreviations, soundex, troncation...
 	 * @return a set of {@link ISynonym} that will search an alternative for each token
 	 */
-	public Set<ISynonym> getSynonyms (){
-		return(this.synonyms);
+	public Set<ISynonym> getFuzzyAlgorithms (){
+		return(this.fuzzyAlgorithms);
+	}
+	
+	/**
+	 * Method renamed 'getFuzzyAlgorithms' ; this method will be removed in future releases
+	 * @return set of {@link ISynonym}
+	 */
+	@Deprecated
+	public Set<ISynonym> getSynonyms() {
+		return(this.fuzzyAlgorithms);
 	}
 	
 	/**
 	 * Change default {@link CacheSyn}
-	 * @param cacheSyn to store synonyms in cache
+	 * @param cacheSyn to store approximate string in cache
 	 */
 	public void setCacheSynonyms(CacheSyn cacheSyn) {
 		this.cacheSyn = cacheSyn;
@@ -176,8 +185,8 @@ class TreeLocation {
 		candidateTokensList = new ArrayList<String>();
 	}
 
-	public void searchNextStates(TNoutput tnoutput, String token, ISynonym synonyms) {
-		states = nextStates(token, synonyms);
+	public void searchNextStates(TNoutput tnoutput, String token, ISynonym fuzzyAlgorithms) {
+		states = nextStates(token, fuzzyAlgorithms);
 		if (pathFound(states)) {
 			candidateTokensList.add(token);
 			saveTermIfAnyFinalState(tnoutput, states);
@@ -207,9 +216,9 @@ class TreeLocation {
 	}
 	
 	// From the current states, try to find new states given a token and a set of string mapping functions
-	private Set<INode> nextStates(String token, ISynonym synonyms) {
+	private Set<INode> nextStates(String token, ISynonym fuzzyAlgorithms) {
 		Set<INode> nextStates = new HashSet<INode>();
-		Set<List<String>> currentSynonyms = synonyms.getSynonyms(token);
+		Set<List<String>> currentSynonyms = fuzzyAlgorithms.getSynonyms(token);
 		for (INode currentState : states) {
 			nextStates.addAll(currentState.gotoNodes(currentSynonyms));
 		}

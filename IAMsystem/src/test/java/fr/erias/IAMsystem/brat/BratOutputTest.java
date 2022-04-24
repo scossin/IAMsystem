@@ -74,14 +74,14 @@ public class BratOutputTest {
 		};
 
 		// find synonyms with abbreviations and typos : 
-		Set<ISynonym> synonyms = new HashSet<ISynonym>();
-		synonyms.add(abbreviations);
-		synonyms.add(levenshtein);
+		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
+		fuzzyAlgorithms.add(abbreviations);
+		fuzzyAlgorithms.add(levenshtein);
 
 
 		// class that detects dictionary entries
 		IDetectCT detectDictionaryEntry = new DetectCT(getTrieTest(),
-				tokenizerNormalizer,synonyms);
+				tokenizerNormalizer,fuzzyAlgorithms);
 		
 		String sentence = "Insuf.            cardiaqu aigue et AVC hémorragiQUE";
 		
