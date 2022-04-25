@@ -18,7 +18,7 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
 /**
  * This class represents a terminology (a set of terms)
- * The terminology is then stored in a {@link Trie}
+ * The terminology is then stored in a trie
  * 
  * @author Cossin Sebastien
  */
@@ -58,7 +58,7 @@ public class Terminology {
 	}
 	
 	/**
-	 * Create a terminology object from a CSV file
+	 * Load a terminology from a CSV file
 	 * @param in The inputstream of the CSV file
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
@@ -74,6 +74,30 @@ public class Terminology {
 			String label = columns[colLabel];
 			String code = columns[colCode];
 			addTerm(label, code, normalizer);
+		}
+		br.close();
+	}
+	
+	/**
+	 * Load a terminology from a CSV file
+	 * @param in inputstream of a CSV file
+	 * @param sep the separator of the CSV file (ex : "\t")
+	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
+	 * @param colCode the ith column containing the terminology code
+	 * @param colTermino the ith column containing the terminology name
+	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @throws IOException inputstream error
+	 */
+	public Terminology (InputStream in, String sep, int colLabel, int colCode, int colTermino, INormalizer normalizer) throws IOException {
+		String line = null;
+		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+		while ((line = br.readLine()) != null) {
+			String[] columns = line.split(sep);
+			String label = columns[colLabel];
+			String code = columns[colCode];
+			String termino = columns[colTermino];
+			Term term = new Term(label, code, termino);
+			addTerm(term);
 		}
 		br.close();
 	}
