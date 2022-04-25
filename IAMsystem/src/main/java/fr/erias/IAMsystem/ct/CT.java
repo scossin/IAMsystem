@@ -4,9 +4,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.TreeSet;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**

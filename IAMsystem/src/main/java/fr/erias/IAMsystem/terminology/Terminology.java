@@ -12,8 +12,6 @@ import java.nio.file.StandardOpenOption;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
@@ -25,8 +23,6 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
  * @author Cossin Sebastien
  */
 public class Terminology {
-	
-	final static Logger logger = LoggerFactory.getLogger(Terminology.class);
 	
 	private Set<Term> terms = new HashSet<Term>();
 	
@@ -80,7 +76,6 @@ public class Terminology {
 			addTerm(label, code, normalizer);
 		}
 		br.close();
-		logger.info("terminology size : " + terms.size());
 	}
 	
 	/**
