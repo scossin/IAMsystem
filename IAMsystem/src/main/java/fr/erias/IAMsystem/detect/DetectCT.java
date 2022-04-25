@@ -71,7 +71,8 @@ public class DetectCT implements IDetectCT {
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
 			String token = tokensArray[currentI];
-			if (stopwords.isStopWord(token)) {
+			String tokenUnormalized = tnoutput.getTokensArrayOriginal()[currentI];
+			if (this.isStopword(tokenUnormalized, stopwords)) {
 				treeLocation.addStopword(token);
 			} else {
 				treeLocation.searchNextStates(tnoutput, token, cacheSyn); // search synonyms (abbreviations, typos...)
@@ -79,6 +80,11 @@ public class DetectCT implements IDetectCT {
 		}
 		DetectOutput detectOutput = new DetectOutput(tnoutput, treeLocation.getCandidateTermsCode());
 		return(detectOutput);
+	}
+	
+	private boolean isStopword(String tokenUnormalized, IStopwords stopwords) {
+		String normTokenOriginalString = tokenUnormalized.toLowerCase().trim();
+		return(stopwords.isStopWord(normTokenOriginalString));
 	}
 	
 	private DetectOutput emptyOutput() {
