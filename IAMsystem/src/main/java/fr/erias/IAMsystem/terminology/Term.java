@@ -12,7 +12,7 @@ public class Term {
 	/**
 	 * the label (ex: "Insuffisance Cardiaque")
 	 */
-	private String label;
+	private final String label;
 	
 	/**
 	 * the normalizedLabel with a {@link INormalizer} or equal to the label (default). Ex: "insuffisance cardiaque")
@@ -22,63 +22,53 @@ public class Term {
 	/**
 	 * the code (ex: I50)
 	 */
-	private String code;
+	private final String code;
 	
 	/**
 	 * the name of the terminology (ex: ICD-10)
 	 * default "" for none
 	 */
 	private String termino = "";
-	
-	/**
-	 * Create a new Term
-	 * @param label the label of a terminology
-	 * @param code the code 
-	 */
-	public Term (String label, String code) {
-		this.setLabel(label);
-		this.setNormalizedLabel(label); // same by default before normalization
-		this.setCode(code);
-	}
-	
+
 	/**
 	 * Create a new Term
 	 * @param label the label of a terminology
 	 * @param code the code
 	 * @param termino the terminology name
+	 * normalizer a {@link INormalizer} to normalize the label
 	 */
-	public Term (String label, String code, String termino) {
-		this.setLabel(label);
-		this.setNormalizedLabel(label); // same by default before normalization
-		this.setCode(code);
-		this.setTermino(termino);
+	public Term (String label, String code, String termino, INormalizer normalizer) {
+		this.label = label;
+		this.code = code;
+		this.termino = termino;
+		this.normalizedLabel = normalizer.getNormalizedSentence(label);
 	}
 	
 	/**
-	 * 
+	 * Create a new Term (no termino / no normalization)
+	 * @param label the label of a terminology
+	 * @param code the code 
+	 */
+	public Term (String label, String code) {
+		this(label, code, "", INormalizer.noNormalizer);
+	}
+	
+	/**
+	 * Create a new Term
 	 * @param label the label of a terminology
 	 * @param code the code 
 	 * @param normalizer a {@link INormalizer} to normalize the label
 	 */
 	public Term(String label, String code, INormalizer normalizer) {
-		this(label, code);
-		setNormalizedLabel(normalizer.getNormalizedSentence(label));
+		this(label, code, "", normalizer);
 	}
 
 	public String getLabel() {
 		return label;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
 	public String getCode() {
 		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
 	}
 
 	public String getNormalizedLabel() {

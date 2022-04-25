@@ -4,6 +4,8 @@ import fr.erias.IAMsystem.stopwords.IStopwords;
 
 public interface INormalizer {
 
+	public static final INormalizer noNormalizer = new NoNormalizer();
+	
 	/**
 	 * Normalize a text/(e.g. a sentence)
 	 * @param sentence a sentence to normalize
