@@ -65,7 +65,7 @@ public class Terminology {
 	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
 	 * @throws IOException inputstream error
 	 */
-	public Terminology (InputStream in, String sep, int colLabel, int colCode, int colTermino, INormalizer normalizer) throws IOException {
+	public Terminology(InputStream in, String sep, int colLabel, int colCode, int colTermino, INormalizer normalizer) throws IOException {
 		String line = null;
 		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
 		while ((line = br.readLine()) != null) {
@@ -77,14 +77,6 @@ public class Terminology {
 			addTerm(term);
 		}
 		br.close();
-	}
-	
-	private String getTerminoValue(String[] columns, int colTermino) {
-		if (colTermino > 0) {
-			return columns[colTermino];
-		} else {
-			return("");
-		}
 	}
 	
 	/**
@@ -99,6 +91,14 @@ public class Terminology {
 	public Terminology(InputStream in, String sep, int colLabel, int colCode, INormalizer normalizer) throws IOException {
 		// colTermino = -1 => no termino
 		this(in, sep, colLabel, colCode, -1, normalizer);
+	}
+	
+	private String getTerminoValue(String[] columns, int colTermino) {
+		if (colTermino > 0) {
+			return columns[colTermino];
+		} else {
+			return("");
+		}
 	}
 	
 	/**
