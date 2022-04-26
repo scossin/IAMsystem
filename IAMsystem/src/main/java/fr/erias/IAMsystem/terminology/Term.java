@@ -35,7 +35,7 @@ public class Term {
 	 * @param label the label of a terminology
 	 * @param code the code
 	 * @param termino the terminology name
-	 * normalizer a {@link INormalizer} to normalize the label
+	 * @param normalizer a {@link INormalizer} to normalize the label
 	 */
 	public Term (String label, String code, String termino, INormalizer normalizer) {
 		this.label = label;
