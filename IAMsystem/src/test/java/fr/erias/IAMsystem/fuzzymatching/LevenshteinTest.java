@@ -3,6 +3,7 @@ package fr.erias.IAMsystem.fuzzymatching;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.HashSet;
 
 import org.junit.Test;
 
@@ -26,11 +27,24 @@ public class LevenshteinTest {
 		LevenshteinTypoLucene levenshteinTypoLucene = new LevenshteinTypoLucene();
 		termDetector.addFuzzyAlgorithm(levenshteinTypoLucene);
 		assertEquals(termDetector.getFuzzyAlgorithms().size(), 1); // check it was correctly added
-		DetectOutput detectOutput = termDetector.detect("gastroenteritee");
 		
+		DetectOutput detectOutput = termDetector.detect("gastroenteritee");
 		assertEquals(detectOutput.getCTcodes().size(), 1);
 		CTcode CTdetected = detectOutput.getCTcodes().iterator().next();
 		assertEquals(CTdetected.getCandidateTermString(),"gastroenteritee");
 		assertEquals(CTdetected.getCode(), "X1");
+		
+		// check token ignored
+		String token2ignore = "gastroenteritea";
+		levenshteinTypoLucene.addAtoken2ignore(token2ignore);
+		detectOutput = termDetector.detect(token2ignore);
+		assertEquals(detectOutput.getCTcodes().size(), 0);
+		// remove the token2ignore and check it's detected:
+		levenshteinTypoLucene.setTokens2ignore(new HashSet<String>());
+		detectOutput = termDetector.detect(token2ignore);
+		assertEquals(detectOutput.getCTcodes().size(), 0); // not detected ! the cache system
+		termDetector.addFuzzyAlgorithm(levenshteinTypoLucene); // reset the cache system
+		detectOutput = termDetector.detect(token2ignore);
+		assertEquals(detectOutput.getCTcodes().size(), 1); 
 	}
 }

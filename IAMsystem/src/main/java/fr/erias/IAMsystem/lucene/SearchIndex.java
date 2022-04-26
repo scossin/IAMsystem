@@ -2,6 +2,8 @@ package fr.erias.IAMsystem.lucene;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.core.StopAnalyzer;
@@ -31,7 +33,7 @@ public class SearchIndex {
 	private Analyzer analyzer = new StopAnalyzer() ;
 	private Directory directory = null;
     private IndexSearcher isearcher = null;
-	
+
     /**
      * Create a {@link IndexSearcher} to search in a Lucene index
      * @param indexFolder The folder containing the Lucene index

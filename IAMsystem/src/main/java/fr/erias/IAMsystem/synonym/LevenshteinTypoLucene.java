@@ -27,6 +27,11 @@ public class LevenshteinTypoLucene implements ISynonym {
 	private SearchIndex searchIndex = null;
 	
 	/**
+	 * Don't search a typo for these tokens
+	 */
+    private Set<String> tokens2ignore = new HashSet<String>();
+	
+	/**
 	 * Number of insertion, deletion of the Levenshtein distance. Max 2
 	 */
 	private int maxEdits = 1; 
@@ -123,6 +128,7 @@ public class LevenshteinTypoLucene implements ISynonym {
 	
 	@Override
 	public Set<List<String>> getSynonyms(String token) {
+		if (this.tokens2ignore.contains(token)) return ISynonym.no_synonyms;
 		Set<List<String>> output;
 		try {
 			output = searchIndexLeven(token);
@@ -131,5 +137,29 @@ public class LevenshteinTypoLucene implements ISynonym {
 			e.getStackTrace();
 			return(ISynonym.no_synonyms);
 		}
+	}
+
+	/**
+	 * Retrieve the set of ignored tokens
+	 * @return a set of ignored tokens
+	 */
+	public Set<String> getTokens2ignore() {
+		return tokens2ignore;
+	}
+
+	/**
+	 * add a set of tokens to ignore: this algorithm will not be called for these tokens
+	 * @param tokens2ignore a set of normalized tokens to ignore
+	 */
+	public void setTokens2ignore(Set<String> tokens2ignore) {
+		this.tokens2ignore = tokens2ignore;
+	}
+	
+	/**
+	 * Add a token to ignore: this algorithm will not be called for this token
+	 * @param token2ignore a normalized token to ignore
+	 */
+	public void addAtoken2ignore(String token2ignore) {
+		this.tokens2ignore.add(token2ignore);
 	}
 }
