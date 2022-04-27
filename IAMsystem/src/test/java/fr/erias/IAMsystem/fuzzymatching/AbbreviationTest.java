@@ -6,8 +6,10 @@ import org.junit.Test;
 
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.TermDetector;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.terminology.Term;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 public class AbbreviationTest {
 
@@ -20,6 +22,21 @@ public class AbbreviationTest {
 		abbreviations.addAbbreviation("insuffisance", "insuf",termDetector.getTokenizerNormalizer());
 		termDetector.addFuzzyAlgorithm(abbreviations);
 		DetectOutput output = termDetector.detect("insuf cardiaque aigue");
+		assertEquals(output.getCTcodes().size(), 1);
+	}
+	
+	@Test
+	public void abbreviationStopwordTest() {
+		TermDetector termDetector = new TermDetector();
+		StopwordsImpl stopwords = new StopwordsImpl();
+		stopwords.addStopwords("du");
+		termDetector.setStopwords(stopwords);
+		Term term = new Term ("infarctus du myocarde", "I50");
+		termDetector.addTerm(term);
+		Abbreviations abbreviations = new Abbreviations();
+		abbreviations.addAbbreviation("infarctus du myocarde", "idm",termDetector.getTokenizerNormalizer());
+		termDetector.addFuzzyAlgorithm(abbreviations);
+		DetectOutput output = termDetector.detect("idm");
 		assertEquals(output.getCTcodes().size(), 1);
 	}
 }
