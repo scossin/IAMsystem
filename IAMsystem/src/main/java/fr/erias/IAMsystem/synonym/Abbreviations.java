@@ -8,6 +8,7 @@ import java.util.Set;
 
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tree.Trie;
 
 /**
  * Manage and store abbreviations
@@ -49,27 +50,28 @@ public class Abbreviations implements ISynonym {
 	
 	/**
 	 * Add an abbreviation. Warning: {@link TokenizerWhiteSpace} is used to tokenize the term. 
+	 * Stopwords will not be removed from the longForm. If you have stopwords, use another method to add an abbreviation.
 	 * See other ways to add abbreviations if you want to control this behavior. 
-	 * @param term (ex: 'accident vasculaire cerebral')
+	 * @param longForm (ex: 'accident vasculaire cerebral')
 	 * @param shortForm (ex: 'avc') (not normalized)
 	 */
-	public void addAbbreviation(String term, String shortForm) {
-		String[] tokensArray = new TokenizerWhiteSpace().tokenize(term);
+	public void addAbbreviation(String longForm, String shortForm) {
+		String[] tokensArray = new TokenizerWhiteSpace().tokenize(longForm);
 		addAbbreviation(tokensArray, shortForm);
 	}
 	
 	
 	/**
 	 * Add an abbreviation. The term and the abbreviation are normalized with the {@link ITokenizerNormalizer}
-	 * @param term (ex : 'insuf')
-	 * @param abbreviation (ex : 'insuffisance')
+	 * @param longForm (ex : 'insuffisance')
+	 * @param shortForm (ex : 'ins')
 	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
 	 */
-	public void addAbbreviation(String term, String abbreviation, ITokenizerNormalizer tokenizerNormalizer) {
-		String normalizedAbbreviation = tokenizerNormalizer.getNormalizer().getNormalizedSentence(abbreviation);
-		String normalizedTerm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(term);
-		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizedTerm);
-		addAbbreviation(tokensArray, normalizedAbbreviation);
+	public void addAbbreviation(String longForm, String shortForm, ITokenizerNormalizer tokenizerNormalizer) {
+		String normLongForm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(longForm);
+		String normShortForm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(shortForm);
+		String[] tokensLongForm = Trie.getTokensSequence(normLongForm, tokenizerNormalizer);
+		addAbbreviation(tokensLongForm, normShortForm);
 	}
 	
 	@Override

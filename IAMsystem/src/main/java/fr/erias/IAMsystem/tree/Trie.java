@@ -54,17 +54,36 @@ public class Trie {
 	 * @param normalizer to normalize the label of the term
 	 */
 	public void addTerm(Term term, ITokenizer tokenizer, INormalizer normalizer) {
+		String[] tokens_without_stopwords = Trie.getTokensSequence(term.getNormalizedLabel(), tokenizer, normalizer);
+		if(tokens_without_stopwords.length == 0)return;
+		addTerm(term, tokens_without_stopwords);
+	}
+	
+	/**
+	 * In this trie, each node is a normalized token and not a stopword. Given a label, we extract a sequence of normalized tokens
+	 * @param normalizedLabel the normalized label 
+	 * @param tokenizer a tokenizer 
+	 * @param normalizer a normalizer to filter stopwords
+	 * @return a normalized sequence of tokens
+	 */
+	public static String[] getTokensSequence(String normalizedLabel, ITokenizer tokenizer, INormalizer normalizer) {
 		IStopwords stopwords = normalizer.getStopwords();
-		String normalizedLabel = term.getNormalizedLabel();
 		if (stopwords.isStopWord(normalizedLabel)) {
-			return;
+			return new String[0];
 		}
 		String[] tokens = tokenizer.tokenize(normalizedLabel);
 		String[] tokens_without_stopwords = IStopwords.removeStopWords(stopwords, tokens);
-		if (tokens_without_stopwords.length == 0) {
-			return;
-		}
-		addTerm(term, tokens_without_stopwords);
+		return(tokens_without_stopwords);
+	}
+	
+	/**
+	 * In this trie, each node is a normalized token and not a stopword. Given a label, we extract a sequence of normalized tokens
+	 * @param normalizedLabel the normalized label 
+	 * @param tokenizerNormalizer a tokenizer and a normalizer to filter stopwords
+	 * @return a normalized sequence of tokens
+	 */
+	public static String[] getTokensSequence(String label, ITokenizerNormalizer tokenizerNormalizer) {
+		return(getTokensSequence(label, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer()));
 	}
 	
 	/**
