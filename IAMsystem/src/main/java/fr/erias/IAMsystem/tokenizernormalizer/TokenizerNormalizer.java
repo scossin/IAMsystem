@@ -5,11 +5,13 @@ import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
-import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
  * A class that tokenizes and normalizes a sentence
+ * Warning: you can instanciate this class with a normalizer and a tokenizer 
+ * but you can't choose the order (normalize first, tokenize after or the reverse). 
+ * 
  * @author Cossin Sebastien
  *
  */
@@ -25,9 +27,6 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	 */
 	private ITokenizer tokenizer ;
 
-	
-	/***************************** GETTERS ********************************/
-	
 	/**
 	 * Constructor
 	 * @param normalizer A normalizer instance to normalize terms or sentences
@@ -55,10 +54,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	 * @return The tokenizerNormalizer
 	 */
 	public static TokenizerNormalizer getDefaultTokenizerNormalizer(){
-		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
-		Normalizer normalizerTerm = new Normalizer(new StopwordsImpl());
-		TokenizerNormalizer tokenizerNormalizer = new TokenizerNormalizer(normalizerTerm, tokenizer);
-		return(tokenizerNormalizer);
+		return(getDefaultTokenizerNormalizer(IStopwords.noStopwords));
 	}
 	
 	/**
@@ -226,5 +222,20 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 			tokenStartEndInSentence[i] = OneTokenStartEnd;
 		}
 		return(tokenStartEndInSentence);
+	}
+
+	@Override
+	public String[] tokenize(String normalizedSentence) {
+		return this.getTokenizer().tokenize(normalizedSentence);
+	}
+
+	@Override
+	public String getNormalizedSentence(String sentence) {
+		return this.getNormalizer().getNormalizedSentence(sentence);
+	}
+
+	@Override
+	public boolean isStopWord(String token) {
+		return this.normalizer.isStopWord(token);
 	}
 }

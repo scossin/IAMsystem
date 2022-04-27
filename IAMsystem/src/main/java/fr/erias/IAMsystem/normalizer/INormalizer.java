@@ -2,7 +2,7 @@ package fr.erias.IAMsystem.normalizer;
 
 import fr.erias.IAMsystem.stopwords.IStopwords;
 
-public interface INormalizer {
+public interface INormalizer extends IStopwords {
 
 	public static final INormalizer noNormalizer = new NoNormalizer();
 	
@@ -12,16 +12,4 @@ public interface INormalizer {
 	 * @return a normalized a sentence
 	 */
 	public String getNormalizedSentence(String sentence);
-
-	/**
-	 * Retrieve the stopwords
-	 * @return the stopwords instance of the normalizer
-	 */
-	public IStopwords getStopwords();
-
-	/**
-	 * set the Stopwords
-	 * @param stopwords a {@link IStopwords}
-	 */
-	public void setStopwords(IStopwords stopwords);
 }

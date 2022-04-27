@@ -56,14 +56,6 @@ public class Normalizer implements INormalizer {
 	}
 	
 	/**
-	 * Add a token to the list of stopword
-	 * @param token a token to add
-	 */
-	public void addStopwords(String token) {
-		this.stopwords.addStopwords(token);
-	}
-	
-	/**
 	 * Remove any character that is not in the regular expression
 	 * @param sentence a sentence to remove punctuation
 	 * @return The sentence with punctuation replace by white space
@@ -154,7 +146,6 @@ public class Normalizer implements INormalizer {
 		return (this.normalizedSentence(sentence));
 	}
 
-	@Override
 	public void setStopwords(IStopwords stopwords) {
 		this.stopwords = stopwords;
 	}

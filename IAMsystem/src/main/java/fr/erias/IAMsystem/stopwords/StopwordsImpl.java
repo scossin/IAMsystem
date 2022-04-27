@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashSet;
+import java.util.Set;
 
 import fr.erias.IAMsystem.normalizer.INormalizer;
 
@@ -18,19 +19,19 @@ public class StopwordsImpl implements IStopwords {
 	/**
 	 * A set of stopwords
 	 */
-	private HashSet<String> stopwordsSet = new HashSet<String>();
-	
+	private Set<String> stopwordsSet = new HashSet<String>();
+
 	/**
 	 * Constructor
 	 */
 	public StopwordsImpl() {
-		
+
 	}
-	
-	public StopwordsImpl(HashSet<String> stopwordsSet) {
+
+	public StopwordsImpl(Set<String> stopwordsSet) {
 		this.stopwordsSet = stopwordsSet;
 	}
-	
+
 	/**
 	 * Interface method
 	 */
@@ -41,7 +42,7 @@ public class StopwordsImpl implements IStopwords {
 		}
 		return(false);
 	}
-	
+
 	/**
 	 * Add stopwords from a file
 	 * @param in stopwordsFile A file containing a list of stopword ; one by line
@@ -60,7 +61,7 @@ public class StopwordsImpl implements IStopwords {
 		}
 		br.close();
 	}
-	
+
 	/**
 	 * Add stopwords from a file without normalization
 	 * @param in stopwordsFile A file containing a list of stopword ; one by line
@@ -75,9 +76,10 @@ public class StopwordsImpl implements IStopwords {
 		}
 		br.close();
 	}
-	
+
 	/**
 	 * Add a stopword
+	 * @param stopword a normalized (or not) stopword. Diacritics matter
 	 */
 	public void addStopwords(String stopword) {
 		stopwordsSet.add(stopword);

@@ -3,25 +3,19 @@ package fr.erias.IAMsystem.detectct;
 import static org.junit.Assert.assertEquals;
 
 import java.util.HashSet;
-import java.util.Set;
 
 import org.junit.Test;
 
-import fr.erias.IAMsystem.ct.CTcode;
 import fr.erias.IAMsystem.detect.DetectCT;
 import fr.erias.IAMsystem.detect.DetectOutput;
-import fr.erias.IAMsystem.detect.DetectionTest;
 import fr.erias.IAMsystem.detect.IDetectCT;
-import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
-import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
-import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
@@ -42,7 +36,6 @@ public class DetectCTstopwordsTest {
 		stopwordsSet.add("à");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);
 		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
-		tokenizerNormalizer.getNormalizer().setStopwords(stopwords);
 		// class that detects dictionary entries
 		IDetectCT detector = new DetectCT(getTrieTest(),
 				tokenizerNormalizer,new HashSet<ISynonym>());

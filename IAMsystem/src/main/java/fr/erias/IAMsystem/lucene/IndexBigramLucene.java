@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
+
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.document.StringField;
@@ -14,6 +15,8 @@ import org.apache.lucene.index.IndexWriterConfig.OpenMode;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+
+import com.sun.xml.bind.v2.runtime.unmarshaller.Loader;
 
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.terminology.Term;
@@ -80,7 +83,6 @@ public class IndexBigramLucene {
 		IndexWriterConfig config = new IndexWriterConfig();
 		config.setOpenMode(OpenMode.CREATE);    //config.setOpenMode(OpenMode.CREATE_OR_APPEND);
 		IndexWriter iwriter = new IndexWriter(directory, config);
-		int counter = 0;
 		Iterator<Entry<String, String>> iter = uniqueTokensBigram.entrySet().iterator();
 		while (iter.hasNext()) {
 			Entry<String, String> entry = iter.next();
@@ -92,7 +94,6 @@ public class IndexBigramLucene {
 			indexableField = new StringField (BIGRAM_FIELD, bigram, Field.Store.YES);
 			doc.add(indexableField);
 			iwriter.addDocument(doc); // write the document to the index
-			counter ++ ;
 		}
 		iwriter.close();
 		directory.close();
@@ -108,12 +109,11 @@ public class IndexBigramLucene {
 	 * @throws IOException Unfound File
 	 */
 	private static HashMap<String,String> getUniqueTokenBigram(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
-		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
 		for (Term term : terminology.getTerms()) {
 			String normalizeLabel = term.getNormalizedLabel();
-			String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizeLabel);
-			tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
+			String[] tokensArray = tokenizerNormalizer.tokenize(normalizeLabel);
+			tokensArray = IStopwords.removeStopWords(tokenizerNormalizer, tokensArray);
 			for (int i =0; i<(tokensArray.length-1);i++) {
 				// as we use a Levenshtein distance, there is no point to concatenate a 1 character token
 				// the Levenshtein distance will find a bigram with the first token alone
@@ -142,12 +142,11 @@ public class IndexBigramLucene {
 	 * @throws IOException
 	 */
 	private static HashMap<String,String> getUniqueToken2index(Terminology terminology, TokenizerNormalizer tokenizerNormalizer) throws IOException{
-		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		HashMap<String,String> uniqueTokens = new HashMap<String,String>();
 		for (Term term : terminology.getTerms()) {
 			String normalizeLabel = term.getNormalizedLabel();
-			String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizeLabel);
-			tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
+			String[] tokensArray = tokenizerNormalizer.tokenize(normalizeLabel);
+			tokensArray = IStopwords.removeStopWords(tokenizerNormalizer, tokensArray);
 			for (String token : tokensArray) {
 				if (token.length() < 5) { // we won't search for a typo index if the word is less than 5 characters
 					continue;

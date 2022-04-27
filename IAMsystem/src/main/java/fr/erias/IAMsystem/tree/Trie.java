@@ -67,12 +67,11 @@ public class Trie {
 	 * @return a normalized sequence of tokens
 	 */
 	public static String[] getTokensSequence(String normalizedLabel, ITokenizer tokenizer, INormalizer normalizer) {
-		IStopwords stopwords = normalizer.getStopwords();
-		if (stopwords.isStopWord(normalizedLabel)) {
+		if (normalizer.isStopWord(normalizedLabel)) {
 			return new String[0];
 		}
 		String[] tokens = tokenizer.tokenize(normalizedLabel);
-		String[] tokens_without_stopwords = IStopwords.removeStopWords(stopwords, tokens);
+		String[] tokens_without_stopwords = IStopwords.removeStopWords(normalizer, tokens);
 		return(tokens_without_stopwords);
 	}
 	
@@ -82,8 +81,8 @@ public class Trie {
 	 * @param tokenizerNormalizer a tokenizer and a normalizer to filter stopwords
 	 * @return a normalized sequence of tokens
 	 */
-	public static String[] getTokensSequence(String label, ITokenizerNormalizer tokenizerNormalizer) {
-		return(getTokensSequence(label, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer()));
+	public static String[] getTokensSequence(String normalizedLabel, ITokenizerNormalizer tokenizerNormalizer) {
+		return(getTokensSequence(normalizedLabel, tokenizerNormalizer, tokenizerNormalizer));
 	}
 	
 	/**
@@ -92,7 +91,7 @@ public class Trie {
 	 * @param tokenizerNormalizer to tokenize and normalize the labels of the terms
 	 */
 	public void addTerm(Term term, ITokenizerNormalizer tokenizerNormalizer) {
-		addTerm(term, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer());
+		addTerm(term, tokenizerNormalizer, tokenizerNormalizer);
 	}
 	
 	/**
@@ -114,7 +113,7 @@ public class Trie {
 	 */
 	public void addTerminology(Terminology terminology, ITokenizerNormalizer tokenizerNormalizer) {
 		for (Term term : terminology.getTerms()) {
-			addTerm(term, tokenizerNormalizer.getTokenizer(), tokenizerNormalizer.getNormalizer());
+			addTerm(term, tokenizerNormalizer, tokenizerNormalizer);
 		}
 	}
 	

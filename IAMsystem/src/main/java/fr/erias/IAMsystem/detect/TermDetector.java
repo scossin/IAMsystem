@@ -2,7 +2,9 @@ package fr.erias.IAMsystem.detect;
 import java.util.HashSet;
 import java.util.Set;
 
+import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
+import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
@@ -39,11 +41,27 @@ public class TermDetector implements IDetectCT {
 	private IDetectCT detector;
 	
 	/**
-	 * Constructor
+	 *  Create a TermDetector with the default TokenizerNormaliser and no stopword
 	 */
 	public TermDetector() {
+		this(IStopwords.noStopwords);
+	}
+
+	/**
+	 * Create a TermDetector with the default TokenizerNormaliser and a list of stopwords
+	 * @param stopwords a class that can check if a token is a stopword
+	 */
+	public TermDetector(IStopwords stopwords) {
+		this(TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords));
+	}
+	
+	/**
+	 * Create a termDetector with a {@link ITokenizerNormalizer}
+	 * @param tokenizerNormalizer a class to tokenize and normalize a sentence, check for stopwords
+	 */
+	public TermDetector(ITokenizerNormalizer tokenizerNormalizer) {
+		this.tokenizerNormalizer = tokenizerNormalizer;
 		this.fuzzyAlgorithms = new HashSet<ISynonym>();
-		this.tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(); // default tokenizerNormalizer
 		this.trie = new Trie();
 		this.detector = new DetectCT(this.trie,this.tokenizerNormalizer,this.fuzzyAlgorithms);
 	}
@@ -54,7 +72,7 @@ public class TermDetector implements IDetectCT {
 	 * @param code the code of the term
 	 */
 	public void addTerm(String label, String code) {
-		Term newTerm = new Term(label,code,tokenizerNormalizer.getNormalizer());
+		Term newTerm = new Term(label,code,tokenizerNormalizer);
 		trie.addTerm(newTerm, this.tokenizerNormalizer);
 	}
 	
@@ -138,15 +156,7 @@ public class TermDetector implements IDetectCT {
 	 * @return {@link IStopwords}
 	 */
 	public IStopwords getStopwords() {
-		return(this.tokenizerNormalizer.getNormalizer().getStopwords());
-	}
-	
-	/**
-	 * Change the TokenizerNormalizer's {@link IStopwords}
-	 * @param stopwords a {@link IStopwords}
-	 */
-	public void setStopwords(IStopwords stopwords) {
-		this.tokenizerNormalizer.getNormalizer().setStopwords(stopwords);
+		return(this.tokenizerNormalizer);
 	}
 	
 	/**

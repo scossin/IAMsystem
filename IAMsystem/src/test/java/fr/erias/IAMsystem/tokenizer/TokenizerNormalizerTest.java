@@ -6,7 +6,6 @@ import java.io.IOException;
 
 import org.junit.Test;
 
-import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
@@ -15,8 +14,7 @@ public class TokenizerNormalizerTest {
 	@Test
 	public void tokenizationTest() throws IOException {
 		String label = "Insuf. cardio-Vasculaire";
-		StopwordsImpl stopwords = new StopwordsImpl();
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(label);
 		String[] tokens =  tnoutput.getTokens();
 		assertEquals(tokens.length, 3);

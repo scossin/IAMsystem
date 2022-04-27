@@ -9,6 +9,15 @@ import java.util.Arrays;
  */
 public interface IStopwords {
 	
+	public final IStopwords noStopwords = new IStopwords() {
+		
+		@Override
+		public boolean isStopWord(String token) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+	};
+	
 	/**
 	 * Is this term or token a stopword ?
 	 * @param token A term to check
@@ -16,12 +25,6 @@ public interface IStopwords {
 	 */
 	public boolean isStopWord(String token);
 
-	/**
-	 * Add a term or a token to a list of stopword
-	 * @param token a stopword
-	 */
-	public void addStopwords(String token);
-	
 	/**
 	 * Remove stopwords in an array of tokens
 	 * @param tokensArray an array of tokens (string) that may contain stopwords

@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.TermDetector;
+import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ClosestSubString;
 import fr.erias.IAMsystem.terminology.Term;
@@ -23,7 +24,7 @@ public class ClosestSubStringTest {
 		termDetector.addFuzzyAlgorithm(closestSub);
 		Term term = new Term ("ulcere gastrique", "I50");
 		termDetector.addTerm(term);
-		prefixTrie.addTerm(term, new StopwordsImpl());
+		prefixTrie.addTerm(term, IStopwords.noStopwords);
 		DetectOutput output = termDetector.detect("ulceres gastriques");
 		assertEquals(output.getCTcodes().size(), 1);
 	}
@@ -36,7 +37,7 @@ public class ClosestSubStringTest {
 		termDetector.addFuzzyAlgorithm(closestSub);
 		Term term = new Term ("ulcere gastrique", "I50");
 		termDetector.addTerm(term);
-		prefixTrie.addTerm(term, new StopwordsImpl());
+		prefixTrie.addTerm(term, IStopwords.noStopwords);
 		DetectOutput output = termDetector.detect("ulceres gastriquess"); // max distance is 2
 		assertEquals(output.getCTcodes().size(), 0);
 	}

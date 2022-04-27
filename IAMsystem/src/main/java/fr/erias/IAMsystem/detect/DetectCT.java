@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 
 import fr.erias.IAMsystem.ct.CTcode;
-import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.synonym.CacheSyn;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
@@ -67,12 +66,11 @@ public class DetectCT implements IDetectCT {
 		// normalize, tokenize and detect :
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(sentence);
 		String[] tokensArray = tnoutput.getTokens();
-		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		while (treeLocation.getCurrentI() != tokensArray.length) {
 			int currentI = treeLocation.getCurrentI(); // current ith token 
 			String token = tokensArray[currentI];
 			String tokenUnormalized = tnoutput.getTokensArrayOriginal()[currentI];
-			if (this.isStopword(tokenUnormalized, stopwords)) {
+			if (this.isStopword(tokenUnormalized)) {
 				treeLocation.addStopword(token);
 			} else {
 				treeLocation.searchNextStates(tnoutput, token, cacheSyn); // search synonyms (abbreviations, typos...)
@@ -82,9 +80,9 @@ public class DetectCT implements IDetectCT {
 		return(detectOutput);
 	}
 	
-	private boolean isStopword(String tokenUnormalized, IStopwords stopwords) {
+	private boolean isStopword(String tokenUnormalized) {
 		String normTokenOriginalString = tokenUnormalized.toLowerCase().trim();
-		return(stopwords.isStopWord(normTokenOriginalString));
+		return(tokenizerNormalizer.isStopWord(normTokenOriginalString));
 	}
 	
 	private DetectOutput emptyOutput() {

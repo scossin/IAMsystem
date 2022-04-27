@@ -4,11 +4,15 @@ import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**
- * Interface for the TokenizerNormalizer class
+ * Interface for the TokenizerNormalizer. 
+ * There is not a unique way to implement TNoutput tokenizeNormalize :
+ * The order (tokenization first, normalization after or the reverse) matters. 
+ * For generality, this interface was created. 
+ * 
  * @author Cossin Sebastien
  *
  */
-public interface ITokenizerNormalizer {
+public interface ITokenizerNormalizer extends ITokenizer, INormalizer {
 
 	/**
 	 * Normalize and tokenize a sentence 
@@ -16,29 +20,4 @@ public interface ITokenizerNormalizer {
 	 * @return a {@link TNoutput}
 	 */
 	public TNoutput tokenizeNormalize(String sentence);
-
-	/**
-	 * Retrieve the normalizer
-	 * @return a {@link INormalizer}
-	 */
-	public INormalizer getNormalizer();
-
-	/**
-	 * Retrieve the tokenizer 
-	 * @return a {@link ITokenizer}
-	 */
-	public ITokenizer getTokenizer();
-
-	/**
-	 * Set the tokenizer 
-	 * @param tokenizer a {@link ITokenizer}
-	 */
-	public void setTokenizer(ITokenizer tokenizer);
-
-	/**
-	 * Set the normalizer a {@link INormalizer}
-	 * @param normalizer a {@link INormalizer}
-	 */
-	public void setNormalizer(INormalizer normalizer);
-
 }

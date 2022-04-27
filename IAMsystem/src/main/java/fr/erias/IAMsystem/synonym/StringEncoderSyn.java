@@ -119,11 +119,10 @@ public class StringEncoderSyn implements ISynonym {
 	}
 
 	private Set<String> getUniqueToken(Term term, ITokenizerNormalizer tokenizerNormalizer) {
-		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		Set<String> uniqueTokens = new HashSet<String> ();
 		String normalizeLabel = term.getNormalizedLabel();
-		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizeLabel);
-		tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
+		String[] tokensArray = tokenizerNormalizer.tokenize(normalizeLabel);
+		tokensArray = IStopwords.removeStopWords(tokenizerNormalizer, tokensArray);
 		for (String token : tokensArray) {
 			if (tokenLengthLessThanMinSize(token)) {
 				continue;

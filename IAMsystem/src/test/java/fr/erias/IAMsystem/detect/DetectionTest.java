@@ -51,7 +51,7 @@ public class DetectionTest {
 	@Test
 	public void DetectionTermTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		// Tokenizer
-		HashSet<String> stopwordsSet = new HashSet<String>();
+		Set<String> stopwordsSet = new HashSet<String>();
 		stopwordsSet.add("de");
 		stopwordsSet.add("la");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);

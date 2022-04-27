@@ -9,7 +9,6 @@ import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.terminology.Term;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 public class AbbreviationTest {
 
@@ -27,10 +26,9 @@ public class AbbreviationTest {
 	
 	@Test
 	public void abbreviationStopwordTest() {
-		TermDetector termDetector = new TermDetector();
 		StopwordsImpl stopwords = new StopwordsImpl();
 		stopwords.addStopwords("du");
-		termDetector.setStopwords(stopwords);
+		TermDetector termDetector = new TermDetector(stopwords);
 		Term term = new Term ("infarctus du myocarde", "I50");
 		termDetector.addTerm(term);
 		Abbreviations abbreviations = new Abbreviations();

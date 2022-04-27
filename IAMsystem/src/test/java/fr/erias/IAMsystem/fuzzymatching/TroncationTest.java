@@ -41,7 +41,7 @@ public class TroncationTest {
 	
 	public static int getNumberOfTruncatedWords(int minPrefixSize, int maxDistance) {
 		PrefixTrie prefixTrie = new PrefixTrie(minPrefixSize);
-		IStopwords stopwords = new StopwordsImpl();
+		IStopwords stopwords = IStopwords.noStopwords;
 		Term term = new Term("insuffisanc","I09");
 		Term term2 = new Term("insuffisance cardiaque","I10");
 		Term term3 = new Term("insuffisances respi","I11");
@@ -70,7 +70,7 @@ public class TroncationTest {
 		Term term3 = new Term ("insuffisance cardiaque aigue", "I50");
 		termDetector.addTerm(term3);
 		Troncation troncation = new Troncation(prefixTrie, 2);
-		prefixTrie.addTerm(term3, new StopwordsImpl());
+		prefixTrie.addTerm(term3, IStopwords.noStopwords);
 		termDetector.addFuzzyAlgorithm(troncation);
 		DetectOutput output = termDetector.detect("insuffisan cardiaq aig");
 		assertEquals(output.getCTcodes().size(), 1);

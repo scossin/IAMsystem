@@ -32,13 +32,12 @@ public class SetTokenTreeBuilder {
 	 */
 	@Deprecated
 	public static SetTokenTree addTerm(Term term, SetTokenTree tokenTreeSet0, ITokenizerNormalizer tokenizerNormalizer) {
-		IStopwords stopwords = tokenizerNormalizer.getNormalizer().getStopwords();
 		String normalizedLabel = term.getNormalizedLabel();
-		if (stopwords.isStopWord(normalizedLabel)) {
+		if (tokenizerNormalizer.isStopWord(normalizedLabel)) {
 			return(tokenTreeSet0);
 		}
-		String[] tokensArray = tokenizerNormalizer.getTokenizer().tokenize(normalizedLabel);
-		tokensArray = IStopwords.removeStopWords(stopwords, tokensArray);
+		String[] tokensArray = tokenizerNormalizer.tokenize(normalizedLabel);
+		tokensArray = IStopwords.removeStopWords(tokenizerNormalizer, tokensArray);
 		if (tokensArray.length == 0) {
 			return(tokenTreeSet0);
 		}

@@ -68,8 +68,8 @@ public class Abbreviations implements ISynonym {
 	 * @param tokenizerNormalizer a {@link ITokenizerNormalizer}
 	 */
 	public void addAbbreviation(String longForm, String shortForm, ITokenizerNormalizer tokenizerNormalizer) {
-		String normLongForm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(longForm);
-		String normShortForm = tokenizerNormalizer.getNormalizer().getNormalizedSentence(shortForm);
+		String normLongForm = tokenizerNormalizer.getNormalizedSentence(longForm);
+		String normShortForm = tokenizerNormalizer.getNormalizedSentence(shortForm);
 		String[] tokensLongForm = Trie.getTokensSequence(normLongForm, tokenizerNormalizer);
 		addAbbreviation(tokensLongForm, normShortForm);
 	}

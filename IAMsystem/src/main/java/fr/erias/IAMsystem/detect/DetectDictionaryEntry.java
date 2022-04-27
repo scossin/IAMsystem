@@ -108,7 +108,7 @@ public class DetectDictionaryEntry implements IDetectCT {
 		}
 
 		// case stopwords : add and continue 
-		if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(token)) {
+		if (tokenizerNormalizer.isStopWord(token)) {
 			// add the stopword to the array of tokens :
 			treeLocation.getMonitorCandidates().addToken(token);
 			return;
@@ -386,7 +386,7 @@ class MonitorCandidates{
 		int numberOfTokens2remove = 0;
 		for (int y = tempCandidateTokenList.size() -1; y>0;y--) {
 			String lastToken = tempCandidateTokenList.get(y);
-			if (tokenizerNormalizer.getNormalizer().getStopwords().isStopWord(lastToken)){
+			if (tokenizerNormalizer.isStopWord(lastToken)){
 				numberOfTokens2remove = numberOfTokens2remove + 1;
 			} else {
 				break;
