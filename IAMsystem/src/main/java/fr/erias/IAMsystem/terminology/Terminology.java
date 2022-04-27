@@ -63,20 +63,27 @@ public class Terminology {
 	 * @param colCode the ith column containing the terminology code
 	 * @param colTermino the ith column containing the terminology name
 	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @param header whether the file contains a header
 	 * @throws IOException inputstream error
 	 */
-	public Terminology(InputStream in, String sep, int colLabel, int colCode, int colTermino, INormalizer normalizer) throws IOException {
-		String line = null;
+	public Terminology(InputStream in, String sep, int colLabel, int colCode, int colTermino, INormalizer normalizer, boolean header) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in,"UTF-8"));
+		if (header) br.readLine();
+		String line = null;
 		while ((line = br.readLine()) != null) {
 			String[] columns = line.split(sep);
-			String label = columns[colLabel];
-			String code = columns[colCode];
+			String label = removeQuotes(columns[colLabel]);
+			String code = removeQuotes(columns[colCode]);
 			String termino = getTerminoValue(columns,colTermino);
 			Term term = new Term(label, code, termino, normalizer);
 			addTerm(term);
 		}
 		br.close();
+	}
+	
+	private String removeQuotes(String label) {
+		label = label.replaceAll("^\"|\"$", "");
+		return(label);
 	}
 	
 	/**
@@ -86,16 +93,17 @@ public class Terminology {
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
 	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @param header whether the file contains a header
 	 * @throws IOException inputstream error
 	 */
-	public Terminology(InputStream in, String sep, int colLabel, int colCode, INormalizer normalizer) throws IOException {
+	public Terminology(InputStream in, String sep, int colLabel, int colCode, INormalizer normalizer, boolean header) throws IOException {
 		// colTermino = -1 => no termino
-		this(in, sep, colLabel, colCode, -1, normalizer);
+		this(in, sep, colLabel, colCode, -1, normalizer, header);
 	}
 	
 	private String getTerminoValue(String[] columns, int colTermino) {
 		if (colTermino > 0) {
-			return columns[colTermino];
+			return removeQuotes(columns[colTermino]);
 		} else {
 			return("");
 		}
@@ -108,10 +116,11 @@ public class Terminology {
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
 	 * @param normalizer a {@link INormalizer} to normalize the terms of the terminology
+	 * @param header whether the file contains a header
 	 * @throws IOException If the file doesn't exist
 	 */
-	public Terminology(File csvFile, String sep, int colLabel, int colCode, INormalizer normalizer) throws IOException {
-		this(new FileInputStream(csvFile), sep, colLabel, colCode,normalizer);
+	public Terminology(File csvFile, String sep, int colLabel, int colCode, INormalizer normalizer, boolean header) throws IOException {
+		this(new FileInputStream(csvFile), sep, colLabel, colCode,normalizer, header);
 	}
 	
 	/**
@@ -120,10 +129,11 @@ public class Terminology {
 	 * @param sep the separator of the CSV file (ex : "\t")
 	 * @param colLabel the ith column containing the libnormal (normalized label of the term)
 	 * @param colCode the ith column containing the terminology code
+	 * @param header whether the file contains a header
 	 * @throws IOException inputstream error
 	 */
-	public Terminology(InputStream in, String sep, int colLabel, int colCode) throws IOException {
-		this(in, sep, colLabel, colCode, new NoNormalizer());	
+	public Terminology(InputStream in, String sep, int colLabel, int colCode, boolean header) throws IOException {
+		this(in, sep, colLabel, colCode, new NoNormalizer(), header);	
 	}
 		
 	/**
