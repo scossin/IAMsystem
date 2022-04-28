@@ -1,7 +1,7 @@
 # IAMsystem
 
 A fast dictionary-based approach for semantic annotation, a.k.a [entity linking](https://en.wikipedia.org/wiki/Entity_linking). Semantic annotation is the process of mapping a sequence of tokens in a document to concepts of a terminology. 
-IAMsystem is efficient at annotating documents with large dictionaries (> 300K keywords) with [approximate string matching algorithms](https://en.wikipedia.org/wiki/Approximate_string_matching) (a.k.a fuzzy string matching). 
+IAMsystem is efficient at annotating documents with large dictionaries (> 300K keywords) and [approximate string matching algorithms](https://en.wikipedia.org/wiki/Approximate_string_matching) (a.k.a fuzzy string matching). 
 
 You provide a list of terms (keywords) you want to detect, you choose and configure some approximate string matching algorithms, IAMsystem does the rest. 
 Brat output is available.
@@ -14,7 +14,7 @@ Add the dependency to your pom.xml to download it from the Maven Repository:
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.3.0</version>
+	<version>1.3.1</version>
 </dependency>
 ```
 

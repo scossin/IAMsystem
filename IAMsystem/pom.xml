@@ -5,11 +5,12 @@
 
 	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.3.1-SNAPSHOT</version>
+	<version>1.3.1</version>
 	<packaging>jar</packaging>
 
 	<name>IAMsystem</name>
-	<description>This is a general purpose annotation tool that uses a dictionary-based approach. The dictionary is stored in a tree datastructure.
+	<description>A fast dictionary-based approach for semantic annotation / entity linking.
+	IAMsystem is efficient at annotating documents with large dictionaries and approximate string matching algorithms.
 	Description of the system can be found in the following paper : &quot;Cossin S, Jouhet V, Mougin F, Diallo G and Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. CEUR-WS. September 2018&quot;</description>
 
 	<url>https://github.com/scossin/IAMsystem</url>
