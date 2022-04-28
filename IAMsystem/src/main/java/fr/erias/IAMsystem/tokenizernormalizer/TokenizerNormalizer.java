@@ -38,7 +38,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	}
 	
 	/**
-	 * Deprecated: Use {@ SimpleTokenizerNormalizer}
+	 * Deprecated: Use {@link SimpleTokenizerNormalizer}
 	 * Get a default {@link TokenizerNormalizer} 
 	 * @param stopwords an instance of {@link IStopwords}
 	 * @return The tokenizerNormalizer
@@ -52,7 +52,7 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	}
 	
 	/**
-	 * Deprecated: Use {@ SimpleTokenizerNormalizer}
+	 * Deprecated: Use {@link SimpleTokenizerNormalizer}
 	 * Get a default {@link TokenizerNormalizer} 
 	 * @return The tokenizerNormalizer
 	 */
