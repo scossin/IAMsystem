@@ -1,6 +1,8 @@
 package fr.erias.IAMsystem.tokenizernormalizer;
 
 import fr.erias.IAMsystem.normalizer.INormalizer;
+import fr.erias.IAMsystem.normalizer.Normalizer;
+import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 
 /**

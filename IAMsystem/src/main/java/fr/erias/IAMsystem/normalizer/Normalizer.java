@@ -85,7 +85,7 @@ public class Normalizer implements INormalizer {
 		normalizedSentence = removeSomePunctuation(normalizedSentence); // µ in µg
 		return (normalizedSentence);
 	}
-
+	
 	// https://stackoverflow.com/questions/3322152/is-there-a-way-to-get-rid-of-accents-and-convert-a-whole-string-to-regular-lette
 	// The idea is to replace accent (éè...) by non accent char (e) without removing non-ASCII char
 	// Previous method was : Normalizer.normalize(sentence, Normalizer.Form.NFD).replaceAll("[^\\p{ASCII}]", "");

@@ -6,15 +6,16 @@ import java.io.IOException;
 
 import org.junit.Test;
 
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 public class TokenizerNormalizerTest {
 
 	@Test
 	public void tokenizationTest() throws IOException {
 		String label = "Insuf. cardio-Vasculaire";
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(label);
 		String[] tokens =  tnoutput.getTokens();
 		assertEquals(tokens.length, 3);
@@ -32,7 +33,7 @@ public class TokenizerNormalizerTest {
 	@Test
 	public void tnoutputTest() throws IOException {
 		String label = "Insuf. cardio-Vasculaire";
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		TNoutput tnoutput = tokenizerNormalizer.tokenizeNormalize(label);
 
 		assertEquals(tnoutput.getTokens().length, 3);

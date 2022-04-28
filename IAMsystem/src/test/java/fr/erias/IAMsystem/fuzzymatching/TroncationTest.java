@@ -12,7 +12,6 @@ import fr.erias.IAMsystem.detect.TermDetector;
 import fr.erias.IAMsystem.normalizer.INormalizer;
 import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
-import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Troncation;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;

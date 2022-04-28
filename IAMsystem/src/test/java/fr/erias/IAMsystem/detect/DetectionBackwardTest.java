@@ -17,6 +17,8 @@ import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
 import fr.erias.IAMsystem.tree.TokenTree;
@@ -64,7 +66,7 @@ public class DetectionBackwardTest {
 		};
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
@@ -93,7 +95,7 @@ public class DetectionBackwardTest {
 		};
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
@@ -127,7 +129,7 @@ public class DetectionBackwardTest {
 		stopwords.addStopwords("la");
 		stopwords.addStopwords("suite");
 		stopwords.addStopwords("a");
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer(stopwords);
 		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		
@@ -173,7 +175,7 @@ public class DetectionBackwardTest {
 		};
 		HashSet<ISynonym> synonyms = new HashSet<ISynonym>();
 		synonyms.add(synonym);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		IDetectCT detectDictionaryEntry = new DetectDictionaryEntry(getSetTokenTreeTest(),
 				tokenizerNormalizer,synonyms);
 		//term = "saignement abondants de la menopause suite à un traitement anticoagulant";

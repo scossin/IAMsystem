@@ -9,6 +9,7 @@ import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.terminology.Terminology;
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
@@ -52,7 +53,7 @@ public class TermDetector implements IDetectCT {
 	 * @param stopwords a class that can check if a token is a stopword
 	 */
 	public TermDetector(IStopwords stopwords) {
-		this(TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords));
+		this(new SimpleTokenizerNormalizer(stopwords));
 	}
 	
 	/**

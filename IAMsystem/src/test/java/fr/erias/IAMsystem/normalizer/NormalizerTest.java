@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 
 public class NormalizerTest {
 	
@@ -44,7 +44,7 @@ public class NormalizerTest {
 	
 	@Test
     public void normalizeSpecialCharTest() {
-		ITokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		tokenizerNormalizer.tokenizeNormalize("İ");
 		assertEquals("i", "i");
     }

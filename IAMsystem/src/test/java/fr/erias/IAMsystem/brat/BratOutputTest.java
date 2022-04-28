@@ -22,7 +22,8 @@ import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
 public class BratOutputTest {
@@ -43,7 +44,7 @@ public class BratOutputTest {
 	@Test
 	public void BratOutputCTTest() throws IOException, UnfoundTokenInSentence, ParseException{
 		// Tokenizer
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 
 		// Abbreviations : 
 		ISynonym abbreviations = new ISynonym() {

@@ -16,7 +16,8 @@ import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
 public class DetectCTstopwordsTest {
@@ -35,7 +36,7 @@ public class DetectCTstopwordsTest {
 		HashSet<String> stopwordsSet = new HashSet<String>();
 		stopwordsSet.add("à");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer(stopwords);
 		// class that detects dictionary entries
 		IDetectCT detector = new DetectCT(getTrieTest(),
 				tokenizerNormalizer,new HashSet<ISynonym>());

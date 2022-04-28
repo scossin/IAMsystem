@@ -16,6 +16,8 @@ import fr.erias.IAMsystem.exceptions.UnfoundTokenInSentence;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
 import fr.erias.IAMsystem.synonym.ISynonym;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
 import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.SetTokenTree;
@@ -55,7 +57,7 @@ public class DetectionTest {
 		stopwordsSet.add("de");
 		stopwordsSet.add("la");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer(stopwords);
 
 		// Abbreviations : 
 		Abbreviations abbreviations = new Abbreviations();

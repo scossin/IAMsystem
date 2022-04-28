@@ -21,8 +21,9 @@ import fr.erias.IAMsystem.synonym.ISynonym;
 import fr.erias.IAMsystem.terminology.Term;
 import fr.erias.IAMsystem.tokenizer.ITokenizer;
 import fr.erias.IAMsystem.tokenizer.TokenizerWhiteSpace;
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.SimpleTokenizerNormalizer;
 import fr.erias.IAMsystem.tokenizernormalizer.TNoutput;
-import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 import fr.erias.IAMsystem.tree.Trie;
 
 public class DetectCTTest {
@@ -51,7 +52,7 @@ public class DetectCTTest {
 		stopwordsSet.add("de");
 		stopwordsSet.add("la");
 		StopwordsImpl stopwords = new StopwordsImpl(stopwordsSet);
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer(stopwords);
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer(stopwords);
 
 		// Abbreviations : 
 		Abbreviations abbreviations = new Abbreviations();
@@ -109,7 +110,7 @@ public class DetectCTTest {
 	public void detectOverlappingTermsTest() {
 		// find synonyms with abbreviations and typos : 
 		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 
 		INormalizer normalizer = new Normalizer();
 		ITokenizer tokenizer = new TokenizerWhiteSpace();
@@ -144,7 +145,7 @@ public class DetectCTTest {
 		trie.addTerm(term2, tokenizer, normalizer);
 		trie.addTerm(term3, tokenizer, normalizer);
 		Set<ISynonym> fuzzyAlgorithms = new HashSet<ISynonym>();
-		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		ITokenizerNormalizer tokenizerNormalizer = new SimpleTokenizerNormalizer();
 		IDetectCT detectDictionaryEntry = new DetectCT(trie,tokenizerNormalizer,fuzzyAlgorithms);
 		String sentence = "syndrome triple x"; 
 		DetectOutput detectOutput = detectDictionaryEntry.detectCandidateTerm(sentence);

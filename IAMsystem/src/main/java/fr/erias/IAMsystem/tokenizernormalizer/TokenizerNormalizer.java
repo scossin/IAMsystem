@@ -38,10 +38,12 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	}
 	
 	/**
+	 * Deprecated: Use {@ SimpleTokenizerNormalizer}
 	 * Get a default {@link TokenizerNormalizer} 
 	 * @param stopwords an instance of {@link IStopwords}
 	 * @return The tokenizerNormalizer
 	 */
+	@Deprecated
 	public static TokenizerNormalizer getDefaultTokenizerNormalizer(IStopwords stopwords){
 		ITokenizer tokenizer = ITokenizer.getDefaultTokenizer();
 		Normalizer normalizerTerm = new Normalizer(stopwords);
@@ -50,9 +52,11 @@ public class TokenizerNormalizer implements ITokenizerNormalizer {
 	}
 	
 	/**
+	 * Deprecated: Use {@ SimpleTokenizerNormalizer}
 	 * Get a default {@link TokenizerNormalizer} 
 	 * @return The tokenizerNormalizer
 	 */
+	@Deprecated
 	public static TokenizerNormalizer getDefaultTokenizerNormalizer(){
 		return(getDefaultTokenizerNormalizer(IStopwords.noStopwords));
 	}
