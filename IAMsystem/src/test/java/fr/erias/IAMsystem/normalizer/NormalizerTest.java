@@ -4,6 +4,9 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
+
 public class NormalizerTest {
 	
 	@Test
@@ -37,5 +40,12 @@ public class NormalizerTest {
 		normalizedLabel = normalizer.normalizedSentence(label);
 		expectedNormalizedLabel = "covid +";
 		assertEquals(normalizedLabel, expectedNormalizedLabel);
+    }
+	
+	@Test
+    public void normalizeSpecialCharTest() {
+		ITokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		tokenizerNormalizer.tokenizeNormalize("İ");
+		assertEquals("i", "i");
     }
 }
