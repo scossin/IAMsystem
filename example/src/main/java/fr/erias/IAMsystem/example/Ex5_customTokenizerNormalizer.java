@@ -8,19 +8,21 @@ import fr.erias.IAMsystem.normalizer.Normalizer;
 import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 import fr.erias.IAMsystem.synonym.Abbreviations;
-import fr.erias.IAMsystem.tokenizernormalizer.ITokenizerNormalizer;
+import fr.erias.IAMsystem.tokenizernormalizer.TokenizerNormalizer;
 
 public class Ex5_customTokenizerNormalizer {
 
 	public static void main(String[] args) throws IOException {
 		IStopwords stopwords = new StopwordsImpl();
+		TokenizerNormalizer tokenizerNormalizer = TokenizerNormalizer.getDefaultTokenizerNormalizer();
+		
+		// Custom normalizer: the default pattern is [^a-z0-9] which removes "+" symbol
 		Normalizer normalizer = new Normalizer(stopwords);
-		// the default pattern is [^a-z0-9] which removes "+" symbol
-		normalizer.setRegexNormalizer("[^a-z0-9+-]"); 
+		normalizer.setRegexNormalizer("[^a-z0-9+-]"); // this pattern keeps "+" and "-" symbol
+		tokenizerNormalizer.setNormalizer(normalizer);
 		
-		TermDetector termDetector = new TermDetector();
-		termDetector.getTokenizerNormalizer().setNormalizer(normalizer);
-		
+		TermDetector termDetector = new TermDetector(tokenizerNormalizer);
+
 		// You can also change the default whitespace tokenizer by a regular expression tokenizer:
 //		Tokenizer tokenizer = new Tokenizer();
 //		tokenizer.setPattern("[0-9]+|[a-z]+|\\+"); // default "[0-9]+|[a-z]+";
@@ -31,9 +33,6 @@ public class Ex5_customTokenizerNormalizer {
 		termDetector.addFuzzyAlgorithm(abbreviations);
 		
 		// use the TokenizerNormalizer of the termDetector to tokenize and normalize abbreviation:
-		ITokenizerNormalizer tokenizerNormalizer = termDetector.getTokenizerNormalizer();
-		String longForm = "positive";
-		String shortForm = "+";
 		abbreviations.addAbbreviation("positive", "+"); // no normalization
 		abbreviations.addAbbreviation("Sars-Cov-2", "covid", tokenizerNormalizer); // normalization: "Sars-Cov-2 => sars cov 2"
 		

@@ -29,19 +29,18 @@ public class Ex3_loadFiles {
 		String sep = "\t";
 		int colLabel = 2;
 		int colCode = 0;
-		Terminology terminology = new Terminology(in, sep, colLabel, colCode, normalizer);
+		Terminology terminology = new Terminology(in, sep, colLabel, colCode, normalizer, false);
 		return(terminology);
 	}
 
 	public static void main(String[] args) throws IOException {
 		// Create a tokenizer with a normalizer 
 		IStopwords stopwords = getStopwords();
-		TermDetector termDetector = new TermDetector();
-		termDetector.setStopwords(stopwords);
+		TermDetector termDetector = new TermDetector(stopwords);
 		// NB: important to load the stopwords in the normalizer before loading the terminology
 		// the normalizer will remove stopwords in the terminology
 
-		INormalizer normalizer = termDetector.getTokenizerNormalizer().getNormalizer();
+		INormalizer normalizer = termDetector.getTokenizerNormalizer();
 		Terminology terminology = getTerminology(normalizer);
 		termDetector.addTerminology(terminology);
 		String document = "le patient prend de l'acide acetylsalicilique, du paracetamol codéiné et du kardegik";

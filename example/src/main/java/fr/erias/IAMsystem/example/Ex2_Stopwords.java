@@ -2,17 +2,15 @@ package fr.erias.IAMsystem.example;
 
 import fr.erias.IAMsystem.detect.DetectOutput;
 import fr.erias.IAMsystem.detect.TermDetector;
-import fr.erias.IAMsystem.stopwords.IStopwords;
 import fr.erias.IAMsystem.stopwords.StopwordsImpl;
 
 public class Ex2_Stopwords {
 
 	public static void main(String[] args) {
-		TermDetector termDetector = new TermDetector();
-		IStopwords stopwords = new StopwordsImpl();
+		StopwordsImpl stopwords = new StopwordsImpl();
 		stopwords.addStopwords("sai");
 		stopwords.addStopwords("very");
-		termDetector.setStopwords(stopwords); // otherwise it doesn't detect
+		TermDetector termDetector = new TermDetector(stopwords); // otherwise it doesn't detect
 		termDetector.addTerm("high blood pressure SAI", "I10");
 		String document = "The patient has a high (very very) blood pressure";
 		DetectOutput detectOutput = termDetector.detect(document);
