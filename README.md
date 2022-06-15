@@ -60,7 +60,7 @@ In the example below, it detects the term "insuffisance cardiaque aigue" in a do
 <img src="./search_algorithm.png" width="525" height="360"/>
 
 ## Approximate string matching
-By default, IAMsystem perform exact match only.
+By default, IAMsystem performs exact match only.
 The following string matching algorithms are available in IAMsystem:
 * [Apache common StringEncoders](https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language) (Metaphone, Soundex, Caverphone...)
 * Levenshtein distance (by [Lucene](https://lucene.apache.org/))
@@ -92,7 +92,7 @@ IAMsystemFR (IAMsystem for French language) is another repository that contains 
 Performance (recall, precision, F-measure) of IAMsystem were evaluated on two information extraction tasks of the [CLEF eHealth initiative](http://www.clef-initiative.eu/). IAMsystem's papers:
 
 *    Cossin S, Jouhet V, Mougin F, Diallo G, Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. https://arxiv.org/abs/1807.03674 
-*    Cossin S and Jouhet V. IAM at CLEF eHealth 2020: Concept Annotation in Spanish Electronic Health Records.  http://www.dei.unipd.it/~ferro/CLEF-WN-Drafts/CLEF2020/paper_198.pdf
+*    Cossin S and Jouhet V. IAM at CLEF eHealth 2020: Concept Annotation in Spanish Electronic Health Records. http://ceur-ws.org/Vol-2696/paper_198.pdf
 
 
 Organizers' papers:
