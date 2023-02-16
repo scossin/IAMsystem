@@ -8,7 +8,7 @@ enum ETokenizer {
   },
   ENGLISH {
     public TokenizerImp getInstance() {
-      return new TokenizerImp(NormFunctions.lowerNoAccents, SplitFunctions.splitAlphaNum);
+      return new TokenizerImp(NormFunctions.lowerCase, SplitFunctions.splitAlphaNum);
     }
   };
 
