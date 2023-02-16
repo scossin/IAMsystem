@@ -48,19 +48,24 @@
 	</properties>
 
 	<dependencies>
+		<!-- Only needed to run tests in a version of IntelliJ IDEA that bundles 
+			older versions -->
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.0.0-M4</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.vintage</groupId>
+			<artifactId>junit-vintage-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-runner</artifactId>
-			<version>1.0.0-RC2</version>
-			<scope>test</scope>
-		</dependency>
 
 		<!-- Lucene for Levensthein distance -->
 		<!-- https://mvnrepository.com/artifact/org.apache.lucene/lucene-queryparser -->
@@ -98,7 +103,7 @@
 			<artifactId>commons-text</artifactId>
 			<version>1.2</version>
 		</dependency>
-		
+
 		<!-- Approximate String matching methods -->
 		<dependency>
 			<groupId>org.apache.directory.studio</groupId>
@@ -113,6 +118,18 @@
 			<version>20160810</version>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.junit</groupId>
+				<artifactId>junit-bom</artifactId>
+				<version>5.9.2</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<distributionManagement>
 		<snapshotRepository>
