@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,7 +93,7 @@ class NodeTest {
 
   @Test
   void testGetKeywords() {
-    assertEquals(0, this.gaucheNode.getKeywords().size());
+    assertThrows(InaccessibleObjectException.class, () -> this.gaucheNode.getKeywords());
     IEntity ent = new Entity("Insuffisance Cardiaque Gauche", "XXX");
     this.gaucheNode.addKeyword(ent);
     this.gaucheNode.addKeyword(ent);

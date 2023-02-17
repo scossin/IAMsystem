@@ -1,6 +1,7 @@
 package fr.erias.iamsystem_java.tree;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
+import java.lang.reflect.InaccessibleObjectException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,7 +21,7 @@ public class Node implements INode {
   private final INode parentNode;
   private final int nodeNumber; // in a trie, each node is unique and is assigned a unique number
   private final String token; // each node has a token (not unique in the trie)
-  private final List<IKeyword> keywords = new ArrayList<IKeyword>(0);
+  private List<IKeyword> keywords = null;
   private final Map<String, INode> childNodes =
       new HashMap<String, INode>(); // 0 if the node is a leaf
 
@@ -85,17 +86,21 @@ public class Node implements INode {
 
   @Override
   public boolean isAfinalState() {
-    return keywords.size() != 0;
+    return keywords != null;
   }
 
   @Override
   public Collection<IKeyword> getKeywords() {
-    return (this.keywords);
+    if (keywords == null) {
+      throw new InaccessibleObjectException("Can't access Keywords if not a final state");
+    }
+    return (keywords);
   }
 
   @Override
   public void addKeyword(IKeyword keyword) {
-    this.keywords.add(keyword);
+    if (keywords == null) keywords = new ArrayList<IKeyword>(0);
+    keywords.add(keyword);
   }
 
   @Override
