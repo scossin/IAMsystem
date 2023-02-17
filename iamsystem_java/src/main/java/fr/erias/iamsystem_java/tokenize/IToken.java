@@ -15,14 +15,14 @@ public interface IToken extends IOffsets {
    *
    * @return label string.
    */
-  public String get_label();
+  public String label();
 
   /**
    * The normalized label used by iamsystem's algorithm to perform entity linking.
    *
    * @return A normalized label string.
    */
-  public String get_norm_label();
+  public String normLabel();
 
   /**
    * Concatenate the normalized label of each token in the sequence.
@@ -31,7 +31,7 @@ public interface IToken extends IOffsets {
    * @return Normalized labels separated by a space.
    */
   public static String ConcatNormLabel(Collection<? extends IToken> tokens) {
-    return tokens.stream().map(t -> t.get_norm_label()).collect(Collectors.joining(" "));
+    return tokens.stream().map(t -> t.normLabel()).collect(Collectors.joining(" "));
   }
 
   /**
@@ -41,6 +41,6 @@ public interface IToken extends IOffsets {
    * @return Labels separated by a space.
    */
   public static String ConcatLabel(Collection<? extends IToken> tokens) {
-    return tokens.stream().map(t -> t.get_label()).collect(Collectors.joining(" "));
+    return tokens.stream().map(t -> t.label()).collect(Collectors.joining(" "));
   }
 }

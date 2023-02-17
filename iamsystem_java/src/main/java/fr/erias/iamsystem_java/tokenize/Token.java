@@ -37,11 +37,11 @@ public class Token implements IToken {
     return this.end;
   }
 
-  public String get_label() {
+  public String label() {
     return this.label;
   }
 
-  public String get_norm_label() {
+  public String normLabel() {
     return this.norm_label;
   }
 }

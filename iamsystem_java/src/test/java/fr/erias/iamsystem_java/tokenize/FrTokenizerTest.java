@@ -54,17 +54,17 @@ class FrTokenizerTest {
 
   @Test
   void testLabel() {
-    String label0 = this.tokens.get(0).get_label();
+    String label0 = this.tokens.get(0).label();
     assertEquals(label0, "Meningo");
-    String label1 = this.tokens.get(1).get_label();
+    String label1 = this.tokens.get(1).label();
     assertEquals(label1, "encéphalite");
   }
 
   @Test
   void testNormLabel() {
-    String label0 = this.tokens.get(0).get_norm_label();
+    String label0 = this.tokens.get(0).normLabel();
     assertEquals(label0, "meningo");
-    String label1 = this.tokens.get(1).get_norm_label();
+    String label1 = this.tokens.get(1).normLabel();
     assertEquals(label1, "encephalite");
   }
 }
