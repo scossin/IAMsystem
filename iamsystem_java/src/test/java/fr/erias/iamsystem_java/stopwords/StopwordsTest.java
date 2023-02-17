@@ -23,7 +23,7 @@ class StopwordsTest {
     assertTrue(stopwords.isStopword("le"));
     assertTrue(!stopwords.isStopword("insuffisance"));
   }
-  
+
   @Test
   void testSimpleStopwordsUppercase() {
     List<String> words = new ArrayList<String>();
