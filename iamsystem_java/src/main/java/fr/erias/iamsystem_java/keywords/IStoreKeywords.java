@@ -1,11 +1,11 @@
 package fr.erias.iamsystem_java.keywords;
 
 import fr.erias.iamsystem_java.stopwords.IStopwords;
+import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public interface IStoreKeywords {
@@ -33,15 +33,11 @@ public interface IStoreKeywords {
    * @return
    */
   public static Set<String> getUnigrams(
-      Iterable<IKeyword> keywords,
-      ITokenizer<? extends IToken> tokenizer,
-      IStopwords<IToken> stopwords) {
+      Iterable<IKeyword> keywords, AbstractTokNorm<? extends IToken> toknorm) {
     Set<String> unigrams = new HashSet<String>();
+
     for (IKeyword kw : keywords) {
-      List<? extends IToken> tokens = tokenizer.tokenize(kw.label());
-      tokens.stream()
-          .filter(t -> !stopwords.isTokenAStopword(t))
-          .forEach(t -> unigrams.add(t.normLabel()));
+      toknorm.tokenizeRmStopwords(kw.label()).stream().forEach(t -> unigrams.add(t.normLabel()));
     }
     return unigrams;
   }

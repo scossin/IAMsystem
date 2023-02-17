@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 class FrTokenizerTest {
 
-  private ITokenizer<Token> tokenizer;
-  private List<Token> tokens;
+  private ITokenizer<IToken> tokenizer;
+  private List<IToken> tokens;
 
   @BeforeEach
   void setUp() throws Exception {

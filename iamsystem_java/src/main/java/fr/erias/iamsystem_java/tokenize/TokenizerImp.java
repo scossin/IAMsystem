@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
  *
  * @author Sebastien Cossin
  */
-public class TokenizerImp implements ITokenizer<Token> {
+public class TokenizerImp implements ITokenizer<IToken> {
 
   private final INormalizeF normalizeF;
   private final ISplitF splitF;
@@ -19,7 +19,7 @@ public class TokenizerImp implements ITokenizer<Token> {
     this.splitF = splitF;
   }
 
-  public List<Token> tokenize(String text) {
+  public List<IToken> tokenize(String text) {
     return this.splitF.split(text).stream()
         .map(
             offset -> {

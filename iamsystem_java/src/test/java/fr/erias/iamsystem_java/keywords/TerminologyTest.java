@@ -5,10 +5,11 @@ import static org.junit.jupiter.api.Assertions.*;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
+import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
-import fr.erias.iamsystem_java.tokenize.Token;
+import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -77,11 +78,12 @@ class TerminologyTest {
   @Test
   void testGetUnigrams() {
     IStopwords<IToken> stopwords = new NoStopwords();
-    ITokenizer<Token> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+    ITokenizer<IToken> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+    AbstractTokNorm<IToken> toknorm = new TokStopImp<IToken>(tokenizer, stopwords);
     Terminology termino = new Terminology();
     termino.addKeyword(icg);
     termino.addKeyword(icg);
-    Set<String> unigrams = IStoreKeywords.getUnigrams(termino, tokenizer, stopwords);
+    Set<String> unigrams = IStoreKeywords.getUnigrams(termino, toknorm);
     assertEquals(3, unigrams.size());
   }
 
@@ -90,11 +92,12 @@ class TerminologyTest {
     List<String> words = new ArrayList<String>();
     words.add("insuffisance");
     IStopwords<IToken> stopwords = new Stopwords(words);
-    ITokenizer<Token> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+    ITokenizer<IToken> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+    AbstractTokNorm<IToken> toknorm = new TokStopImp<IToken>(tokenizer, stopwords);
     Terminology termino = new Terminology();
     termino.addKeyword(icg);
     termino.addKeyword(icg);
-    Set<String> unigrams = IStoreKeywords.getUnigrams(termino, tokenizer, stopwords);
+    Set<String> unigrams = IStoreKeywords.getUnigrams(termino, toknorm);
     assertEquals(2, unigrams.size());
   }
 }
