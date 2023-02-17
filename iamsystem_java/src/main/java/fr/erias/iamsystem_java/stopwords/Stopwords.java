@@ -27,11 +27,11 @@ public class Stopwords extends SimpleStopwords implements IStoreStopwords<IToken
 
   @Override
   public boolean isStopword(String word) {
-    return word.isBlank() || stopwords.contains(word);
+    return word.isBlank() || stopwords.contains(word.toLowerCase());
   }
 
   @Override
   public void add(Collection<String> words) {
-    words.forEach((w) -> this.stopwords.add(w));
+    words.forEach((w) -> this.stopwords.add(w.toLowerCase()));
   }
 }
