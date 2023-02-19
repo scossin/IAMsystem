@@ -51,4 +51,9 @@ public class Token implements IToken {
   public int i() {
     return i;
   }
+
+  @Override
+  public int compareTo(IToken o) {
+    return this.i - o.i();
+  }
 }

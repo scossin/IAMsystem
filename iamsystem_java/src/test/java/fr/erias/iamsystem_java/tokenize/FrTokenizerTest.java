@@ -2,6 +2,8 @@ package fr.erias.iamsystem_java.tokenize;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -65,6 +67,18 @@ class FrTokenizerTest {
     String label0 = this.tokens.get(0).normLabel();
     assertEquals(label0, "meningo");
     String label1 = this.tokens.get(1).normLabel();
+    assertEquals(label1, "encephalite");
+  }
+
+  @Test
+  void testTokenOrder() {
+    List<IToken> unSortedList = new ArrayList<IToken>();
+    unSortedList.add(this.tokens.get(1));
+    unSortedList.add(this.tokens.get(0));
+    unSortedList.sort(Comparator.naturalOrder());
+    String label0 = unSortedList.get(0).normLabel();
+    assertEquals(label0, "meningo");
+    String label1 = unSortedList.get(1).normLabel();
     assertEquals(label1, "encephalite");
   }
 }

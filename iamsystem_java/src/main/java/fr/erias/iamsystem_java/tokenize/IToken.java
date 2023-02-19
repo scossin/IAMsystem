@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
  *
  * @author Sebastien Cossin
  */
-public interface IToken extends IOffsets {
+public interface IToken extends IOffsets, Comparable<IToken> {
 
   /**
    * The label as it is in the document/keyword.
