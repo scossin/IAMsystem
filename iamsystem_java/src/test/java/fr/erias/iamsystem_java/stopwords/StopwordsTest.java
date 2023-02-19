@@ -51,7 +51,7 @@ class StopwordsTest {
 
   @Test
   void testNegativeStopwords() {
-    Token token = new Token(0, 1, "important", "important");
+    Token token = new Token(0, 1, "important", "important", 0);
     List<String> words = new ArrayList<String>();
     NegativeStopwords stopwords = new NegativeStopwords(words);
     assertTrue(stopwords.isTokenAStopword(token));
@@ -62,7 +62,7 @@ class StopwordsTest {
 
   @Test
   void testNegativeStopwordsFun2keep() {
-    Token token = new Token(0, 1, "important", "important");
+    Token token = new Token(0, 1, "important", "important", 0);
     NegativeStopwords stopwords = new NegativeStopwords();
     assertTrue(stopwords.isTokenAStopword(token));
     stopwords.add((word) -> word.equals("important") ? true : false);

@@ -25,6 +25,13 @@ public interface IToken extends IOffsets {
   public String normLabel();
 
   /**
+   * Get the token index.
+   *
+   * @return the index
+   */
+  public int i();
+
+  /**
    * Concatenate the normalized label of each token in the sequence.
    *
    * @param tokens An ordered sequence of tokens.

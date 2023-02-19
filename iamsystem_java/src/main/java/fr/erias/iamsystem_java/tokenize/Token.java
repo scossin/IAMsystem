@@ -11,6 +11,7 @@ public class Token implements IToken {
   private final int end;
   private final String label;
   private final String norm_label;
+  private final int i;
 
   /**
    * Create a token.
@@ -22,11 +23,12 @@ public class Token implements IToken {
    * @param norm_label the normalized label (used by iamsystem's algorithm to perform entity
    *     linking).
    */
-  public Token(int start, int end, String label, String norm_label) {
+  public Token(int start, int end, String label, String norm_label, int i) {
     this.start = start;
     this.end = end;
     this.label = label;
     this.norm_label = norm_label;
+    this.i = i;
   }
 
   public int start() {
@@ -43,5 +45,10 @@ public class Token implements IToken {
 
   public String normLabel() {
     return this.norm_label;
+  }
+
+  @Override
+  public int i() {
+    return i;
   }
 }
