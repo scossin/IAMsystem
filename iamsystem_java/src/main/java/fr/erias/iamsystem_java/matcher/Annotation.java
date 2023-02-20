@@ -8,6 +8,7 @@ import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tree.INode;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Matcher output
@@ -66,5 +67,14 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
    */
   public void setBratFormatter(IBratFormatterF bratFormatter) {
     this.bratFormatter = bratFormatter;
+  }
+
+  @Override
+  public String toString() {
+    return String.format("%s\t%s", this.bratFormatter.getFormat(this), keywords2Str());
+  }
+
+  private String keywords2Str() {
+    return this.getKeywords().stream().map(k -> k.toString()).collect(Collectors.joining(";"));
   }
 }

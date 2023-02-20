@@ -17,4 +17,9 @@ public class BratFormat {
   public String getOffsets() {
     return offsets;
   }
+
+  @Override
+  public String toString() {
+    return String.format("%s\t%s", text, offsets);
+  }
 }

@@ -35,6 +35,6 @@ public class TransitionState<T extends IToken> {
   }
 
   public static boolean isStartState(TransitionState<? extends IToken> state) {
-    return state.getParent() == null;
+    return state.parent == null;
   }
 }

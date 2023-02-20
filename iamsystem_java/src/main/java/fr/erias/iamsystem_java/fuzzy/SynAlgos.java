@@ -1,27 +1,52 @@
 package fr.erias.iamsystem_java.fuzzy;
 
 import java.util.Collection;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SynAlgos {
 
-  private final List<String> syn;
-  private final Collection<String> algos;
+  private final String syn;
+  private final Set<String> algos;
 
-  public SynAlgos(List<String> syn, Collection<String> algos) {
+  public SynAlgos(String syn, String algo) {
     this.syn = syn;
-    this.algos = algos;
+    this.algos = new HashSet<String>();
+    this.algos.add(algo);
   }
 
   public void addAlgo(String algo) {
     this.algos.add(algo);
   }
 
-  public List<String> getSyn() {
+  public String[] getSynToken() {
+    return syn.split(" ");
+  }
+
+  public String getSyn() {
     return syn;
   }
 
   public Collection<String> getAlgos() {
     return algos;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (o == this) {
+      return true;
+    }
+
+    if (!(o instanceof SynAlgos)) {
+      return false;
+    }
+
+    SynAlgos c = (SynAlgos) o;
+    return syn.equals(c.getSyn());
+  }
+
+  @Override
+  public int hashCode() {
+    return syn.hashCode();
   }
 }

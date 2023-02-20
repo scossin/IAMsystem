@@ -19,13 +19,13 @@ import org.junit.jupiter.api.Test;
 class TrieTest {
 
   private ITokenizer<IToken> tokenizer;
-  private Stopwords stopwords;
+  private Stopwords<IToken> stopwords;
   private TokStopImp<IToken> tokstop;
 
   @BeforeEach
   void setUp() throws Exception {
     this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-    this.stopwords = new Stopwords();
+    this.stopwords = new Stopwords<IToken>();
     this.tokstop = new TokStopImp<IToken>(tokenizer, stopwords);
   }
 
@@ -86,17 +86,14 @@ class TrieTest {
     assertTrue(trie.getInitialState().hasTransitionTo("Insuffisance"));
   }
 
-  //    trie = Trie()
-  //    self.assertEqual(1, trie.get_number_of_nodes())
-  //    # first ent
-  //    ent = Entity("Insuffisance Cardiaque", "I50.9")
-  //    tokens = ["insuffisance", "cardiaque"]
-  //    trie.add_keyword_with_tokens(keyword=ent, tokens=tokens)
-  //    self.assertEqual(3, trie.get_number_of_nodes())  # one per token
-  //    # second ent
-  //    ent = Entity("Insuffisance Cardiaque Gauche", "I50.1")
-  //    tokens = ["insuffisance", "cardiaque", "gauche"]
-  //    trie.add_keyword_with_tokens(keyword=ent, tokens=tokens)
-  //    self.assertEqual(3 + 1, trie.get_number_of_nodes())  # new node gauche
-
+  @Test
+  void testFinalStateTrie() {
+    // Go to insuffisance node and checks it's not a final state.
+    Trie trie = new Trie();
+    trie.addKeywords(MockData.getICG(), tokstop);
+    assertFalse(trie.getInitialState().isAfinalState());
+    INode insuffisance = trie.getInitialState().gotoNode("insuffisance");
+    assertFalse(insuffisance == EmptyNode.EMPTYNODE);
+    assertFalse(insuffisance.isAfinalState());
+  }
 }

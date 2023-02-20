@@ -10,7 +10,7 @@ import java.util.Set;
  *
  * @author Sebastien Cossin
  */
-public class Stopwords extends SimpleStopwords implements IStoreStopwords<IToken> {
+public class Stopwords<T extends IToken> extends SimpleStopwords<T> implements IStoreStopwords<T> {
 
   private Set<String> stopwords = new HashSet<String>();
 
@@ -32,6 +32,11 @@ public class Stopwords extends SimpleStopwords implements IStoreStopwords<IToken
 
   @Override
   public void add(Collection<String> words) {
-    words.forEach((w) -> this.stopwords.add(w.toLowerCase()));
+    words.forEach((w) -> this.add(w));
+  }
+
+  @Override
+  public void add(String word) {
+    this.stopwords.add(word.toLowerCase());
   }
 }

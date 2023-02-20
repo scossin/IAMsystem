@@ -22,7 +22,7 @@ public class MockData {
 
   public static AbstractTokNorm<IToken> getFrenchTokStop() {
     ITokenizer<IToken> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-    IStopwords<IToken> stopwords = new Stopwords();
+    IStopwords<IToken> stopwords = new Stopwords<IToken>();
     AbstractTokNorm<IToken> tokstop = new TokStopImp<IToken>(tokenizer, stopwords);
     return (tokstop);
   }

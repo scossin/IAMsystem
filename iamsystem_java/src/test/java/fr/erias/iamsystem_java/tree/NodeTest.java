@@ -10,18 +10,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class NodeTest {
-  //
-  //    trie = Trie()
-  //    root_node = trie.get_initial_state()
-  //    self.ins_node = Node(
-  //        token="insuffisance", node_num=1, parent_node=root_node
-  //    )
-  //    self.card_node = Node(
-  //        token="cardiaque", node_num=2, parent_node=self.ins_node
-  //    )
-  //    self.node_gauche = Node(
-  //        token="gauche", node_num=3, parent_node=self.card_node
-  //    )
 
   private Trie trie;
   private Node insNode;
@@ -46,9 +34,6 @@ class NodeTest {
     gaucheNode.addKeyword(ent);
     gaucheNode.addKeyword(ent);
     assertEquals(2, gaucheNode.getKeywords().size());
-    //		this.trie.addIKeyword(ent, MockData.getFrenchTokStop());
-    //		this.trie.addIKeyword(ent, MockData.getFrenchTokStop());
-    //		fail("Not yet implemented");
   }
 
   @Test

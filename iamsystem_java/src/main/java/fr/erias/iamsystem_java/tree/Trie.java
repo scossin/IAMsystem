@@ -97,8 +97,8 @@ public class Trie {
         nodeNumber++;
         currentNode = newNode;
       }
-      currentNode.addKeyword(keyword);
     }
+    currentNode.addKeyword(keyword);
   }
 
   /**

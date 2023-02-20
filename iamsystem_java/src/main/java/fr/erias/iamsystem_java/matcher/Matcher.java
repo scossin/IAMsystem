@@ -1,7 +1,10 @@
 package fr.erias.iamsystem_java.matcher;
 
+import fr.erias.iamsystem_java.fuzzy.ExactMatch;
+import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.SynAlgos;
+import fr.erias.iamsystem_java.fuzzy.SynsProvider;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
@@ -27,17 +30,21 @@ public class Matcher<T extends IToken>
   private ITokenizer<T> tokenizer;
   private IStopwords<T> stopwords;
   private final Detector<T> detector;
-  private int w;
+  private int w = 1;
   private final Trie trie = new Trie();
   private Terminology termino = new Terminology();
   private boolean removeNestedAnnot = true;
   private TokStopImp<T> tokstop; // TODO set stopwords/tokenizer
+  private List<FuzzyAlgo<T>> fuzzyAlgos = new ArrayList<FuzzyAlgo<T>>();
+  private SynsProvider<T> synsProvider;
 
   public Matcher(ITokenizer<T> tokenizer, IStopwords<T> stopwords) {
     this.setTokenizer(tokenizer);
     this.setStopwords(stopwords);
     this.detector = new Detector<T>();
     this.tokstop = new TokStopImp<T>(tokenizer, stopwords);
+    fuzzyAlgos.add(new ExactMatch<T>());
+    this.synsProvider = new SynsProvider<T>(fuzzyAlgos);
   }
 
   public ITokenizer<T> getTokenizer() {
@@ -73,12 +80,18 @@ public class Matcher<T extends IToken>
     return IStoreKeywords.getUnigrams(this.getKeywords(), tokstop);
   }
 
+  public void addKeyword(Iterable<? extends IKeyword> keywords) {
+    for (IKeyword kw : keywords) {
+      this.addKeyword(kw);
+    }
+  }
+
   /**
    * Add keywords by providing a String iterable.
    *
    * @param keywords A collection of keywords to add.
    */
-  public void addKeyword(Iterable<String> keywords) {
+  public void addKeyword(String[] keywords) {
     for (String kw : keywords) {
       Keyword k = new Keyword(kw);
       this.addKeyword(k);
@@ -107,9 +120,9 @@ public class Matcher<T extends IToken>
   }
 
   @Override
-  public Iterable<SynAlgos> getSynonyms(
+  public Collection<SynAlgos> getSynonyms(
       List<T> tokens, T token, List<TransitionState<T>>[] wStates) {
-    return null;
+    return synsProvider.getSynonyms(tokens, token, wStates);
   }
 
   public List<IAnnotation<T>> annot(List<T> tokens) {
@@ -133,6 +146,7 @@ class Detector<T extends IToken> {
       w_states[i] = new ArrayList<TransitionState<T>>();
     }
     w_states[w_states_size - 2].add(startState);
+    List<TransitionState<T>> tempTransStates = w_states[w_states_size - 1];
 
     int count_not_stopword = 0;
     List<T> stopTokens = new ArrayList<T>();
@@ -142,10 +156,8 @@ class Detector<T extends IToken> {
         continue;
       }
       count_not_stopword++;
-      Iterable<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, w_states);
-      List<TransitionState<T>> tempTransStates = w_states[w_states_size - 1];
       tempTransStates.clear();
-
+      Iterable<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, w_states);
       for (SynAlgos synAlgo : synAlgos) {
         for (int i = 0; i < w_states_size - 1; i++) {
           List<TransitionState<T>> transStates = w_states[i];
@@ -164,6 +176,8 @@ class Detector<T extends IToken> {
       }
       w_states[count_not_stopword % w].clear();
       w_states[count_not_stopword % w].addAll(tempTransStates);
+      // TODO: test performance creating tempTransStates at each iteration
+      // vs doing clear and addAll operation.
     }
     return annots;
   }
@@ -182,7 +196,7 @@ class Detector<T extends IToken> {
     List<TransitionState<T>> transStates = new ArrayList<>();
     transStates.add(last_el);
     TransitionState<T> parent = last_el.getParent();
-    while (TransitionState.isStartState(parent)) {
+    while (!TransitionState.isStartState(parent)) {
       transStates.add(parent);
       parent = parent.getParent();
     }
