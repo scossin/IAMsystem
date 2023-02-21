@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import fr.erias.iamsystem_java.abbs.Abbreviations;
 import fr.erias.iamsystem_java.abbs.TokenIsAnAbbFactory;
 import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.SynAlgo;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
@@ -39,9 +40,10 @@ class AbbreviationsTest
 	{
 		this.abbs.add("ic", "insuffisance cardiaque", tokenizer);
 		IToken token = new Token(0, 1, "ic", "ic", 0);
-		String[] syn = this.abbs.getSynonyms(token);
-		assertEquals(1, syn.length);
-		assertEquals("insuffisance cardiaque", syn[0]);
+		List<SynAlgo> syns = this.abbs.getSynonyms(token);
+		assertEquals(1, syns.size());
+		assertEquals("insuffisance cardiaque", syns.get(0).getSyn());
+		assertEquals("Abbs", syns.get(0).getAlgo());
 	}
 
 	@Test
@@ -50,12 +52,12 @@ class AbbreviationsTest
 		this.abbs.add("irc", "insuffisance  respiratoire   Chronique ", tokenizer);
 		this.abbs.add("irc", "Insuffisance rénale chronique", tokenizer);
 		IToken token = new Token(0, 1, "irc", "irc", 0);
-		String[] syns = this.abbs.getSynonyms(token);
-		assertEquals(2, syns.length);
-		for (String syn : syns)
+		List<SynAlgo> syns = this.abbs.getSynonyms(token);
+		assertEquals(2, syns.size());
+		for (SynAlgo synAlgo : syns)
 		{
-			assertTrue(
-					syn.equals("insuffisance respiratoire chronique") || syn.equals("insuffisance renale chronique"));
+			assertTrue(synAlgo.getSyn().equals("insuffisance respiratoire chronique")
+					|| synAlgo.getSyn().equals("insuffisance renale chronique"));
 		}
 	}
 
@@ -65,11 +67,11 @@ class AbbreviationsTest
 		this.abbs = new Abbreviations<IToken>("Abbs", TokenIsAnAbbFactory.upperCaseOnly);
 		this.abbs.add("ic", "insuffisance cardiaque", tokenizer);
 		IToken token = new Token(0, 1, "ic", "ic", 0);
-		String[] syns = this.abbs.getSynonyms(token);
+		List<SynAlgo> syns = this.abbs.getSynonyms(token);
 		assertEquals(syns, FuzzyAlgo.NO_SYN);
 		token = new Token(0, 1, "IC", "ic", 0);
 		syns = this.abbs.getSynonyms(token);
-		assertEquals(1, syns.length);
+		assertEquals(1, syns.size());
 	}
 
 	@Test
@@ -88,8 +90,8 @@ class AbbreviationsTest
 	void testNoSynoyms()
 	{
 		IToken token = new Token(0, 1, "irc", "irc", 0);
-		String[] syns = this.abbs.getSynonyms(token);
-		assertEquals(0, syns.length);
+		List<SynAlgo> syns = this.abbs.getSynonyms(token);
+		assertEquals(0, syns.size());
 		assertEquals(syns, FuzzyAlgo.NO_SYN);
 	}
 }

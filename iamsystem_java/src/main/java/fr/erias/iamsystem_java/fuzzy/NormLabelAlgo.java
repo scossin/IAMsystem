@@ -1,5 +1,7 @@
 package fr.erias.iamsystem_java.fuzzy;
 
+import java.util.List;
+
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 public abstract class NormLabelAlgo<T extends IToken> extends ContextFreeAlgo<T>
@@ -11,10 +13,10 @@ public abstract class NormLabelAlgo<T extends IToken> extends ContextFreeAlgo<T>
 	}
 
 	@Override
-	public String[] getSynonyms(T token)
+	public List<SynAlgo> getSynonyms(T token)
 	{
 		return this.getSynsOfWord(token.normLabel());
 	}
 
-	public abstract String[] getSynsOfWord(String word);
+	public abstract List<SynAlgo> getSynsOfWord(String normLabel);
 }

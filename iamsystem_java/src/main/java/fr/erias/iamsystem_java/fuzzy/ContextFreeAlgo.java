@@ -14,10 +14,10 @@ public abstract class ContextFreeAlgo<T extends IToken> extends FuzzyAlgo<T>
 	}
 
 	@Override
-	public String[] getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates)
+	public List<SynAlgo> getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates)
 	{
 		return this.getSynonyms(token);
 	}
 
-	public abstract String[] getSynonyms(T token);
+	public abstract List<SynAlgo> getSynonyms(T token);
 }

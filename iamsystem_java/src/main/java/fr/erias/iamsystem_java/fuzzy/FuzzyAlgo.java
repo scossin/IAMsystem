@@ -1,7 +1,10 @@
 package fr.erias.iamsystem_java.fuzzy;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.matcher.TransitionState;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -9,7 +12,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 public abstract class FuzzyAlgo<T extends IToken>
 {
 
-	public static String[] NO_SYN = new String[] {};
+	public static List<SynAlgo> NO_SYN = Arrays.asList();
 	private final String name;
 
 	public FuzzyAlgo(String name)
@@ -22,15 +25,18 @@ public abstract class FuzzyAlgo<T extends IToken>
 		return name;
 	}
 
-	public abstract String[] getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates);
+	public abstract List<SynAlgo> getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates);
 
-	public String[] word2syn(String word)
+	public List<SynAlgo> word2syn(String word)
 	{
-		return new String[] { word };
+		SynAlgo synsAlgo = new SynAlgo(word, this.getName());
+		List<SynAlgo> syns = new ArrayList<SynAlgo>(1);
+		syns.add(synsAlgo);
+		return syns;
 	}
 
-	public String[] words2syn(Collection<String> words)
+	public List<SynAlgo> words2syn(Collection<String> words)
 	{
-		return words.toArray(new String[words.size()]);
+		return words.stream().map(w -> new SynAlgo(w, this.getName())).collect(Collectors.toList());
 	}
 }

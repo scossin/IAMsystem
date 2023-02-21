@@ -1,5 +1,7 @@
 package fr.erias.iamsystem_java.fuzzy;
 
+import java.util.List;
+
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 public class ExactMatch<T extends IToken> extends NormLabelAlgo<T>
@@ -11,7 +13,7 @@ public class ExactMatch<T extends IToken> extends NormLabelAlgo<T>
 	}
 
 	@Override
-	public String[] getSynsOfWord(String word)
+	public List<SynAlgo> getSynsOfWord(String word)
 	{
 		return this.word2syn(word);
 	}

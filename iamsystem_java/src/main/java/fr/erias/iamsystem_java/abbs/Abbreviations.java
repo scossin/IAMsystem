@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.fuzzy.ContextFreeAlgo;
 import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.SynAlgo;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -33,7 +34,7 @@ public class Abbreviations<T extends IToken> extends ContextFreeAlgo<T>
 
 	/**
 	 * Add an abbreviation.
-	 * 
+	 *
 	 * @param shortForm an abbreviation short form (ex: CHF).
 	 * @param longForm  an abbreviation long form. (ex: congestive heart failure).
 	 * @param tokenizer a {@link ITokenizer} to tokenize the long form. It is
@@ -52,7 +53,7 @@ public class Abbreviations<T extends IToken> extends ContextFreeAlgo<T>
 	}
 
 	@Override
-	public String[] getSynonyms(T token)
+	public List<SynAlgo> getSynonyms(T token)
 	{
 		if (!abbsChecker.isAnAbb(token))
 			return FuzzyAlgo.NO_SYN;
@@ -61,7 +62,7 @@ public class Abbreviations<T extends IToken> extends ContextFreeAlgo<T>
 		if (short2longForms.containsKey(potentialNorm))
 		{
 			Set<String> longForms = short2longForms.get(potentialNorm);
-			return longForms.toArray(new String[longForms.size()]);
+			return this.words2syn(longForms);
 		} else
 		{
 			return FuzzyAlgo.NO_SYN;

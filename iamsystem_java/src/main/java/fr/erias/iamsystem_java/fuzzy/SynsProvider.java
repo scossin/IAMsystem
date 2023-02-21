@@ -11,9 +11,9 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 public class SynsProvider<T extends IToken> implements ISynsProvider<T>
 {
 
-	private Iterable<FuzzyAlgo<T>> fuzzyAlgos;
+	private List<? extends FuzzyAlgo<T>> fuzzyAlgos;
 
-	public SynsProvider(Iterable<FuzzyAlgo<T>> fuzzyAlgos)
+	public SynsProvider(List<? extends FuzzyAlgo<T>> fuzzyAlgos)
 	{
 		this.fuzzyAlgos = fuzzyAlgos;
 	}
@@ -24,16 +24,20 @@ public class SynsProvider<T extends IToken> implements ISynsProvider<T>
 		Map<String, SynAlgos> syn2synAlgos = new HashMap<String, SynAlgos>();
 		for (FuzzyAlgo<T> fuzzyAlgo : fuzzyAlgos)
 		{
-			String[] syns = fuzzyAlgo.getSynonyms(tokens, token, wStates);
-			for (String syn : syns)
+			// synsAlgo: multiple synonym for one algorithm.
+			// synAlgos: one synonym for multiple algorithms.
+			List<SynAlgo> synsAlgo = fuzzyAlgo.getSynonyms(tokens, token, wStates);
+
+			for (SynAlgo synAlgo : synsAlgo)
 			{
+				String syn = synAlgo.getSyn();
 				if (syn2synAlgos.containsKey(syn))
 				{
-					syn2synAlgos.get(syn).addAlgo(fuzzyAlgo.getName());
+					syn2synAlgos.get(syn).addAlgo(synAlgo.getAlgo());
 				} else
 				{
-					SynAlgos synAlgo = new SynAlgos(syn, fuzzyAlgo.getName());
-					syn2synAlgos.put(syn, synAlgo);
+					SynAlgos synAlgos = new SynAlgos(syn, synAlgo.getAlgo());
+					syn2synAlgos.put(syn, synAlgos);
 				}
 			}
 		}
