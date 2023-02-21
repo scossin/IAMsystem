@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
 
@@ -154,7 +152,13 @@ public class Node implements INode
 	}
 
 	@Override
-	public INode gotoNode(List<String> tokens)
+	public INode gotoNode(String token)
+	{
+		return childNodes.getOrDefault(token, EmptyNode.EMPTYNODE);
+	}
+
+	@Override
+	public INode gotoNode(String[] tokens)
 	{
 		INode node = this;
 		for (String token : tokens)
@@ -162,25 +166,6 @@ public class Node implements INode
 			node = node.gotoNode(token);
 		}
 		return (node);
-	}
-
-	@Override
-	public INode gotoNode(String token)
-	{
-		return childNodes.getOrDefault(token, EmptyNode.EMPTYNODE);
-	}
-
-	@Override
-	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms)
-	{
-		Set<INode> nodes = new HashSet<INode>();
-		for (List<String> synonyms : setOfsynonyms)
-		{
-			INode node = gotoNode(synonyms);
-			nodes.add(node);
-		}
-		nodes.remove(EmptyNode.EMPTYNODE);
-		return (nodes);
 	}
 
 	@Override

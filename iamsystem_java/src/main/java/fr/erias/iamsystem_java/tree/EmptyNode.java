@@ -2,7 +2,6 @@ package fr.erias.iamsystem_java.tree;
 
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
@@ -77,21 +76,15 @@ public class EmptyNode implements INode
 	}
 
 	@Override
-	public INode gotoNode(List<String> tokens)
-	{
-		return EMPTYNODE;
-	}
-
-	@Override
 	public INode gotoNode(String token)
 	{
 		return EMPTYNODE;
 	}
 
 	@Override
-	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms)
+	public INode gotoNode(String[] tokens)
 	{
-		return noNodes;
+		return EMPTYNODE;
 	}
 
 	@Override

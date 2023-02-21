@@ -1,10 +1,11 @@
 package fr.erias.iamsystem_java.tokenize;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,30 +23,10 @@ class FrTokenizerTest
 	}
 
 	@Test
-	void testTokenization()
+	void testConcatLabel()
 	{
-		assertEquals(2, this.tokens.size());
-	}
-
-	@Test
-	void testMinStart()
-	{
-		int minTokenStart = IOffsets.getMinStart(this.tokens);
-		assertEquals(0, minTokenStart);
-	}
-
-	@Test
-	void testMaxEnd()
-	{
-		int maxTokenEnd = IOffsets.getMaxEnd(this.tokens);
-		assertEquals(19, maxTokenEnd);
-	}
-
-	@Test
-	void testGetSpanSeqId()
-	{
-		String seqId = IOffsets.getSpanSeqId(this.tokens);
-		assertEquals("(0,7);(8,19)", seqId);
+		String tokenLabel = IToken.ConcatLabel(this.tokens);
+		assertEquals("Meningo encéphalite", tokenLabel);
 	}
 
 	@Test
@@ -56,10 +37,10 @@ class FrTokenizerTest
 	}
 
 	@Test
-	void testConcatLabel()
+	void testGetSpanSeqId()
 	{
-		String tokenLabel = IToken.ConcatLabel(this.tokens);
-		assertEquals("Meningo encéphalite", tokenLabel);
+		String seqId = IOffsets.getSpanSeqId(this.tokens);
+		assertEquals("(0,7);(8,19)", seqId);
 	}
 
 	@Test
@@ -72,12 +53,32 @@ class FrTokenizerTest
 	}
 
 	@Test
+	void testMaxEnd()
+	{
+		int maxTokenEnd = IOffsets.getMaxEnd(this.tokens);
+		assertEquals(19, maxTokenEnd);
+	}
+
+	@Test
+	void testMinStart()
+	{
+		int minTokenStart = IOffsets.getMinStart(this.tokens);
+		assertEquals(0, minTokenStart);
+	}
+
+	@Test
 	void testNormLabel()
 	{
 		String label0 = this.tokens.get(0).normLabel();
 		assertEquals(label0, "meningo");
 		String label1 = this.tokens.get(1).normLabel();
 		assertEquals(label1, "encephalite");
+	}
+
+	@Test
+	void testTokenization()
+	{
+		assertEquals(2, this.tokens.size());
 	}
 
 	@Test

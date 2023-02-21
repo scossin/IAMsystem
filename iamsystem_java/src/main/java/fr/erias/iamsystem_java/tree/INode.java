@@ -1,8 +1,6 @@
 package fr.erias.iamsystem_java.tree;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 
 import org.apache.lucene.index.Term;
 
@@ -66,26 +64,18 @@ public interface INode
 	/**
 	 * From this node go to another node with child relations
 	 *
-	 * @param tokens a sequence of normalized string
-	 * @return a {@link Node} if a path exists in the trie or the {@link EmptyNode}
-	 */
-	public INode gotoNode(List<String> tokens);
-
-	/**
-	 * From this node go to another node with child relations
-	 *
 	 * @param token a normalized string
 	 * @return a {@link Node} if a path exists in the trie or the {@link EmptyNode}
 	 */
 	public INode gotoNode(String token);
 
 	/**
-	 * For each unique sequence of tokens returns a node
+	 * From this node go to another node with child relations
 	 *
-	 * @param setOfsynonyms a set of sequences of tokens
-	 * @return a set of {@link Node}
+	 * @param tokens a sequence of normalized string
+	 * @return a {@link Node} if a path exists in the trie or the {@link EmptyNode}
 	 */
-	public Set<INode> gotoNodes(Set<List<String>> setOfsynonyms);
+	public INode gotoNode(String[] tokens);
 
 	/**
 	 * Check if, from this node, a transition is possible to another node. Each node

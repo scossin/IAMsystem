@@ -14,6 +14,17 @@ class SynAlgosTest
 	}
 
 	@Test
+	void testSynAlgosAlgos()
+	{
+		SynAlgos synAlgo = build("insuffisance");
+		assertEquals(synAlgo.getAlgos().size(), 1);
+		synAlgo.addAlgo("Exact");
+		assertEquals(synAlgo.getAlgos().size(), 1);
+		synAlgo.addAlgo("exact");
+		assertEquals(synAlgo.getAlgos().size(), 2);
+	}
+
+	@Test
 	void testSynAlgosEquality()
 	{
 		SynAlgos synAlgo = build("insuffisance");
@@ -35,16 +46,5 @@ class SynAlgosTest
 		assertEquals(synAlgo2.getSynToken().length, 1);
 		SynAlgos synAlgo3 = build("insuffisance cardiaque");
 		assertEquals(synAlgo3.getSynToken().length, 2);
-	}
-
-	@Test
-	void testSynAlgosAlgos()
-	{
-		SynAlgos synAlgo = build("insuffisance");
-		assertEquals(synAlgo.getAlgos().size(), 1);
-		synAlgo.addAlgo("Exact");
-		assertEquals(synAlgo.getAlgos().size(), 1);
-		synAlgo.addAlgo("exact");
-		assertEquals(synAlgo.getAlgos().size(), 2);
 	}
 }

@@ -1,6 +1,13 @@
 package fr.erias.iamsystem_java.brat;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.matcher.Annotation;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
@@ -11,11 +18,6 @@ import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.tree.Node;
 import fr.erias.iamsystem_java.tree.Trie;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class FormatterTest
 {
@@ -37,6 +39,15 @@ class FormatterTest
 	}
 
 	@Test
+	void testGetBratFormatTokenFormatter()
+	{
+		List<List<IToken>> sequences = BratFormatters.groupContinuousSeq(this.tokens);
+		List<IOffsets> offsetsSeq = BratFormatters.multipleSeqToOffsets(sequences);
+		String offsets = BratFormatters.getBratFormat(offsetsSeq);
+		assertEquals("0 6;13 28", offsets);
+	}
+
+	@Test
 	void testGroupContinuousSeq()
 	{
 		List<List<IToken>> sequences = BratFormatters.groupContinuousSeq(this.tokens);
@@ -53,15 +64,6 @@ class FormatterTest
 		assertEquals("cancer", this.text.substring(offsets0.start(), offsets0.end()));
 		IOffsets offsets1 = offsets.get(1);
 		assertEquals("glande prostate", this.text.substring(offsets1.start(), offsets1.end()));
-	}
-
-	@Test
-	void testGetBratFormatTokenFormatter()
-	{
-		List<List<IToken>> sequences = BratFormatters.groupContinuousSeq(this.tokens);
-		List<IOffsets> offsetsSeq = BratFormatters.multipleSeqToOffsets(sequences);
-		String offsets = BratFormatters.getBratFormat(offsetsSeq);
-		assertEquals("0 6;13 28", offsets);
 	}
 
 	@Test

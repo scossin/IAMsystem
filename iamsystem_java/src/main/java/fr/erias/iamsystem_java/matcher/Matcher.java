@@ -71,7 +71,7 @@ class Detector<T extends IToken>
 					List<TransitionState<T>> transStates = w_states[i];
 					for (TransitionState<T> transState : transStates)
 					{
-						INode node = transState.getNode().gotoNode(synAlgo.getSyn());
+						INode node = transState.getNode().gotoNode(synAlgo.getSynToken());
 						if (node == EmptyNode.EMPTYNODE)
 							continue;
 						TransitionState<T> newTransState = new TransitionState<T>(transState, node, token,
@@ -131,6 +131,11 @@ public class Matcher<T extends IToken>
 		this.tokstop = new TokStopImp<T>(tokenizer, stopwords);
 		fuzzyAlgos.add(new ExactMatch<T>());
 		this.synsProvider = new SynsProvider<T>(fuzzyAlgos);
+	}
+
+	public void addFuzzyAlgo(FuzzyAlgo<T> fuzzyAlgo)
+	{
+		this.fuzzyAlgos.add(fuzzyAlgo);
 	}
 
 	@Override

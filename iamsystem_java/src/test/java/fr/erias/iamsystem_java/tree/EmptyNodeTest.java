@@ -1,7 +1,8 @@
 package fr.erias.iamsystem_java.tree;
 
 import static org.junit.Assert.assertThrows;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,36 +19,6 @@ class EmptyNodeTest
 	}
 
 	@Test
-	void testIsFinalState()
-	{
-		assertFalse(this.emptyNode.isAfinalState());
-	}
-
-	@Test
-	void testHasTransitionTo()
-	{
-		assertFalse(this.emptyNode.hasTransitionTo("Anythign"));
-	}
-
-	@Test
-	void testGoToNode()
-	{
-		assertEquals(this.emptyNode, this.emptyNode.gotoNode("anything"));
-	}
-
-	@Test
-	void testNodeNumber()
-	{
-		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getNodeNumber());
-	}
-
-	@Test
-	void testParentNode()
-	{
-		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getParentNode());
-	}
-
-	@Test
 	void testAncestors()
 	{
 		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getAncestors());
@@ -60,8 +31,38 @@ class EmptyNodeTest
 	}
 
 	@Test
+	void testGoToNode()
+	{
+		assertEquals(this.emptyNode, this.emptyNode.gotoNode("anything"));
+	}
+
+	@Test
+	void testHasTransitionTo()
+	{
+		assertFalse(this.emptyNode.hasTransitionTo("Anythign"));
+	}
+
+	@Test
+	void testIsFinalState()
+	{
+		assertFalse(this.emptyNode.isAfinalState());
+	}
+
+	@Test
 	void testKeywords()
 	{
 		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getKeywords());
+	}
+
+	@Test
+	void testNodeNumber()
+	{
+		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getNodeNumber());
+	}
+
+	@Test
+	void testParentNode()
+	{
+		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getParentNode());
 	}
 }

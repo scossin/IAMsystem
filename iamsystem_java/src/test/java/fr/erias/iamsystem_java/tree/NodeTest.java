@@ -1,13 +1,17 @@
 package fr.erias.iamsystem_java.tree;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.lang.reflect.InaccessibleObjectException;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
-import java.lang.reflect.InaccessibleObjectException;
-import java.util.Arrays;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class NodeTest
 {
@@ -29,25 +33,6 @@ class NodeTest
 	}
 
 	@Test
-	void testKeywordNotOverriden()
-	{
-		// Adding the same ent to a node doesn't override it.
-		IEntity ent = new Entity("Insuffisance Cardiaque Gauche", "XXX");
-		Node gaucheNode = new Node("gauche", this.insNode, 3);
-		gaucheNode.addKeyword(ent);
-		gaucheNode.addKeyword(ent);
-		assertEquals(2, gaucheNode.getKeywords().size());
-	}
-
-	@Test
-	void testHasTransitionTo()
-	{
-		assertTrue(this.insNode.hasTransitionTo("cardiaque"));
-		assertFalse(this.insNode.hasTransitionTo("gauche"));
-		assertTrue(this.cardNode.hasTransitionTo("gauche"));
-	}
-
-	@Test
 	void testGetAncestors()
 	{
 		assertEquals(2, this.gaucheNode.getAncestors().size());
@@ -64,16 +49,34 @@ class NodeTest
 	}
 
 	@Test
-	void testGoToNodeDeadEnd()
+	void testGetKeywords()
 	{
-		assertEquals(EmptyNode.EMPTYNODE, this.insNode.gotoNode("DoesNotExist"));
-		assertEquals(EmptyNode.EMPTYNODE, this.insNode.gotoNode(Arrays.asList("one", "two")));
+		assertThrows(InaccessibleObjectException.class, () -> this.gaucheNode.getKeywords());
+		IEntity ent = new Entity("Insuffisance Cardiaque Gauche", "XXX");
+		this.gaucheNode.addKeyword(ent);
+		this.gaucheNode.addKeyword(ent);
+		assertEquals(2, this.gaucheNode.getKeywords().size());
 	}
 
 	@Test
 	void testGoToNode()
 	{
-		assertEquals(this.gaucheNode, this.insNode.gotoNode(Arrays.asList("cardiaque", "gauche")));
+		assertEquals(this.gaucheNode, this.insNode.gotoNode(new String[] { "cardiaque", "gauche" }));
+	}
+
+	@Test
+	void testGoToNodeDeadEnd()
+	{
+		assertEquals(EmptyNode.EMPTYNODE, this.insNode.gotoNode("DoesNotExist"));
+		assertEquals(EmptyNode.EMPTYNODE, this.insNode.gotoNode(new String[] { "one", "two" }));
+	}
+
+	@Test
+	void testHasTransitionTo()
+	{
+		assertTrue(this.insNode.hasTransitionTo("cardiaque"));
+		assertFalse(this.insNode.hasTransitionTo("gauche"));
+		assertTrue(this.cardNode.hasTransitionTo("gauche"));
 	}
 
 	@Test
@@ -86,12 +89,13 @@ class NodeTest
 	}
 
 	@Test
-	void testGetKeywords()
+	void testKeywordNotOverriden()
 	{
-		assertThrows(InaccessibleObjectException.class, () -> this.gaucheNode.getKeywords());
+		// Adding the same ent to a node doesn't override it.
 		IEntity ent = new Entity("Insuffisance Cardiaque Gauche", "XXX");
-		this.gaucheNode.addKeyword(ent);
-		this.gaucheNode.addKeyword(ent);
-		assertEquals(2, this.gaucheNode.getKeywords().size());
+		Node gaucheNode = new Node("gauche", this.insNode, 3);
+		gaucheNode.addKeyword(ent);
+		gaucheNode.addKeyword(ent);
+		assertEquals(2, gaucheNode.getKeywords().size());
 	}
 }

@@ -1,6 +1,13 @@
 package fr.erias.iamsystem_java.tree;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Arrays;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
@@ -12,9 +19,6 @@ import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.tokenize.TokenizerImp;
 import fr.erias.iamsystem_java.utils.MockData;
-import java.util.Arrays;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 
 class TrieTest
 {
@@ -32,41 +36,15 @@ class TrieTest
 	}
 
 	@Test
-	void testTrieNumberOfNodes()
+	void testFinalStateTrie()
 	{
-		// Number of tokens in keywords.
-		Trie trie = new Trie();
-		assertEquals(trie.getNumberOfNodes(), 1);
-		trie.addKeywords(MockData.getICG(), tokstop);
-		assertEquals(trie.getNumberOfNodes(), 4);
-	}
-
-	@Test
-	void testTrieInitialState()
-	{
-		// Number of tokens in keywords.
-		Trie trie = new Trie();
-		Trie.isTheRootNode(trie.getInitialState());
-	}
-
-	@Test
-	void testTrieCheckTransitionFromRootNode()
-	{
-		// insuffisance ventriculaire gauche': START_TOKEN -> 'insuffisance'
+		// Go to insuffisance node and checks it's not a final state.
 		Trie trie = new Trie();
 		trie.addKeywords(MockData.getICG(), tokstop);
-		assertTrue(trie.getInitialState().hasTransitionTo("insuffisance"));
-	}
-
-	@Test
-	void testTrieWithStopwords()
-	{
-		// remove insuffisance to check transition is to next token 'cardiaque'.
-		Trie trie = new Trie();
-		this.stopwords.add(Arrays.asList("insuffisance"));
-		trie.addKeywords(MockData.getICG(), tokstop);
-		assertTrue(!trie.getInitialState().hasTransitionTo("insuffisance"));
-		assertTrue(trie.getInitialState().hasTransitionTo("cardiaque"));
+		assertFalse(trie.getInitialState().isAfinalState());
+		INode insuffisance = trie.getInitialState().gotoNode("insuffisance");
+		assertFalse(insuffisance == EmptyNode.EMPTYNODE);
+		assertFalse(insuffisance.isAfinalState());
 	}
 
 	@Test
@@ -94,14 +72,40 @@ class TrieTest
 	}
 
 	@Test
-	void testFinalStateTrie()
+	void testTrieCheckTransitionFromRootNode()
 	{
-		// Go to insuffisance node and checks it's not a final state.
+		// insuffisance ventriculaire gauche': START_TOKEN -> 'insuffisance'
 		Trie trie = new Trie();
 		trie.addKeywords(MockData.getICG(), tokstop);
-		assertFalse(trie.getInitialState().isAfinalState());
-		INode insuffisance = trie.getInitialState().gotoNode("insuffisance");
-		assertFalse(insuffisance == EmptyNode.EMPTYNODE);
-		assertFalse(insuffisance.isAfinalState());
+		assertTrue(trie.getInitialState().hasTransitionTo("insuffisance"));
+	}
+
+	@Test
+	void testTrieInitialState()
+	{
+		// Number of tokens in keywords.
+		Trie trie = new Trie();
+		Trie.isTheRootNode(trie.getInitialState());
+	}
+
+	@Test
+	void testTrieNumberOfNodes()
+	{
+		// Number of tokens in keywords.
+		Trie trie = new Trie();
+		assertEquals(trie.getNumberOfNodes(), 1);
+		trie.addKeywords(MockData.getICG(), tokstop);
+		assertEquals(trie.getNumberOfNodes(), 4);
+	}
+
+	@Test
+	void testTrieWithStopwords()
+	{
+		// remove insuffisance to check transition is to next token 'cardiaque'.
+		Trie trie = new Trie();
+		this.stopwords.add(Arrays.asList("insuffisance"));
+		trie.addKeywords(MockData.getICG(), tokstop);
+		assertTrue(!trie.getInitialState().hasTransitionTo("insuffisance"));
+		assertTrue(trie.getInitialState().hasTransitionTo("cardiaque"));
 	}
 }
