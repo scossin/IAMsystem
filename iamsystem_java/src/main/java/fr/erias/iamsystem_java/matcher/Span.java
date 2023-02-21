@@ -2,11 +2,39 @@ package fr.erias.iamsystem_java.matcher;
 
 import java.util.List;
 
+import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 
-public class Span<T extends IToken> implements ISpan<T>
+public class Span<T extends IToken> implements IOffsets, ISpan<T>
 {
+
+	/**
+	 * True if a is the shorter span of b.
+	 * 
+	 * @param a span a.
+	 * @param b span b.
+	 * @return True if a is the shorter span of b.
+	 */
+	public static boolean isShorterSpanOf(ISpan<? extends IToken> a, ISpan<? extends IToken> b)
+	{
+		if (a == b)
+			return false;
+		if (!IOffsets.offsetsOverlap(a, b))
+			return false;
+		// if both conditions are true then we can't decide which to remove so it
+		// returns False. Ex: 'IRC' abbreviation is matched to two long forms
+		// that have the same offsets.
+		if ((a.start() == b.start()) && (a.end() == b.end()))
+			return false;
+		// b_seq_id must contain all offsets of a_seq_id, for example:
+		// 1) left: 'lung cancer' and 'lung'
+		// 2) right: 'prostate cancer' and 'cancer'
+		// 3) middle: 'prostate cancer undetermined' and 'cancer'
+		String aSeqId = IOffsets.getSpanSeqId(a.tokens());
+		String bSeqId = IOffsets.getSpanSeqId(b.tokens());
+		return bSeqId.contains(aSeqId);
+	}
 
 	private final List<T> tokens;
 
@@ -21,9 +49,21 @@ public class Span<T extends IToken> implements ISpan<T>
 	}
 
 	@Override
+	public int end()
+	{
+		return tokens.get(tokens.size() - 1).end();
+	}
+
+	@Override
 	public int end_i()
 	{
 		return tokens.get(tokens.size() - 1).i();
+	}
+
+	@Override
+	public int start()
+	{
+		return tokens.get(0).start();
 	}
 
 	@Override

@@ -54,6 +54,7 @@ class CacheFuzzyAlgosTest
 		StringEncoderSyn stringEncoder = new StringEncoderSyn(new Caverphone1(), 5);
 		stringEncoder.addTerminology(this.matcher.getKeywords(), this.matcher.getTokStop());
 		this.cache.addFuzzyAlgo(stringEncoder);
+		this.matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffizzzance cardiaqu gauch");
 		assertEquals(anns.size(), 2);
 	}

@@ -45,6 +45,20 @@ public interface IOffsets
 	}
 
 	/**
+	 * True if a and b have indices in common in their range (start:end).
+	 * 
+	 * @param a first Offset
+	 * @param b second Offset
+	 * @return True if overlaps.
+	 */
+	public static boolean offsetsOverlap(IOffsets a, IOffsets b)
+	{
+		if (a == b)
+			return false;
+		return (b.start() <= a.start() && a.start() <= b.end()) || a.start() <= b.start() && b.start() <= a.end();
+	}
+
+	/**
 	 * End-offset is the index of the last character **+ 1**, that is to say the
 	 * first character to exclude from the returned substring when slicing with
 	 * [start:end]

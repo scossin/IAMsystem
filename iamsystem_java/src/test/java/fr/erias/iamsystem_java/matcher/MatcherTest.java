@@ -121,6 +121,7 @@ class MatcherTest
 	void testMultipleAnnots()
 	{
 		this.matcher.addKeyword(MockData.getICG());
+		this.matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
 	}

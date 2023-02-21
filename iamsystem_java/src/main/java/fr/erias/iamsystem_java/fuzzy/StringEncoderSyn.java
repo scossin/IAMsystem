@@ -47,7 +47,7 @@ public class StringEncoderSyn extends NormLabelAlgo<IToken>
 	/**
 	 * Encode all the unique tokens of your terminology for approximate string
 	 * matching
-	 * 
+	 *
 	 * @param stringEncoder     an method that implements {@link StringEncoder} <br>
 	 *                          https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
 	 * @param minTokenLength    don't encode token less than this length (0 if you

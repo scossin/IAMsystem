@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -19,6 +20,7 @@ import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
+import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokStopImp;
@@ -91,7 +93,54 @@ class Detector<T extends IToken>
 			// TODO: test performance creating tempTransStates at each iteration
 			// vs doing clear and addAll operation.
 		}
+		annots.sort(Comparator.naturalOrder());
 		return annots;
+	}
+
+	protected List<IAnnotation<T>> rmNestedAnnots(List<IAnnotation<T>> annots, boolean keepAncestors)
+	{
+		Set<Integer> ancestIndices = new HashSet<Integer>();
+		Set<Integer> shortIndices = new HashSet<Integer>();
+
+		for (int i = 0; i < annots.size(); i++)
+		{
+			IAnnotation<T> annot = annots.get(i);
+			for (int y = i + 1; y < annots.size(); y++)
+			{
+				IAnnotation<T> other = annots.get(y);
+				if (!IOffsets.offsetsOverlap(annot, other))
+					break;
+				if (Span.isShorterSpanOf(annot, other))
+				{
+					shortIndices.add(i);
+					if (IAnnotation.isAncestorAnnotOf(annot, other))
+					{
+						ancestIndices.add(i);
+					}
+				}
+				if (Span.isShorterSpanOf(annot, other))
+				{
+					shortIndices.add(y);
+				}
+			}
+		}
+		Set<Integer> indices2remove;
+		if (!keepAncestors)
+		{
+			indices2remove = shortIndices;
+		} else
+		{
+			indices2remove = shortIndices.stream().filter(i -> !ancestIndices.contains(i)).collect(Collectors.toSet());
+		}
+		List<IAnnotation<T>> annots2keep = new ArrayList<IAnnotation<T>>(annots.size() - indices2remove.size());
+		for (int i = 0; i < annots.size(); i++)
+		{
+			if (!indices2remove.contains(i))
+			{
+				annots2keep.add(annots.get(i));
+			}
+		}
+		return annots2keep;
 	}
 
 	private List<TransitionState<T>> toList(TransitionState<T> last_el)
@@ -170,13 +219,19 @@ public class Matcher<T extends IToken>
 
 	public List<IAnnotation<T>> annot(List<T> tokens)
 	{
-		return detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
+		List<IAnnotation<T>> annots = detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
+		if (this.removeNestedAnnot)
+		{
+			annots = this.detector.rmNestedAnnots(annots, false);
+		}
+		return annots;
 	}
 
 	public List<IAnnotation<T>> annot(String text)
 	{
 		List<T> tokens = tokenize(text);
-		return this.annot(tokens);
+		List<IAnnotation<T>> annots = this.annot(tokens);
+		return annots;
 	}
 
 	@Override
@@ -220,6 +275,16 @@ public class Matcher<T extends IToken>
 	public boolean isTokenAStopword(T token)
 	{
 		return stopwords.isTokenAStopword(token);
+	}
+
+	public boolean removeNestedAnnot()
+	{
+		return removeNestedAnnot;
+	}
+
+	public void setRemoveNestedAnnot(boolean removeNestedAnnot)
+	{
+		this.removeNestedAnnot = removeNestedAnnot;
 	}
 
 	public void setStopwords(IStopwords<T> stopwords)

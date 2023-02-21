@@ -82,6 +82,7 @@ class AbbreviationsTest
 		this.abbs.add("ic", "insuffisance cardiaque", tokenizer);
 		matcher.addKeyword(MockData.getICG());
 		matcher.addFuzzyAlgo(abbs);
+		matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> anns = matcher.annot("IC gauche");
 		assertEquals(anns.size(), 2);
 	}

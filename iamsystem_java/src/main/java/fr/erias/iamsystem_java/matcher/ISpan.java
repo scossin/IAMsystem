@@ -2,9 +2,10 @@ package fr.erias.iamsystem_java.matcher;
 
 import java.util.List;
 
+import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public interface ISpan<T extends IToken>
+public interface ISpan<T extends IToken> extends IOffsets
 {
 
 	/**

@@ -17,4 +17,5 @@ public interface ISpan<T extends IToken>
 	 * @return A sequence of {@link IToken} type.
 	 */
 	public List<T> get_tokens();
+
 }

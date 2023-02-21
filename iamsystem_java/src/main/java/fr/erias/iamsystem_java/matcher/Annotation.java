@@ -44,6 +44,19 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
 	}
 
 	@Override
+	public int compareTo(IAnnotation<T> o)
+	{
+		int diffStart = this.start() - o.start();
+		if (diffStart != 0)
+		{
+			return diffStart;
+		} else
+		{
+			return this.end() - o.end();
+		}
+	}
+
+	@Override
 	public IBratFormatterF formatter()
 	{
 		return this.bratFormatter;
@@ -64,6 +77,12 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
 	private String keywords2Str()
 	{
 		return this.getKeywords().stream().map(k -> k.toString()).collect(Collectors.joining(";"));
+	}
+
+	@Override
+	public INode lastState()
+	{
+		return this.lastState;
 	}
 
 	/**
