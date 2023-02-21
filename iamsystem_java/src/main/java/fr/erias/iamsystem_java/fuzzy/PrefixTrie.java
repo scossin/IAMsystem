@@ -1,4 +1,5 @@
 package fr.erias.iamsystem_java.fuzzy;
+
 // package fr.erias.iamsystem_java.tree;
 //
 // import java.util.HashSet;

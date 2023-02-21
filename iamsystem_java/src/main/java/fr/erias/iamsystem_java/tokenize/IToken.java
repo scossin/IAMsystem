@@ -8,46 +8,49 @@ import java.util.stream.Collectors;
  *
  * @author Sebastien Cossin
  */
-public interface IToken extends IOffsets, Comparable<IToken> {
+public interface IToken extends IOffsets, Comparable<IToken>
+{
 
-  /**
-   * The label as it is in the document/keyword.
-   *
-   * @return label string.
-   */
-  public String label();
+	/**
+	 * Concatenate the label of each token in the sequence.
+	 *
+	 * @param tokens An ordered sequence of tokens.
+	 * @return Labels separated by a space.
+	 */
+	public static String ConcatLabel(Collection<? extends IToken> tokens)
+	{
+		return tokens.stream().map(t -> t.label()).collect(Collectors.joining(" "));
+	}
 
-  /**
-   * The normalized label used by iamsystem's algorithm to perform entity linking.
-   *
-   * @return A normalized label string.
-   */
-  public String normLabel();
+	/**
+	 * Concatenate the normalized label of each token in the sequence.
+	 *
+	 * @param tokens An ordered sequence of tokens.
+	 * @return Normalized labels separated by a space.
+	 */
+	public static String ConcatNormLabel(Collection<? extends IToken> tokens)
+	{
+		return tokens.stream().map(t -> t.normLabel()).collect(Collectors.joining(" "));
+	}
 
-  /**
-   * Get the token index.
-   *
-   * @return the index
-   */
-  public int i();
+	/**
+	 * Get the token index.
+	 *
+	 * @return the index
+	 */
+	public int i();
 
-  /**
-   * Concatenate the normalized label of each token in the sequence.
-   *
-   * @param tokens An ordered sequence of tokens.
-   * @return Normalized labels separated by a space.
-   */
-  public static String ConcatNormLabel(Collection<? extends IToken> tokens) {
-    return tokens.stream().map(t -> t.normLabel()).collect(Collectors.joining(" "));
-  }
+	/**
+	 * The label as it is in the document/keyword.
+	 *
+	 * @return label string.
+	 */
+	public String label();
 
-  /**
-   * Concatenate the label of each token in the sequence.
-   *
-   * @param tokens An ordered sequence of tokens.
-   * @return Labels separated by a space.
-   */
-  public static String ConcatLabel(Collection<? extends IToken> tokens) {
-    return tokens.stream().map(t -> t.label()).collect(Collectors.joining(" "));
-  }
+	/**
+	 * The normalized label used by iamsystem's algorithm to perform entity linking.
+	 *
+	 * @return A normalized label string.
+	 */
+	public String normLabel();
 }

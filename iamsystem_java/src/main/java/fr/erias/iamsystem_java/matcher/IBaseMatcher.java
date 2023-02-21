@@ -1,3 +1,5 @@
 package fr.erias.iamsystem_java.matcher;
 
-public interface IBaseMatcher {}
+public interface IBaseMatcher
+{
+}

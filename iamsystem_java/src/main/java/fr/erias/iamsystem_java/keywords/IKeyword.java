@@ -5,12 +5,13 @@ package fr.erias.iamsystem_java.keywords;
  *
  * @author Sebastien Cossin
  */
-public interface IKeyword {
+public interface IKeyword
+{
 
-  /**
-   * A string to search in a document (ex: "heart failure").
-   *
-   * @return The label of keyword.
-   */
-  public String label();
+	/**
+	 * A string to search in a document (ex: "heart failure").
+	 *
+	 * @return The label of keyword.
+	 */
+	public String label();
 }

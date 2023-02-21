@@ -8,13 +8,14 @@ import java.util.List;
  * @author Sebastien Cossin
  * @param <T> A generic token.
  */
-public interface ITokenizer<T extends IToken> {
+public interface ITokenizer<T extends IToken>
+{
 
-  /**
-   * Tokenize a string.
-   *
-   * @param text an unormalized string.
-   * @return A sequence of {@link IToken} type.
-   */
-  public List<T> tokenize(String text);
+	/**
+	 * Tokenize a string.
+	 *
+	 * @param text an unormalized string.
+	 * @return A sequence of {@link IToken} type.
+	 */
+	public List<T> tokenize(String text);
 }

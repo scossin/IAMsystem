@@ -4,49 +4,59 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class SynAlgos {
+public class SynAlgos
+{
 
-  private final String syn;
-  private final Set<String> algos;
+	private final String syn;
+	private final Set<String> algos;
 
-  public SynAlgos(String syn, String algo) {
-    this.syn = syn;
-    this.algos = new HashSet<String>();
-    this.algos.add(algo);
-  }
+	public SynAlgos(String syn, String algo)
+	{
+		this.syn = syn;
+		this.algos = new HashSet<String>();
+		this.algos.add(algo);
+	}
 
-  public void addAlgo(String algo) {
-    this.algos.add(algo);
-  }
+	public void addAlgo(String algo)
+	{
+		this.algos.add(algo);
+	}
 
-  public String[] getSynToken() {
-    return syn.split(" ");
-  }
+	@Override
+	public boolean equals(Object o)
+	{
+		if (o == this)
+		{
+			return true;
+		}
 
-  public String getSyn() {
-    return syn;
-  }
+		if (!(o instanceof SynAlgos))
+		{
+			return false;
+		}
 
-  public Collection<String> getAlgos() {
-    return algos;
-  }
+		SynAlgos c = (SynAlgos) o;
+		return syn.equals(c.getSyn());
+	}
 
-  @Override
-  public boolean equals(Object o) {
-    if (o == this) {
-      return true;
-    }
+	public Collection<String> getAlgos()
+	{
+		return algos;
+	}
 
-    if (!(o instanceof SynAlgos)) {
-      return false;
-    }
+	public String getSyn()
+	{
+		return syn;
+	}
 
-    SynAlgos c = (SynAlgos) o;
-    return syn.equals(c.getSyn());
-  }
+	public String[] getSynToken()
+	{
+		return syn.split(" ");
+	}
 
-  @Override
-  public int hashCode() {
-    return syn.hashCode();
-  }
+	@Override
+	public int hashCode()
+	{
+		return syn.hashCode();
+	}
 }

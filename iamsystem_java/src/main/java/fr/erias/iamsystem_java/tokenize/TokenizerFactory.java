@@ -1,8 +1,10 @@
 package fr.erias.iamsystem_java.tokenize;
 
-public class TokenizerFactory {
+public class TokenizerFactory
+{
 
-  public static ITokenizer<IToken> getTokenizer(ETokenizer tokenizer) {
-    return tokenizer.getInstance();
-  }
+	public static ITokenizer<IToken> getTokenizer(ETokenizer tokenizer)
+	{
+		return tokenizer.getInstance();
+	}
 }

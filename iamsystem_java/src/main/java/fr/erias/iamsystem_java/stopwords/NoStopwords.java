@@ -7,15 +7,18 @@ import fr.erias.iamsystem_java.tokenize.IToken;
  *
  * @author Sebastien Cossin
  */
-public class NoStopwords implements ISimpleStopwords<IToken> {
+public class NoStopwords implements ISimpleStopwords<IToken>
+{
 
-  @Override
-  public boolean isTokenAStopword(IToken token) {
-    return false;
-  }
+	@Override
+	public boolean isStopword(String word)
+	{
+		return false;
+	}
 
-  @Override
-  public boolean isStopword(String word) {
-    return false;
-  }
+	@Override
+	public boolean isTokenAStopword(IToken token)
+	{
+		return false;
+	}
 }

@@ -8,12 +8,13 @@ import java.util.List;
  * @author Sebastien Cossin
  * @param <T> A generic/custom token type.
  */
-public interface ISpan<T extends IToken> {
+public interface ISpan<T extends IToken>
+{
 
-  /**
-   * Get the sequence of tokens.
-   *
-   * @return A sequence of {@link IToken} type.
-   */
-  public List<T> get_tokens();
+	/**
+	 * Get the sequence of tokens.
+	 *
+	 * @return A sequence of {@link IToken} type.
+	 */
+	public List<T> get_tokens();
 }

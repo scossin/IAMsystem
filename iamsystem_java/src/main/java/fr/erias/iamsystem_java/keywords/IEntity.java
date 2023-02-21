@@ -5,10 +5,11 @@ package fr.erias.iamsystem_java.keywords;
  *
  * @author Sebastien Cossin
  */
-public interface IEntity extends IKeyword {
+public interface IEntity extends IKeyword
+{
 
-  /**
-   * @return
-   */
-  public String kbid();
+	/**
+	 * @return
+	 */
+	public String kbid();
 }
