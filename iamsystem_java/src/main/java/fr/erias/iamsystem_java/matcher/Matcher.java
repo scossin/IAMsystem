@@ -18,6 +18,7 @@ import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
+import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokStopImp;
@@ -198,6 +199,11 @@ public class Matcher<T extends IToken>
 	public ITokenizer<T> getTokenizer()
 	{
 		return tokenizer;
+	}
+
+	public AbstractTokNorm<T> getTokStop()
+	{
+		return this.tokstop;
 	}
 
 	public Set<String> getUnigrams()

@@ -6,6 +6,11 @@ import java.util.stream.Collectors;
 public abstract class AbstractTokNorm<T extends IToken> implements ITokenizerStopwords<T>
 {
 
+	public static List<IToken> tokenizeRmStopwords(String text, ITokenizerStopwords<IToken> tokstop)
+	{
+		return tokstop.tokenize(text).stream().filter(t -> !tokstop.isTokenAStopword(t)).collect(Collectors.toList());
+	}
+
 	/**
 	 * Tokenize and remove tokens that are stopwords.
 	 *

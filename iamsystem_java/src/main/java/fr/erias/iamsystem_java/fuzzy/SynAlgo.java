@@ -21,4 +21,10 @@ public class SynAlgo
 	{
 		return syn;
 	}
+
+	@Override
+	public String toString()
+	{
+		return String.format("SynAlgo=(syn='%s', algo='%s')", syn, algo);
+	}
 }
