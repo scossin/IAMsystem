@@ -7,7 +7,7 @@ public enum ETokenizer
 		@Override
 		public TokenizerImp getInstance()
 		{
-			return new TokenizerImp(NormFunctions.lowerNoAccents, SplitFunctions.splitAlphaNum);
+			return new TokenizerImp(NormFunctions.normFrench, SplitFunctions.splitAlphaNum);
 		}
 	},
 	ENGLISH

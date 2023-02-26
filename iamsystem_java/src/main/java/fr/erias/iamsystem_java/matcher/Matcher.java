@@ -71,11 +71,7 @@ class Detector<T extends IToken>
 			}
 			// w_bucket stores when a state will be out-of-reach given window size
 			// 'count_not_stopword % w' has range [0 ; w-1]
-//			System.out.println("----------");
-//			System.out.println(String.format("count_not_stopword %d", count_not_stopword));
-//			System.out.println(String.format("w %d", w));
 			int wBucket = count_not_stopword % w;
-//			System.out.println(String.format("wBucket: %d", wBucket));
 			newStates.clear();
 			states2remove.clear();
 			count_not_stopword++;
@@ -157,8 +153,6 @@ class Detector<T extends IToken>
 				count++;
 			}
 		}
-		System.out.println("count:" + count);
-		System.out.println("annots size:" + annots.size());
 		Set<Integer> indices2remove;
 		if (!keepAncestors)
 		{
@@ -167,7 +161,6 @@ class Detector<T extends IToken>
 		{
 			indices2remove = shortIndices.stream().filter(i -> !ancestIndices.contains(i)).collect(Collectors.toSet());
 		}
-		System.out.println("indices2remove size:" + indices2remove.size());
 		List<IAnnotation<T>> annots2keep = new ArrayList<IAnnotation<T>>(annots.size() - indices2remove.size());
 		for (int i = 0; i < annots.size(); i++)
 		{

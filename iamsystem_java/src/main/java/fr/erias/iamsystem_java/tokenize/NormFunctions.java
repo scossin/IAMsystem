@@ -11,5 +11,6 @@ public class NormFunctions
 	public static INormalizeF rmAccents = new RemoveAccents();
 	public static INormalizeF lowerCase = (s) -> s.toLowerCase();
 	public static INormalizeF lowerNoAccents = (s) -> NormFunctions.rmAccents.normalize(s.toLowerCase());
+	public static INormalizeF normFrench = (s) -> NormFunctions.lowerNoAccents.normalize(s).replace("œ", "oe");
 	public static INormalizeF noNormalization = (s) -> s;
 }

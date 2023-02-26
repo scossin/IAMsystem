@@ -82,7 +82,7 @@ public class Main
 		matcher = new Matcher<IToken>(tokenizer, new NoStopwords());
 		matcher.addKeyword(getTerminology(Main.filename));
 		matcher.setRemoveNestedAnnot(false);
-		matcher.setW(1);
+		matcher.setW(100);
 	}
 
 	// syndrome Triple X
@@ -100,17 +100,14 @@ public class Main
 		while (iter.hasNext())
 		{
 			File file = iter.next();
-			if (!file.getName().equals("Placenta_praevia.txt"))
-			{
-				continue;
-			}
-			System.out.println(file.getName());
+//			if (!file.getName().equals("Placenta_praevia.txt"))
+//			{
+//				continue;
+//			}
+			//System.out.println(file.getName());
 			String content = Files.readString(file.toPath(), Charset.defaultCharset());
 			long startTime = System.nanoTime();
 			List<IAnnotation<IToken>> anns = matcher.annot(content);
-			for (IAnnotation<IToken> annot : anns) {
-				System.out.println(annot);
-			}
 			// for (CTcode ct : output.getCTcodes()) {
 			// System.out.println(ct.toString());
 			// w.write(ct.toString());
@@ -120,8 +117,8 @@ public class Main
 			// double mem = (double) (Runtime.getRuntime().totalMemory() -
 			// Runtime.getRuntime().freeMemory() / (1024*1024));
 			System.out.println(file.getName() + "\t" + anns.size());
-			if (count == 1000)
-				break;
+//			if (count == 1000)
+//				break;
 //			count++;
 		}
 		long endTimeAll = System.nanoTime();

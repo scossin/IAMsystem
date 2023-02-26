@@ -11,6 +11,8 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.keywords.Entity;
+import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -124,5 +126,15 @@ class MatcherTest
 		this.matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
+	}
+	
+	@Test
+	void testEdansO()
+	{
+		IEntity ent1 = new Entity("fœtal", "C1305737");
+		this.matcher.addKeyword(ent1);
+		this.matcher.setRemoveNestedAnnot(false);
+		List<IAnnotation<IToken>> anns = this.matcher.annot("foetal");
+		assertEquals(anns.size(), 1);
 	}
 }
