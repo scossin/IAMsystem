@@ -31,9 +31,9 @@ import fr.erias.iamsystem_java.tree.Trie;
 class Detector<T extends IToken>
 {
 
-	private Annotation<T> createAnnot(TransitionState<T> last_el, List<T> stopTokens)
+	private Annotation<T> createAnnot(LinkedState<T> last_el, List<T> stopTokens)
 	{
-		List<TransitionState<T>> transStates = this.toList(last_el);
+		List<LinkedState<T>> transStates = this.toList(last_el);
 		INode lastState = last_el.getNode();
 		List<T> tokens = transStates.stream().map(t -> t.getToken()).collect(Collectors.toList());
 		tokens.sort(Comparator.naturalOrder());
@@ -41,22 +41,27 @@ class Detector<T extends IToken>
 		return new Annotation<T>(tokens, algos, lastState, stopTokens);
 	}
 
+	private LinkedState<T> createStartState(INode initialState)
+	{
+		return new LinkedState<T>(null, initialState, null, null, -1);
+	}
+
 	public List<IAnnotation<T>> detect(List<T> tokens, int w, INode initialState, ISynsProvider<T> synsProvider,
 			IStopwords<T> stopwords)
 	{
 		List<IAnnotation<T>> annots = new ArrayList<IAnnotation<T>>();
-		TransitionState<T> startState = new TransitionState<T>(null, initialState, null, null);
-		int w_states_size = w + 2;
-		List<TransitionState<T>>[] w_states = new ArrayList[w_states_size];
-		for (int i = 0; i < w_states_size; i++)
-		{
-			w_states[i] = new ArrayList<TransitionState<T>>();
-		}
-		w_states[w_states_size - 2].add(startState);
-		List<TransitionState<T>> tempTransStates = w_states[w_states_size - 1];
+		// states stores linkedstate instance that keeps track of a tree path
+		// and document's tokens that matched.
+		Set<LinkedState<T>> states = new HashSet<LinkedState<T>>();
+		LinkedState<T> startState = createStartState(initialState);
+		states.add(startState);
 
+		// count_not_stopword allows a stopword-independent window size.
 		int count_not_stopword = 0;
 		List<T> stopTokens = new ArrayList<T>();
+		List<LinkedState<T>> newStates = new ArrayList<LinkedState<T>>();
+		List<LinkedState<T>> states2remove = new ArrayList<LinkedState<T>>();
+
 		for (T token : tokens)
 		{
 			if (stopwords.isTokenAStopword(token))
@@ -64,34 +69,59 @@ class Detector<T extends IToken>
 				stopTokens.add(token);
 				continue;
 			}
+			// w_bucket stores when a state will be out-of-reach given window size
+			// 'count_not_stopword % w' has range [0 ; w-1]
+//			System.out.println("----------");
+//			System.out.println(String.format("count_not_stopword %d", count_not_stopword));
+//			System.out.println(String.format("w %d", w));
+			int wBucket = count_not_stopword % w;
+//			System.out.println(String.format("wBucket: %d", wBucket));
+			newStates.clear();
+			states2remove.clear();
 			count_not_stopword++;
-			tempTransStates.clear();
-			Iterable<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, w_states);
-			for (SynAlgos synAlgo : synAlgos)
+
+			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
+
+			for (LinkedState<T> state : states)
 			{
-				for (int i = 0; i < w_states_size - 1; i++)
+				if (state.getwBucket() == wBucket)
+					states2remove.add(state);
+
+				for (SynAlgos synAlgo : synAlgos)
 				{
-					List<TransitionState<T>> transStates = w_states[i];
-					for (TransitionState<T> transState : transStates)
+					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
+					if (node == EmptyNode.EMPTYNODE)
+						continue;
+					LinkedState<T> newState = new LinkedState<T>(state, node, token, synAlgo.getAlgos(), wBucket);
+					newStates.add(newState);
+					/**
+					 * Why 'states.contains(newState)': if node_num is already in the states set, it
+					 * means an annotation was already created for this state. For example 'cancer
+					 * cancer', if an annotation was created for the first 'cancer' then we don't
+					 * want to create a new one for the second 'cancer'.
+					 */
+
+					if (node.isAfinalState() && !states.contains(newState))
 					{
-						INode node = transState.getNode().gotoNode(synAlgo.getSynToken());
-						if (node == EmptyNode.EMPTYNODE)
-							continue;
-						TransitionState<T> newTransState = new TransitionState<T>(transState, node, token,
-								synAlgo.getAlgos());
-						if (node.isAfinalState())
-						{
-							IAnnotation<T> annotation = this.createAnnot(newTransState, stopTokens);
-							annots.add(annotation);
-						}
-						tempTransStates.add(newTransState);
+						IAnnotation<T> annotation = this.createAnnot(newState, stopTokens);
+						annots.add(annotation);
 					}
 				}
 			}
-			w_states[count_not_stopword % w].clear();
-			w_states[count_not_stopword % w].addAll(tempTransStates);
-			// TODO: test performance creating tempTransStates at each iteration
-			// vs doing clear and addAll operation.
+			/**
+			 * Prepare next iteration: first loop remove out-of-reach states. Second
+			 * iteration add new states.
+			 */
+			for (LinkedState<T> state : states2remove)
+			{
+				states.remove(state);
+			}
+			for (LinkedState<T> state : newStates)
+			{
+				if (states.contains(state))
+					states.remove(state);
+				states.add(state);
+			}
 		}
 		annots.sort(Comparator.naturalOrder());
 		return annots;
@@ -101,12 +131,14 @@ class Detector<T extends IToken>
 	{
 		Set<Integer> ancestIndices = new HashSet<Integer>();
 		Set<Integer> shortIndices = new HashSet<Integer>();
-
+		int count = 0;
 		for (int i = 0; i < annots.size(); i++)
 		{
 			IAnnotation<T> annot = annots.get(i);
 			for (int y = i + 1; y < annots.size(); y++)
 			{
+				if (shortIndices.contains(y))
+					continue;
 				IAnnotation<T> other = annots.get(y);
 				if (!IOffsets.offsetsOverlap(annot, other))
 					break;
@@ -118,12 +150,15 @@ class Detector<T extends IToken>
 						ancestIndices.add(i);
 					}
 				}
-				if (Span.isShorterSpanOf(annot, other))
+				if (Span.isShorterSpanOf(other, annot))
 				{
 					shortIndices.add(y);
 				}
+				count++;
 			}
 		}
+		System.out.println("count:" + count);
+		System.out.println("annots size:" + annots.size());
 		Set<Integer> indices2remove;
 		if (!keepAncestors)
 		{
@@ -132,6 +167,7 @@ class Detector<T extends IToken>
 		{
 			indices2remove = shortIndices.stream().filter(i -> !ancestIndices.contains(i)).collect(Collectors.toSet());
 		}
+		System.out.println("indices2remove size:" + indices2remove.size());
 		List<IAnnotation<T>> annots2keep = new ArrayList<IAnnotation<T>>(annots.size() - indices2remove.size());
 		for (int i = 0; i < annots.size(); i++)
 		{
@@ -143,12 +179,12 @@ class Detector<T extends IToken>
 		return annots2keep;
 	}
 
-	private List<TransitionState<T>> toList(TransitionState<T> last_el)
+	private List<LinkedState<T>> toList(LinkedState<T> last_el)
 	{
-		List<TransitionState<T>> transStates = new ArrayList<>();
+		List<LinkedState<T>> transStates = new ArrayList<>();
 		transStates.add(last_el);
-		TransitionState<T> parent = last_el.getParent();
-		while (!TransitionState.isStartState(parent))
+		LinkedState<T> parent = last_el.getParent();
+		while (!LinkedState.isStartState(parent))
 		{
 			transStates.add(parent);
 			parent = parent.getParent();
@@ -246,9 +282,9 @@ public class Matcher<T extends IToken>
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates)
+	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
 	{
-		return synsProvider.getSynonyms(tokens, token, wStates);
+		return synsProvider.getSynonyms(tokens, token, states);
 	}
 
 	public ITokenizer<T> getTokenizer()

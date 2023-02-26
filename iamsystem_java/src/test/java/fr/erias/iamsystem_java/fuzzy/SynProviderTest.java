@@ -4,12 +4,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.erias.iamsystem_java.matcher.TransitionState;
+import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -21,7 +23,7 @@ class SynProviderTest
 	private ISynsProvider<IToken> synProvider;
 	private List<FuzzyAlgo<IToken>> fuzzyAlgos;
 	private ITokenizer<IToken> tokenizer;
-	private ArrayList<TransitionState<IToken>>[] wStates;
+	private Set<LinkedState<IToken>> states;
 
 	@BeforeEach
 	void setUp() throws Exception
@@ -30,7 +32,7 @@ class SynProviderTest
 		this.fuzzyAlgos = new ArrayList<FuzzyAlgo<IToken>>();
 		this.fuzzyAlgos.add(new ExactMatch<IToken>());
 		this.synProvider = new SynsProvider<IToken>(fuzzyAlgos);
-		this.wStates = new ArrayList[0];
+		this.states = new HashSet<LinkedState<IToken>>(0);
 	}
 
 	@Test
@@ -39,7 +41,7 @@ class SynProviderTest
 		List<IToken> tokens = this.tokenizer.tokenize("(ic) Insuffisance cardiaque");
 		assertEquals(3, tokens.size());
 		IToken ic = tokens.get(0);
-		Collection<SynAlgos> syns = this.synProvider.getSynonyms(tokens, ic, this.wStates);
+		Collection<SynAlgos> syns = this.synProvider.getSynonyms(tokens, ic, this.states);
 		assertEquals(1, syns.size());
 		for (SynAlgos synAlgos : syns)
 		{

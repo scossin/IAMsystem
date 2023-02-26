@@ -11,7 +11,7 @@ public class Span<T extends IToken> implements IOffsets, ISpan<T>
 
 	/**
 	 * True if a is the shorter span of b.
-	 * 
+	 *
 	 * @param a span a.
 	 * @param b span b.
 	 * @return True if a is the shorter span of b.

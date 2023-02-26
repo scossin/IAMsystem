@@ -46,7 +46,7 @@ public interface IOffsets
 
 	/**
 	 * True if a and b have indices in common in their range (start:end).
-	 * 
+	 *
 	 * @param a first Offset
 	 * @param b second Offset
 	 * @return True if overlaps.

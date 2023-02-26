@@ -1,8 +1,9 @@
 package fr.erias.iamsystem_java.fuzzy;
 
 import java.util.List;
+import java.util.Set;
 
-import fr.erias.iamsystem_java.matcher.TransitionState;
+import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 public abstract class ContextFreeAlgo<T extends IToken> extends FuzzyAlgo<T>
@@ -14,7 +15,7 @@ public abstract class ContextFreeAlgo<T extends IToken> extends FuzzyAlgo<T>
 	}
 
 	@Override
-	public List<SynAlgo> getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates)
+	public List<SynAlgo> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
 	{
 		return this.getSynonyms(token);
 	}

@@ -14,7 +14,7 @@ public interface IAnnotation<T extends IToken> extends ISpan<T>, Comparable<IAnn
 
 	/**
 	 * True if a is an ancestor of b.
-	 * 
+	 *
 	 * @param a Annotation a.
 	 * @param b Annotation b.
 	 * @return True if a is an ancestor of b.
@@ -52,7 +52,7 @@ public interface IAnnotation<T extends IToken> extends ISpan<T>, Comparable<IAnn
 
 	/**
 	 * Retrieve the algorithm last state containing the keywords.
-	 * 
+	 *
 	 * @return a final state.
 	 */
 	public INode lastState();

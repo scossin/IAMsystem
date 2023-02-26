@@ -4,8 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import fr.erias.iamsystem_java.matcher.TransitionState;
+import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 public class SynsProvider<T extends IToken> implements ISynsProvider<T>
@@ -19,14 +20,14 @@ public class SynsProvider<T extends IToken> implements ISynsProvider<T>
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, List<TransitionState<T>>[] wStates)
+	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
 	{
 		Map<String, SynAlgos> syn2synAlgos = new HashMap<String, SynAlgos>();
 		for (FuzzyAlgo<T> fuzzyAlgo : fuzzyAlgos)
 		{
 			// synsAlgo: multiple synonym for one algorithm.
 			// synAlgos: one synonym for multiple algorithms.
-			List<SynAlgo> synsAlgo = fuzzyAlgo.getSynonyms(tokens, token, wStates);
+			List<SynAlgo> synsAlgo = fuzzyAlgo.getSynonyms(tokens, token, states);
 
 			for (SynAlgo synAlgo : synsAlgo)
 			{
