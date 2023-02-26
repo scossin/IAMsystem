@@ -8,10 +8,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.erias.iamsystem_java.abbs.Abbreviations;
-import fr.erias.iamsystem_java.abbs.TokenIsAnAbbFactory;
-import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
-import fr.erias.iamsystem_java.fuzzy.SynAlgo;
+import fr.erias.iamsystem_java.fuzzy.abbreviations.Abbreviations;
+import fr.erias.iamsystem_java.fuzzy.abbreviations.TokenIsAnAbbFactory;
+import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;

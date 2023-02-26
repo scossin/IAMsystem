@@ -99,6 +99,16 @@ class MatcherTest
 	}
 
 	@Test
+	void testEdansO()
+	{
+		IEntity ent1 = new Entity("fœtal", "C1305737");
+		this.matcher.addKeyword(ent1);
+		this.matcher.setRemoveNestedAnnot(false);
+		List<IAnnotation<IToken>> anns = this.matcher.annot("foetal");
+		assertEquals(anns.size(), 1);
+	}
+
+	@Test
 	void testGetUnigrams()
 	{
 		this.matcher.addKeyword(MockData.getICG());
@@ -126,15 +136,5 @@ class MatcherTest
 		this.matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
-	}
-	
-	@Test
-	void testEdansO()
-	{
-		IEntity ent1 = new Entity("fœtal", "C1305737");
-		this.matcher.addKeyword(ent1);
-		this.matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> anns = this.matcher.annot("foetal");
-		assertEquals(anns.size(), 1);
 	}
 }

@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.abbs;
+package fr.erias.iamsystem_java.fuzzy.abbreviations;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import fr.erias.iamsystem_java.fuzzy.ContextFreeAlgo;
-import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
-import fr.erias.iamsystem_java.fuzzy.SynAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.ContextFreeAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;

@@ -104,7 +104,7 @@ public class Main
 //			{
 //				continue;
 //			}
-			//System.out.println(file.getName());
+			// System.out.println(file.getName());
 			String content = Files.readString(file.toPath(), Charset.defaultCharset());
 			long startTime = System.nanoTime();
 			List<IAnnotation<IToken>> anns = matcher.annot(content);

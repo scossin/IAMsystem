@@ -56,7 +56,7 @@ class SplitFunctionsTest
 		assertEquals(offsets1.start(), 4);
 		assertEquals(offsets1.end(), 7);
 	}
-	
+
 	@Test
 	void testSplitChar()
 	{

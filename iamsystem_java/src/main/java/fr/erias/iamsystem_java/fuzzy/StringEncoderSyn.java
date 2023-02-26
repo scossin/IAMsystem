@@ -13,6 +13,9 @@ import java.util.stream.Collectors;
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.StringEncoder;
 
+import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;

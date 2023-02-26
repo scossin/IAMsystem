@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 public class CacheFuzzyAlgos<T extends IToken> extends NormLabelAlgo<T>

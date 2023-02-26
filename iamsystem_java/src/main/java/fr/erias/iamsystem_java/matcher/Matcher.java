@@ -10,10 +10,10 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.fuzzy.ExactMatch;
-import fr.erias.iamsystem_java.fuzzy.FuzzyAlgo;
-import fr.erias.iamsystem_java.fuzzy.ISynsProvider;
-import fr.erias.iamsystem_java.fuzzy.SynAlgos;
-import fr.erias.iamsystem_java.fuzzy.SynsProvider;
+import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
+import fr.erias.iamsystem_java.fuzzy.base.SynsProvider;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;

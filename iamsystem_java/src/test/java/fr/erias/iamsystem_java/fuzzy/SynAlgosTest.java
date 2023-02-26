@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
+
 class SynAlgosTest
 {
 

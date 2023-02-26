@@ -1,6 +1,9 @@
 package fr.erias.iamsystem_java.matcher;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -19,25 +22,27 @@ import fr.erias.iamsystem_java.tree.Trie;
 class LinkedStateTest
 {
 
+	static LinkedState<IToken> createState(LinkedState<IToken> parent, INode node, Token token)
+	{
+		List<String> algos = Arrays.asList();
+		return new LinkedState<IToken>(parent, node, token, algos, 0);
+	}
+
 	private LinkedState<IToken> stateIns;
+
 	private LinkedState<IToken> stateCard;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
-		Token tokenIns = new Token(0,0,"insuffisance","insuffisance", 0);
-		Token tokenCard = new Token(1,1,"cardiaque","cardiaque", 1);
+		Token tokenIns = new Token(0, 0, "insuffisance", "insuffisance", 0);
+		Token tokenCard = new Token(1, 1, "cardiaque", "cardiaque", 1);
 		Trie trie = new Trie();
 		INode initialState = trie.getInitialState();
 		Node nodeIns = new Node("insuffisance", initialState, 1);
 		Node nodeCard = new Node("cardiaque", nodeIns, 2);
 		this.stateIns = createState(null, nodeIns, tokenIns);
 		this.stateCard = createState(stateIns, nodeCard, tokenCard);
-	}
-	
-	static LinkedState<IToken> createState(LinkedState<IToken> parent, INode node, Token token) {
-		List<String> algos = Arrays.asList();
-		return new LinkedState<IToken>(parent, node, token, algos, 0);
 	}
 
 	@Test
@@ -54,7 +59,7 @@ class LinkedStateTest
 		states.add(stateIns);
 		assertTrue(states.contains(otherStateSameNum));
 	}
-	
+
 	@Test
 	void testsStartState()
 	// A start state has a null parent.

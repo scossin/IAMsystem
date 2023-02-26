@@ -152,13 +152,7 @@ public class Node implements INode
 	}
 
 	@Override
-	public INode gotoNode(String token)
-	{
-		return childNodes.getOrDefault(token, EmptyNode.EMPTYNODE);
-	}
-
-	@Override
-	public INode gotoNode(String[] tokens)
+	public INode gotoNode(Collection<String> tokens)
 	{
 		INode node = this;
 		for (String token : tokens)
@@ -167,9 +161,15 @@ public class Node implements INode
 		}
 		return (node);
 	}
-	
+
 	@Override
-	public INode gotoNode(Collection<String> tokens)
+	public INode gotoNode(String token)
+	{
+		return childNodes.getOrDefault(token, EmptyNode.EMPTYNODE);
+	}
+
+	@Override
+	public INode gotoNode(String[] tokens)
 	{
 		INode node = this;
 		for (String token : tokens)

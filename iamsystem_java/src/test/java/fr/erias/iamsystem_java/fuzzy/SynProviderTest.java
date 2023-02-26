@@ -11,6 +11,10 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
+import fr.erias.iamsystem_java.fuzzy.base.SynsProvider;
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IToken;

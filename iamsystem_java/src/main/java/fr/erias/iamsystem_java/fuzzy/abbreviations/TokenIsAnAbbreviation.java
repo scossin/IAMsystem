@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.abbs;
+package fr.erias.iamsystem_java.fuzzy.abbreviations;
 
 import fr.erias.iamsystem_java.tokenize.IToken;
 

@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.fuzzy;
+package fr.erias.iamsystem_java.fuzzy.base;
 
 import java.util.Collection;
 import java.util.HashMap;

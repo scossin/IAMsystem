@@ -11,6 +11,8 @@ import org.apache.commons.codec.language.bm.BeiderMorseEncoder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
+
 class StringEncoderTest
 {
 

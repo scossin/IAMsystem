@@ -61,6 +61,8 @@ public interface INode
 	 */
 	public String getToken();
 
+	public INode gotoNode(Collection<String> tokens);
+
 	/**
 	 * From this node go to another node with child relations
 	 *
@@ -76,8 +78,6 @@ public interface INode
 	 * @return a {@link Node} if a path exists in the trie or the {@link EmptyNode}
 	 */
 	public INode gotoNode(String[] tokens);
-	
-	public INode gotoNode(Collection<String> tokens);
 
 	/**
 	 * Check if, from this node, a transition is possible to another node. Each node
