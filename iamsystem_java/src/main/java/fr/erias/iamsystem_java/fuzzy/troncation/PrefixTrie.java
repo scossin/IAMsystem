@@ -26,7 +26,7 @@ public class PrefixTrie
 
 	/**
 	 * Approximate String algorithm based on the prefix of a token
-	 * 
+	 *
 	 * @param minPrefixLength minimum number of characters of the prefix/token <br>
 	 *                        Ignore all token that has length below minPrefixLength
 	 */
@@ -50,7 +50,7 @@ public class PrefixTrie
 
 	/**
 	 * Retrieve the character tokenizer
-	 * 
+	 *
 	 * @return a tokenizer
 	 */
 	public ITokenizer<IToken> getCharTokenizer()
@@ -60,7 +60,7 @@ public class PrefixTrie
 
 	/**
 	 * Retrieve the tree storing the characters
-	 * 
+	 *
 	 * @return {@link Trie}
 	 */
 	public Trie getTrie()
@@ -70,7 +70,7 @@ public class PrefixTrie
 
 	/**
 	 * Check if token length is greater than the minimum size
-	 * 
+	 *
 	 * @param token a document from the document
 	 * @return true if greater or equal to the minimum size
 	 */

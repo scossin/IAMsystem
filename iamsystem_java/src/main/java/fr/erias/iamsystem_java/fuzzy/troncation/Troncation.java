@@ -75,7 +75,7 @@ public class Troncation<T extends IToken> extends NormLabelAlgo<T>
 	/**
 	 * Fuzzy string matching algorithm to find tokens in the terminology that ends
 	 * by the token (truncated word) in the document
-	 * 
+	 *
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
 	 *                    unique tokens in the terminology in a trie
 	 * @param maxDistance maximum number of character between the prefix and a

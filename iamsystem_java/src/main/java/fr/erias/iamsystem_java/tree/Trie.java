@@ -96,7 +96,7 @@ public class Trie
 
 	/**
 	 * Add a keyword by its label.
-	 * 
+	 *
 	 * @param keyword a keyword label.
 	 * @param tokstop
 	 */
