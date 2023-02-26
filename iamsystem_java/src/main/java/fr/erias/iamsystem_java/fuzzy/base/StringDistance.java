@@ -10,7 +10,7 @@ public abstract class StringDistance<T extends IToken> extends NormLabelAlgo<T>
 
 	/**
 	 * Build a string distance fuzzy algorithm.
-	 * 
+	 *
 	 * @param name      algorithm's name
 	 * @param minNbChar the minimum number of characters a word must have in order
 	 *                  not to be ignored.

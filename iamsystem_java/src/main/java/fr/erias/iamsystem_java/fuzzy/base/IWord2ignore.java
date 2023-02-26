@@ -12,7 +12,7 @@ public interface IWord2ignore
 	/**
 	 * Check if a string distance algorithm should ignore this word to avoid a false
 	 * positive.
-	 * 
+	 *
 	 * @param word a word to test
 	 * @return True if the word should be ignored.
 	 */
