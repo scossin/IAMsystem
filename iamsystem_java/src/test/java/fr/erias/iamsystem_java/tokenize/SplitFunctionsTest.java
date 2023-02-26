@@ -56,4 +56,14 @@ class SplitFunctionsTest
 		assertEquals(offsets1.start(), 4);
 		assertEquals(offsets1.end(), 7);
 	}
+	
+	@Test
+	void testSplitChar()
+	{
+		List<IOffsets> offsets = SplitFunctions.splitChar.split("one two");
+		assertEquals(6, offsets.size());
+		IOffsets offsets1 = offsets.get(0);
+		assertEquals(offsets1.start(), 0);
+		assertEquals(offsets1.end(), 1);
+	}
 }

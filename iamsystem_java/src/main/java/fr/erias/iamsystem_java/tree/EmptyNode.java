@@ -82,6 +82,12 @@ public class EmptyNode implements INode
 	}
 
 	@Override
+	public INode gotoNode(Collection<String> tokens)
+	{
+		return EMPTYNODE;
+	}
+	
+	@Override
 	public INode gotoNode(String[] tokens)
 	{
 		return EMPTYNODE;

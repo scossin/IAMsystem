@@ -167,6 +167,17 @@ public class Node implements INode
 		}
 		return (node);
 	}
+	
+	@Override
+	public INode gotoNode(Collection<String> tokens)
+	{
+		INode node = this;
+		for (String token : tokens)
+		{
+			node = node.gotoNode(token);
+		}
+		return (node);
+	}
 
 	@Override
 	public int hashCode()

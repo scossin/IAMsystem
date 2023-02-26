@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
+import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
@@ -66,6 +67,16 @@ public class Trie
 				.collect(Collectors.toList());
 		addIKeyword(keyword, stringSeq);
 	}
+	
+	/**
+	 * Add a keyword by its label.
+	 * @param keyword a keyword label. 
+	 * @param tokstop 
+	 */
+	public void addKeyword(String keyword, AbstractTokNorm<? extends IToken> tokstop) {
+		Keyword kw = new Keyword(keyword);
+		addIKeyword(kw, tokstop);
+	}
 
 	/**
 	 * Add a keyword of a keywordinology.
@@ -92,6 +103,8 @@ public class Trie
 		}
 		currentNode.addKeyword(keyword);
 	}
+	
+
 
 	/**
 	 * add every keyword of a keywordinology
