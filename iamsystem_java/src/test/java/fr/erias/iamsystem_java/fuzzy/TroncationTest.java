@@ -28,7 +28,7 @@ class TroncationTest
 				new NoStopwords());
 		matcher.addKeyword(MockData.getICG());
 		trie.addToken(matcher.getUnigrams());
-		Troncation<IToken> troncation = new Troncation<IToken>(trie, maxDistance);
+		Troncation<IToken> troncation = new Troncation<IToken>("troncation", trie, maxDistance);
 		return troncation;
 	}
 
@@ -53,7 +53,7 @@ class TroncationTest
 				new NoStopwords());
 		matcher.addKeyword(MockData.getICG());
 		trie.addToken(matcher.getUnigrams());
-		Troncation<IToken> troncation = new Troncation<IToken>(trie, 2);
+		Troncation<IToken> troncation = new Troncation<IToken>("troncation", trie, 2);
 		matcher.addFuzzyAlgo(troncation);
 		matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation<IToken>> annots = matcher.annot("insuffisan cardiaq gauc");

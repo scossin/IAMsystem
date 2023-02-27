@@ -3,6 +3,7 @@ package fr.erias.iamsystem_java.fuzzy.levenshtein;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +29,20 @@ class LevenshteinTest
 	@BeforeEach
 	void setUp() throws Exception
 	{
+	}
+
+	@Test
+	void testAscendingOrder()
+	// Check it works even if words not in ascending order.
+
+	{
+		int maxdistance = 1;
+		List<String> unigrams = Arrays.asList("insuffisance", "cardiaque");
+		unigrams.sort(Comparator.naturalOrder());
+		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
+		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", 5, transducer);
+		List<SynAlgo> syns = leven.getSynsOfWord("insuffisanse");
+		assertEquals(1, syns.size());
 	}
 
 	@Test

@@ -1,6 +1,8 @@
 package fr.erias.iamsystem_java.fuzzy.levenshtein;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -24,8 +26,11 @@ public class Levenshtein<T extends IToken> extends StringDistance<T>
 	public static ITransducer<Candidate> buildTransuder(int maxDistance, Collection<String> unigrams,
 			Algorithm algorithm)
 	{
+		// unigrams must be ordered.
+		List<String> unigramsOrdered = new ArrayList<String>(unigrams);
+		unigramsOrdered.sort(Comparator.naturalOrder());
 		ITransducer<Candidate> transducer = new TransducerBuilder().algorithm(algorithm).defaultMaxDistance(maxDistance)
-				.dictionary(unigrams, true).build();
+				.dictionary(unigramsOrdered, true).build();
 		return transducer;
 	}
 

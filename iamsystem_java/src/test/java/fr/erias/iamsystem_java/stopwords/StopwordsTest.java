@@ -47,7 +47,7 @@ class StopwordsTest
 		List<String> words = new ArrayList<String>();
 		words.add("le");
 		words.add("la");
-		ISimpleStopwords<IToken> stopwords = new Stopwords(words);
+		ISimpleStopwords<IToken> stopwords = new Stopwords<IToken>(words);
 		assertTrue(stopwords.isStopword("le"));
 		assertTrue(!stopwords.isStopword("insuffisance"));
 	}

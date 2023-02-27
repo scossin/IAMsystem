@@ -14,7 +14,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
-public class ClosestSubString<T extends IToken> extends NormLabelAlgo<IToken>
+public class ClosestSubString<T extends IToken> extends NormLabelAlgo<T>
 {
 
 	private final PrefixTrie prefixTrie;
@@ -24,7 +24,7 @@ public class ClosestSubString<T extends IToken> extends NormLabelAlgo<IToken>
 	 * Fuzzy matching algorithm that finds the closest token substring, in the all
 	 * terminology, of a token in a document Ex: term is "high blood pressure" ;
 	 * token is 'pressures' ; the closest substring is 'pressure' Complexity is O(1)
-	 * 
+	 *
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
 	 *                    unique tokens in the terminology in a trie
 	 * @param maxDistance the maximum number of characters between the closest

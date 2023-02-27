@@ -81,9 +81,9 @@ public class Troncation<T extends IToken> extends NormLabelAlgo<T>
 	 * @param maxDistance maximum number of character between the prefix and a
 	 *                    string (ex: diabet --- diabetes ; 2 char)
 	 */
-	public Troncation(PrefixTrie prefixTrie, int maxDistance)
+	public Troncation(String name, PrefixTrie prefixTrie, int maxDistance)
 	{
-		super("Troncation");
+		super(name);
 		this.prefixTrie = prefixTrie;
 		this.maxDistance = maxDistance;
 	}

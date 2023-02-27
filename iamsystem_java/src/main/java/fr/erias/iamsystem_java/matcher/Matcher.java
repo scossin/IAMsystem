@@ -9,21 +9,39 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.github.liblevenshtein.transducer.Algorithm;
+import com.github.liblevenshtein.transducer.Candidate;
+import com.github.liblevenshtein.transducer.ITransducer;
+
+import fr.erias.iamsystem_java.fuzzy.CacheFuzzyAlgos;
 import fr.erias.iamsystem_java.fuzzy.ExactMatch;
+import fr.erias.iamsystem_java.fuzzy.abbreviations.Abbreviations;
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
+import fr.erias.iamsystem_java.fuzzy.base.IWord2ignore;
+import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
+import fr.erias.iamsystem_java.fuzzy.base.SimpleWords2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.fuzzy.base.SynsProvider;
+import fr.erias.iamsystem_java.fuzzy.closestSubString.ClosestSubString;
+import fr.erias.iamsystem_java.fuzzy.levenshtein.Levenshtein;
+import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
+import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
+import fr.erias.iamsystem_java.stopwords.NegativeStopwords;
+import fr.erias.iamsystem_java.stopwords.NoStopwords;
+import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
+import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokStopImp;
+import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 import fr.erias.iamsystem_java.tree.Trie;
@@ -190,6 +208,181 @@ class Detector<T extends IToken>
 public class Matcher<T extends IToken>
 		implements IMatcher<T>, IStoreKeywords, ITokenizer<T>, IStopwords<T>, ISynsProvider<T>
 {
+
+	public static class Builder<T extends IToken>
+	{
+
+		private ITokenizer<T> tokenizer;
+		private IStopwords<T> stopwords;
+		private Collection<IKeyword> keywords = new ArrayList<IKeyword>();
+		private int w = 1;
+		private boolean removeNestedAnnot = true;
+		private IWord2ignore word2ignore = new NoWord2ignore();
+		private List<String> shortForms = new ArrayList<String>();
+		private List<String> longForms = new ArrayList<String>();
+		private int minNbcharLeven;
+		private int maxDistanceLeven;
+		private Algorithm algorithmLeven;
+		private boolean negativeStopwords = false;
+		private int minPrefixLengthClosest = -1;
+		private int maxDistanceClosest = -1;
+		private int minPrefixLengthTroncation;
+		private int maxDistanceTroncation;
+
+		public Builder()
+		{
+		}
+
+		public Builder<T> abbreviations(String shortForm, String longForm)
+		{
+			this.shortForms.add(shortForm);
+			this.longForms.add(longForm);
+			return this;
+		}
+
+		public Matcher<? extends IToken> build()
+		{
+			ITokenizer<T> tokenizer = (this.tokenizer != null) ? this.tokenizer
+					: (ITokenizer<T>) TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+			IStopwords<T> stopwords = (this.stopwords != null) ? this.stopwords : (IStopwords<T>) new NoStopwords();
+			Matcher<T> matcher = new Matcher<T>(tokenizer, stopwords);
+			matcher.setW(this.w);
+			matcher.setRemoveNestedAnnot(this.removeNestedAnnot);
+			matcher.addKeyword(this.keywords);
+			if (this.negativeStopwords)
+			{
+				matcher.setStopwords(new NegativeStopwords<T>());
+			}
+			CacheFuzzyAlgos<T> cache = new CacheFuzzyAlgos<T>("cache");
+			matcher.addFuzzyAlgo(cache);
+			if (this.algorithmLeven != null)
+			{
+				ITransducer<Candidate> transducer = Levenshtein.buildTransuder(this.maxDistanceLeven, matcher,
+						this.algorithmLeven);
+				Levenshtein<T> leven = new Levenshtein<T>("levenshtein", this.minNbcharLeven, word2ignore, transducer);
+				cache.addFuzzyAlgo(leven);
+			}
+			if (this.shortForms.size() != 0)
+			{
+
+				Abbreviations<T> abbs = new Abbreviations<T>("abbs");
+				matcher.addFuzzyAlgo(abbs);
+				for (int i = 0; i < this.shortForms.size(); i++)
+				{
+					String shortForm = this.shortForms.get(i);
+					String longForm = this.longForms.get(i);
+					abbs.add(shortForm, longForm, matcher);
+				}
+			}
+			if (this.minPrefixLengthClosest != -1)
+			{
+				PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
+				trie.addToken(matcher.getUnigrams());
+				ClosestSubString<T> closest = new ClosestSubString<T>("closest", trie, this.maxDistanceClosest);
+				cache.addFuzzyAlgo(closest);
+			}
+
+			if (this.minPrefixLengthTroncation != -1)
+			{
+				PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
+				trie.addToken(matcher.getUnigrams());
+				Troncation<T> troncation = new Troncation<T>("troncation", trie, this.maxDistanceTroncation);
+				cache.addFuzzyAlgo(troncation);
+			}
+			return matcher;
+		}
+
+		public Builder<T> closestSubString(int minPrefixLength, int maxDistance)
+		{
+			this.minPrefixLengthClosest = minPrefixLength;
+			this.maxDistanceClosest = maxDistance;
+			return this;
+		}
+
+		public Builder<T> keywords(Collection<IKeyword> keywords)
+		{
+			keywords.addAll(keywords);
+			return this;
+		}
+
+		public Builder<T> keywords(String... labels)
+		{
+			for (String label : labels)
+			{
+				IKeyword kw = new Keyword(label);
+				this.keywords.add(kw);
+			}
+			return this;
+		}
+
+		public Builder<T> levenshtein(int minNbChar, int maxDistance, Algorithm algorithm)
+		{
+			this.minNbcharLeven = minNbChar;
+			this.maxDistanceLeven = maxDistance;
+			this.algorithmLeven = algorithm;
+			return this;
+		}
+
+		public Builder<T> negativeStopwords(boolean negativeStopwords)
+		{
+			this.negativeStopwords = negativeStopwords;
+			return this;
+		}
+
+		public Builder<T> stopwords(Collection<String> stopwords)
+		{
+			this.stopwords = new Stopwords<T>(stopwords);
+			return this;
+		}
+
+		public Builder<T> stopwords(IStopwords<T> stopwords)
+		{
+			this.stopwords = stopwords;
+			return this;
+		}
+
+		public Builder<T> stopwords(String... words)
+		{
+			Stopwords<T> stopwords = new Stopwords<T>();
+			for (String stopword : words)
+			{
+				stopwords.add(stopword);
+			}
+			this.stopwords = stopwords;
+			return this;
+		}
+
+		public Builder<T> stringDistanceWords2ignore(Collection<String> words2ignore)
+		{
+			this.word2ignore = new SimpleWords2ignore(words2ignore);
+			return this;
+		}
+
+		public Builder<T> tokenizer(ITokenizer<T> tokenizer)
+		{
+			this.tokenizer = tokenizer;
+			return this;
+		}
+
+		public Builder<T> troncation(int minPrefixLength, int maxDistance)
+		{
+			this.minPrefixLengthTroncation = minPrefixLength;
+			this.maxDistanceTroncation = maxDistance;
+			return this;
+		}
+
+		public Builder<T> w(boolean removeNestedAnnot)
+		{
+			this.removeNestedAnnot = removeNestedAnnot;
+			return this;
+		}
+
+		public Builder<T> w(int w)
+		{
+			this.w = w;
+			return this;
+		}
+	}
 
 	private ITokenizer<T> tokenizer;
 	private IStopwords<T> stopwords;
