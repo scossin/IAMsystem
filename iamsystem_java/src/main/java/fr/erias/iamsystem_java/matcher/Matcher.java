@@ -15,13 +15,12 @@ import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
-import fr.erias.iamsystem_java.tokenize.TokStopImp;
+import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 import fr.erias.iamsystem_java.tree.Trie;
 
-public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords, ISynsProvider
+public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, ISynsProvider
 {
 
 	private ITokenizer tokenizer;
@@ -31,7 +30,6 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords
 	private final Trie trie = new Trie();
 	private Terminology termino = new Terminology();
 	private boolean removeNestedAnnot = true;
-	private TokStopImp tokstop; // TODO set stopwords/tokenizer
 	private List<FuzzyAlgo> fuzzyAlgos = new ArrayList<FuzzyAlgo>();
 	private SynsProvider synsProvider;
 
@@ -40,7 +38,6 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords
 		this.setTokenizer(tokenizer);
 		this.setStopwords(stopwords);
 		this.detector = new Detector();
-		this.tokstop = new TokStopImp(tokenizer, stopwords);
 		fuzzyAlgos.add(new ExactMatch());
 		this.synsProvider = new SynsProvider(fuzzyAlgos);
 	}
@@ -54,7 +51,7 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords
 	public void addKeyword(IKeyword keyword)
 	{
 		termino.addKeyword(keyword);
-		trie.addIKeyword(keyword, tokstop);
+		trie.addIKeyword(keyword, this);
 	}
 
 	public void addKeyword(Iterable<? extends IKeyword> keywords)
@@ -118,14 +115,9 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords
 		return tokenizer;
 	}
 
-	public AbstractTokNorm getTokStop()
-	{
-		return this.tokstop;
-	}
-
 	public Set<String> getUnigrams()
 	{
-		return IStoreKeywords.getUnigrams(this.getKeywords(), tokstop);
+		return IStoreKeywords.getUnigrams(this.getKeywords(), this);
 	}
 
 	public int getW()

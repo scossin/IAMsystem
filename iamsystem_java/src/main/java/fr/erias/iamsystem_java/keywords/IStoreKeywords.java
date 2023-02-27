@@ -5,11 +5,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fr.erias.iamsystem_java.stopwords.IStopwords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
+import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 
 public interface IStoreKeywords
 {
+
+	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, ITokenizer tokenizer, IStopwords stopwords)
+	{
+		Set<String> unigrams = new HashSet<String>();
+
+		for (IKeyword kw : keywords)
+		{
+			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokenizer, stopwords).stream()
+					.forEach(t -> unigrams.add(t.normLabel()));
+		}
+		return unigrams;
+	}
 
 	/**
 	 * Get all the unigrams (single words excluding stopwords) in the keywords.
@@ -19,13 +31,14 @@ public interface IStoreKeywords
 	 * @param stopwords a {@link IStopwords}
 	 * @return
 	 */
-	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, AbstractTokNorm toknorm)
+	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, ITokenizerStopwords tokstop)
 	{
 		Set<String> unigrams = new HashSet<String>();
 
 		for (IKeyword kw : keywords)
 		{
-			toknorm.tokenizeRmStopwords(kw.label()).stream().forEach(t -> unigrams.add(t.normLabel()));
+			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokstop).stream()
+					.forEach(t -> unigrams.add(t.normLabel()));
 		}
 		return unigrams;
 	}

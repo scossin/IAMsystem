@@ -6,24 +6,9 @@ import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Keyword;
-import fr.erias.iamsystem_java.stopwords.IStopwords;
-import fr.erias.iamsystem_java.stopwords.Stopwords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.ITokenizer;
-import fr.erias.iamsystem_java.tokenize.TokStopImp;
-import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
 public class MockData
 {
-
-	public static AbstractTokNorm getFrenchTokStop()
-	{
-		ITokenizer tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		IStopwords stopwords = new Stopwords();
-		AbstractTokNorm tokstop = new TokStopImp(tokenizer, stopwords);
-		return (tokstop);
-	}
 
 	public static Iterable<IEntity> getICG()
 	{

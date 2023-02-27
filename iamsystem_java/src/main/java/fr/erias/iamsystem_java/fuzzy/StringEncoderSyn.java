@@ -16,9 +16,6 @@ import org.apache.commons.codec.StringEncoder;
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
-import fr.erias.iamsystem_java.keywords.IKeyword;
-import fr.erias.iamsystem_java.keywords.IStoreKeywords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 
 /**
  *
@@ -82,12 +79,6 @@ public class StringEncoderSyn extends NormLabelAlgo
 			}
 			encoding2tokens.get(encodedString).add(token);
 		}
-	}
-
-	public void addTerminology(Iterable<IKeyword> keywords, AbstractTokNorm toknorm) throws EncoderException
-	{
-		Set<String> tokens = IStoreKeywords.getUnigrams(keywords, toknorm);
-		add(tokens);
 	}
 
 	private Collection<String> encodedStrSplit(String encoded)

@@ -3,6 +3,7 @@ package fr.erias.iamsystem_java.fuzzy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
+import java.util.Set;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.Caverphone1;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
+import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
@@ -53,7 +55,8 @@ class CacheFuzzyAlgosTest
 	void testMatcher() throws EncoderException
 	{
 		StringEncoderSyn stringEncoder = new StringEncoderSyn(new Caverphone1(), 5);
-		stringEncoder.addTerminology(this.matcher.getKeywords(), this.matcher.getTokStop());
+		Set<String> unigrams = IStoreKeywords.getUnigrams(this.matcher.getKeywords(), this.matcher);
+		stringEncoder.add(unigrams);
 		this.cache.addFuzzyAlgo(stringEncoder);
 		this.matcher.setRemoveNestedAnnot(false);
 		List<IAnnotation> anns = this.matcher.annot("insuffizzzance cardiaqu gauch");

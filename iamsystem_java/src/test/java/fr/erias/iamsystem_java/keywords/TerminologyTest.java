@@ -13,10 +13,8 @@ import org.junit.jupiter.api.Test;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
-import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
 class TerminologyTest
@@ -47,11 +45,10 @@ class TerminologyTest
 	{
 		IStopwords stopwords = new NoStopwords();
 		ITokenizer tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		AbstractTokNorm toknorm = new TokStopImp(tokenizer, stopwords);
 		Terminology termino = new Terminology();
 		termino.addKeyword(icg);
 		termino.addKeyword(icg);
-		Set<String> unigrams = IStoreKeywords.getUnigrams(termino, toknorm);
+		Set<String> unigrams = IStoreKeywords.getUnigrams(termino, tokenizer, stopwords);
 		assertEquals(3, unigrams.size());
 	}
 
@@ -62,11 +59,10 @@ class TerminologyTest
 		words.add("insuffisance");
 		IStopwords stopwords = new Stopwords(words);
 		ITokenizer tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		AbstractTokNorm toknorm = new TokStopImp(tokenizer, stopwords);
 		Terminology termino = new Terminology();
 		termino.addKeyword(icg);
 		termino.addKeyword(icg);
-		Set<String> unigrams = IStoreKeywords.getUnigrams(termino, toknorm);
+		Set<String> unigrams = IStoreKeywords.getUnigrams(termino, tokenizer, stopwords);
 		assertEquals(2, unigrams.size());
 	}
 

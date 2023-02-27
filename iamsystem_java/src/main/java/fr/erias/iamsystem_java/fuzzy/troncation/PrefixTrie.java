@@ -1,13 +1,13 @@
 package fr.erias.iamsystem_java.fuzzy.troncation;
 
 import java.util.Collection;
+import java.util.List;
 
-import fr.erias.iamsystem_java.stopwords.NoStopwords;
-import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
+import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
+import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 import fr.erias.iamsystem_java.tokenize.NormFunctions;
 import fr.erias.iamsystem_java.tokenize.SplitFunctions;
-import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerImp;
 import fr.erias.iamsystem_java.tree.Trie;
 
@@ -15,13 +15,12 @@ import fr.erias.iamsystem_java.tree.Trie;
  * @author Sebastien Cossin
  *
  */
-public class PrefixTrie
+public class PrefixTrie implements ITokenizerStopwords
 {
 
 	private final int minPrefixLength;
 	private final Trie trie;
 	private final ITokenizer charTokenizer;
-	private final AbstractTokNorm toknorm;
 
 	/**
 	 * Approximate String algorithm based on the prefix of a token
@@ -34,7 +33,6 @@ public class PrefixTrie
 		this.minPrefixLength = minPrefixLength;
 		this.trie = new Trie();
 		this.charTokenizer = new TokenizerImp(NormFunctions.rmAccents, SplitFunctions.splitChar);
-		this.toknorm = new TokStopImp(charTokenizer, new NoStopwords());
 	}
 
 	public void addToken(Collection<String> tokens)
@@ -44,7 +42,7 @@ public class PrefixTrie
 
 	public void addToken(String token)
 	{
-		trie.addKeyword(token, toknorm);
+		trie.addKeyword(token, this);
 	}
 
 	/**
@@ -65,6 +63,18 @@ public class PrefixTrie
 	public Trie getTrie()
 	{
 		return (this.trie);
+	}
+
+	@Override
+	public boolean isTokenAStopword(IToken token)
+	{
+		return false;
+	}
+
+	@Override
+	public List<IToken> tokenize(String text)
+	{
+		return this.charTokenizer.tokenize(text);
 	}
 
 	/**

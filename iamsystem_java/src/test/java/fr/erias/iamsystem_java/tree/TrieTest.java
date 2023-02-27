@@ -5,33 +5,39 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
+import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
+import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 import fr.erias.iamsystem_java.tokenize.NormFunctions;
 import fr.erias.iamsystem_java.tokenize.SplitFunctions;
-import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.tokenize.TokenizerImp;
 import fr.erias.iamsystem_java.utils.MockData;
 
-class TrieTest
+class TrieTest implements ITokenizerStopwords
 {
 
 	private ITokenizer tokenizer;
 	private Stopwords stopwords;
-	private TokStopImp tokstop;
+
+	@Override
+	public boolean isTokenAStopword(IToken token)
+	{
+		return this.stopwords.isTokenAStopword(token);
+	}
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
 		this.stopwords = new Stopwords();
-		this.tokstop = new TokStopImp(tokenizer, stopwords);
 	}
 
 	@Test
@@ -39,7 +45,7 @@ class TrieTest
 	{
 		// Go to insuffisance node and checks it's not a final state.
 		Trie trie = new Trie();
-		trie.addKeywords(MockData.getICG(), tokstop);
+		trie.addKeywords(MockData.getICG(), this);
 		assertFalse(trie.getInitialState().isAfinalState());
 		INode insuffisance = trie.getInitialState().gotoNode("insuffisance");
 		assertFalse(insuffisance == EmptyNode.EMPTYNODE);
@@ -52,7 +58,7 @@ class TrieTest
 		// remove all string to check no transition(only the root node is present).
 		Trie trie = new Trie();
 		this.stopwords.add(Arrays.asList("insuffisance", "cardiaque", "gauche"));
-		trie.addKeywords(MockData.getICG(), tokstop);
+		trie.addKeywords(MockData.getICG(), this);
 		assertEquals(trie.getNumberOfNodes(), 1);
 	}
 
@@ -61,11 +67,9 @@ class TrieTest
 	{
 		// Check tokens stored depend on the normalizing function of tokenizer.
 		Trie trie = new Trie();
-		ITokenizer tokenizer = new TokenizerImp(NormFunctions.noNormalization, SplitFunctions.splitAlphaNum);
-		TokStopImp tokstop = new TokStopImp(tokenizer, stopwords);
-		trie.addKeywords(MockData.getICG(), tokstop);
+		this.tokenizer = new TokenizerImp(NormFunctions.noNormalization, SplitFunctions.splitAlphaNum);
+		trie.addKeywords(MockData.getICG(), this);
 		assertEquals(trie.getNumberOfNodes(), 4);
-		System.out.println();
 		assertTrue(!trie.getInitialState().hasTransitionTo("insuffisance"));
 		assertTrue(trie.getInitialState().hasTransitionTo("Insuffisance"));
 	}
@@ -75,7 +79,7 @@ class TrieTest
 	{
 		// insuffisance ventriculaire gauche': START_TOKEN -> 'insuffisance'
 		Trie trie = new Trie();
-		trie.addKeywords(MockData.getICG(), tokstop);
+		trie.addKeywords(MockData.getICG(), this);
 		assertTrue(trie.getInitialState().hasTransitionTo("insuffisance"));
 	}
 
@@ -93,7 +97,7 @@ class TrieTest
 		// Number of tokens in keywords.
 		Trie trie = new Trie();
 		assertEquals(trie.getNumberOfNodes(), 1);
-		trie.addKeywords(MockData.getICG(), tokstop);
+		trie.addKeywords(MockData.getICG(), this);
 		assertEquals(trie.getNumberOfNodes(), 4);
 	}
 
@@ -103,8 +107,14 @@ class TrieTest
 		// remove insuffisance to check transition is to next token 'cardiaque'.
 		Trie trie = new Trie();
 		this.stopwords.add(Arrays.asList("insuffisance"));
-		trie.addKeywords(MockData.getICG(), tokstop);
+		trie.addKeywords(MockData.getICG(), this);
 		assertTrue(!trie.getInitialState().hasTransitionTo("insuffisance"));
 		assertTrue(trie.getInitialState().hasTransitionTo("cardiaque"));
+	}
+
+	@Override
+	public List<IToken> tokenize(String text)
+	{
+		return this.tokenizer.tokenize(text);
 	}
 }
