@@ -67,9 +67,9 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 	 *
 	 * @param keywords A collection of keywords to add.
 	 */
-	public void addKeyword(String[] keywords)
+	public void addKeyword(String...labels)
 	{
-		for (String kw : keywords)
+		for (String kw : labels)
 		{
 			Keyword k = new Keyword(kw);
 			this.addKeyword(k);
