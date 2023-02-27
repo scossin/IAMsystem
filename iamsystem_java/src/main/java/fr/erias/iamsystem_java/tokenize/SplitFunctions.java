@@ -6,7 +6,7 @@ public class SplitFunctions
 	public static ISplitF splitAlphaNum = new SplitRegex("[\\p{IsAlphabetic}0-9_]+");
 
 	public static ISplitF splitChar = new SplitRegex("[\\p{IsAlphabetic}0-9_]");
-	
+
 	public static ISplitF splitAlphaNumFloat = new SplitRegex("[\\p{IsAlphabetic}0-9_,\\.]+");
 
 }
