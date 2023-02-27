@@ -2,7 +2,7 @@ package fr.erias.iamsystem_java.stopwords;
 
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public abstract class SimpleStopwords<T extends IToken> implements ISimpleStopwords<T>
+public abstract class SimpleStopwords implements ISimpleStopwords
 {
 
 	@Override

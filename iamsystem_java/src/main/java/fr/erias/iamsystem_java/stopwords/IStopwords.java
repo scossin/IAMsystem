@@ -8,7 +8,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
  * @author Sebastien Cossin
  * @param <T> a generic Token.
  */
-public interface IStopwords<T extends IToken>
+public interface IStopwords
 {
 
 	/**
@@ -17,5 +17,5 @@ public interface IStopwords<T extends IToken>
 	 * @param token a generic Token created by a tokenizer.
 	 * @return True if this token is a stopword.
 	 */
-	public boolean isTokenAStopword(T token);
+	public boolean isTokenAStopword(IToken token);
 }

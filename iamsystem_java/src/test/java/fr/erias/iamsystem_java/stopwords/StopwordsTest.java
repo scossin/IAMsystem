@@ -8,7 +8,6 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.Token;
 
 class StopwordsTest
@@ -47,7 +46,7 @@ class StopwordsTest
 		List<String> words = new ArrayList<String>();
 		words.add("le");
 		words.add("la");
-		ISimpleStopwords<IToken> stopwords = new Stopwords<IToken>(words);
+		ISimpleStopwords stopwords = new Stopwords(words);
 		assertTrue(stopwords.isStopword("le"));
 		assertTrue(!stopwords.isStopword("insuffisance"));
 	}
@@ -57,7 +56,7 @@ class StopwordsTest
 	{
 		List<String> words = new ArrayList<String>();
 		words.add("à");
-		ISimpleStopwords<IToken> stopwords = new Stopwords(words);
+		ISimpleStopwords stopwords = new Stopwords(words);
 		assertTrue(stopwords.isStopword("à"));
 		assertTrue(!stopwords.isStopword("a"));
 	}
@@ -65,7 +64,7 @@ class StopwordsTest
 	@Test
 	void testSimpleStopwordsEmptyString()
 	{
-		ISimpleStopwords<IToken> stopwords = new Stopwords();
+		ISimpleStopwords stopwords = new Stopwords();
 		assertTrue(stopwords.isStopword(" "));
 		assertTrue(stopwords.isStopword("\t"));
 		assertTrue(stopwords.isStopword("\n"));
@@ -76,7 +75,7 @@ class StopwordsTest
 	{
 		List<String> words = new ArrayList<String>();
 		words.add("Insuffisance");
-		ISimpleStopwords<IToken> stopwords = new Stopwords(words);
+		ISimpleStopwords stopwords = new Stopwords(words);
 		assertTrue(stopwords.isStopword("insuffisance"));
 	}
 }

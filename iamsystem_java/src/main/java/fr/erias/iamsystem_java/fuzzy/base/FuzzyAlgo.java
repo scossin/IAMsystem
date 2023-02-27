@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public abstract class FuzzyAlgo<T extends IToken>
+public abstract class FuzzyAlgo
 {
 
 	public static List<SynAlgo> NO_SYN = Arrays.asList();
@@ -26,7 +26,7 @@ public abstract class FuzzyAlgo<T extends IToken>
 		return name;
 	}
 
-	public abstract List<SynAlgo> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states);
+	public abstract List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states);
 
 	public List<SynAlgo> word2syn(String word)
 	{

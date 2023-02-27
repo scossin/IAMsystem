@@ -4,7 +4,7 @@ import java.util.List;
 
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public abstract class NormLabelAlgo<T extends IToken> extends ContextFreeAlgo<T>
+public abstract class NormLabelAlgo extends ContextFreeAlgo
 {
 
 	public NormLabelAlgo(String name)
@@ -13,7 +13,7 @@ public abstract class NormLabelAlgo<T extends IToken> extends ContextFreeAlgo<T>
 	}
 
 	@Override
-	public List<SynAlgo> getSynonyms(T token)
+	public List<SynAlgo> getSynonyms(IToken token)
 	{
 		return this.getSynsOfWord(token.normLabel());
 	}

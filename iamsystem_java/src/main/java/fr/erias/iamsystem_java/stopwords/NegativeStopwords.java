@@ -25,7 +25,7 @@ interface IWord2keepF
 	public boolean isAword2keep(String word);
 }
 
-public class NegativeStopwords<T extends IToken> implements IStopwords<T>
+public class NegativeStopwords implements IStopwords
 {
 
 	private Set<String> words2keep = new HashSet<String>();

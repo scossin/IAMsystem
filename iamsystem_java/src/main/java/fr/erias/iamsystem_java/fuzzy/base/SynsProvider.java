@@ -9,21 +9,21 @@ import java.util.Set;
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public class SynsProvider<T extends IToken> implements ISynsProvider<T>
+public class SynsProvider implements ISynsProvider
 {
 
-	private List<? extends FuzzyAlgo<T>> fuzzyAlgos;
+	private List<? extends FuzzyAlgo> fuzzyAlgos;
 
-	public SynsProvider(List<? extends FuzzyAlgo<T>> fuzzyAlgos)
+	public SynsProvider(List<? extends FuzzyAlgo> fuzzyAlgos)
 	{
 		this.fuzzyAlgos = fuzzyAlgos;
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states)
 	{
 		Map<String, SynAlgos> syn2synAlgos = new HashMap<String, SynAlgos>();
-		for (FuzzyAlgo<T> fuzzyAlgo : fuzzyAlgos)
+		for (FuzzyAlgo fuzzyAlgo : fuzzyAlgos)
 		{
 			// synsAlgo: multiple synonym for one algorithm.
 			// synAlgos: one synonym for multiple algorithms.

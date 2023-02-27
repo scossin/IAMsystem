@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
@@ -66,7 +65,7 @@ class PrefixFounder
  * @author Sebastien Cossin
  *
  */
-public class Troncation<T extends IToken> extends NormLabelAlgo<T>
+public class Troncation extends NormLabelAlgo
 {
 
 	private final PrefixTrie prefixTrie;

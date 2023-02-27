@@ -15,14 +15,13 @@ import fr.erias.iamsystem_java.tree.INode;
  * Matcher output
  *
  * @author Sebastien Cossin
- * @param <T>
  */
-public class Annotation<T extends IToken> extends Span<T> implements IAnnotation<T>
+public class Annotation extends Span implements IAnnotation
 {
 
 	private final List<Collection<String>> algos;
 	private final INode lastState;
-	private final List<T> stopTokens;
+	private final List<IToken> stopTokens;
 	private IBratFormatterF bratFormatter = BratFormatters.tokenFormatter;
 
 	/**
@@ -35,7 +34,7 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
 	 *                   that matched this sequence of tokens.
 	 * @param stopTokens the list of stopwords tokens of the document.
 	 */
-	public Annotation(List<T> tokens, List<Collection<String>> algos, INode lastState, List<T> stopTokens)
+	public Annotation(List<IToken> tokens, List<Collection<String>> algos, INode lastState, List<IToken> stopTokens)
 	{
 		super(tokens);
 		this.algos = algos;
@@ -44,7 +43,7 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
 	}
 
 	@Override
-	public int compareTo(IAnnotation<T> o)
+	public int compareTo(IAnnotation o)
 	{
 		int diffStart = this.start() - o.start();
 		if (diffStart != 0)
@@ -97,7 +96,7 @@ public class Annotation<T extends IToken> extends Span<T> implements IAnnotation
 	}
 
 	@Override
-	public List<T> stopTokens()
+	public List<IToken> stopTokens()
 	{
 		return stopTokens;
 	}

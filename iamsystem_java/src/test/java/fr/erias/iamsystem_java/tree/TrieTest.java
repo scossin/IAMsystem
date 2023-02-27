@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.NormFunctions;
 import fr.erias.iamsystem_java.tokenize.SplitFunctions;
@@ -23,16 +22,16 @@ import fr.erias.iamsystem_java.utils.MockData;
 class TrieTest
 {
 
-	private ITokenizer<IToken> tokenizer;
-	private Stopwords<IToken> stopwords;
-	private TokStopImp<IToken> tokstop;
+	private ITokenizer tokenizer;
+	private Stopwords stopwords;
+	private TokStopImp tokstop;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		this.stopwords = new Stopwords<IToken>();
-		this.tokstop = new TokStopImp<IToken>(tokenizer, stopwords);
+		this.stopwords = new Stopwords();
+		this.tokstop = new TokStopImp(tokenizer, stopwords);
 	}
 
 	@Test
@@ -62,8 +61,8 @@ class TrieTest
 	{
 		// Check tokens stored depend on the normalizing function of tokenizer.
 		Trie trie = new Trie();
-		ITokenizer<IToken> tokenizer = new TokenizerImp(NormFunctions.noNormalization, SplitFunctions.splitAlphaNum);
-		TokStopImp<IToken> tokstop = new TokStopImp<IToken>(tokenizer, stopwords);
+		ITokenizer tokenizer = new TokenizerImp(NormFunctions.noNormalization, SplitFunctions.splitAlphaNum);
+		TokStopImp tokstop = new TokStopImp(tokenizer, stopwords);
 		trie.addKeywords(MockData.getICG(), tokstop);
 		assertEquals(trie.getNumberOfNodes(), 4);
 		System.out.println();

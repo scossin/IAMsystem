@@ -2,410 +2,50 @@ package fr.erias.iamsystem_java.matcher;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
-import com.github.liblevenshtein.transducer.Algorithm;
-import com.github.liblevenshtein.transducer.Candidate;
-import com.github.liblevenshtein.transducer.ITransducer;
-
-import fr.erias.iamsystem_java.fuzzy.CacheFuzzyAlgos;
 import fr.erias.iamsystem_java.fuzzy.ExactMatch;
-import fr.erias.iamsystem_java.fuzzy.abbreviations.Abbreviations;
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
-import fr.erias.iamsystem_java.fuzzy.base.IWord2ignore;
-import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
-import fr.erias.iamsystem_java.fuzzy.base.SimpleWords2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.fuzzy.base.SynsProvider;
-import fr.erias.iamsystem_java.fuzzy.closestSubString.ClosestSubString;
-import fr.erias.iamsystem_java.fuzzy.levenshtein.Levenshtein;
-import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
-import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
-import fr.erias.iamsystem_java.stopwords.NegativeStopwords;
-import fr.erias.iamsystem_java.stopwords.NoStopwords;
-import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokStopImp;
-import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
-import fr.erias.iamsystem_java.tree.EmptyNode;
-import fr.erias.iamsystem_java.tree.INode;
 import fr.erias.iamsystem_java.tree.Trie;
 
-class Detector<T extends IToken>
+public class Matcher implements IMatcher, IStoreKeywords, ITokenizer, IStopwords, ISynsProvider
 {
 
-	private Annotation<T> createAnnot(LinkedState<T> last_el, List<T> stopTokens)
-	{
-		List<LinkedState<T>> transStates = this.toList(last_el);
-		INode lastState = last_el.getNode();
-		List<T> tokens = transStates.stream().map(t -> t.getToken()).collect(Collectors.toList());
-		tokens.sort(Comparator.naturalOrder());
-		List<Collection<String>> algos = transStates.stream().map(t -> t.getAlgos()).collect(Collectors.toList());
-		return new Annotation<T>(tokens, algos, lastState, stopTokens);
-	}
-
-	private LinkedState<T> createStartState(INode initialState)
-	{
-		return new LinkedState<T>(null, initialState, null, null, -1);
-	}
-
-	public List<IAnnotation<T>> detect(List<T> tokens, int w, INode initialState, ISynsProvider<T> synsProvider,
-			IStopwords<T> stopwords)
-	{
-		List<IAnnotation<T>> annots = new ArrayList<IAnnotation<T>>();
-		// states stores linkedstate instance that keeps track of a tree path
-		// and document's tokens that matched.
-		Set<LinkedState<T>> states = new HashSet<LinkedState<T>>();
-		LinkedState<T> startState = createStartState(initialState);
-		states.add(startState);
-
-		// count_not_stopword allows a stopword-independent window size.
-		int count_not_stopword = 0;
-		List<T> stopTokens = new ArrayList<T>();
-		List<LinkedState<T>> newStates = new ArrayList<LinkedState<T>>();
-		List<LinkedState<T>> states2remove = new ArrayList<LinkedState<T>>();
-
-		for (T token : tokens)
-		{
-			if (stopwords.isTokenAStopword(token))
-			{
-				stopTokens.add(token);
-				continue;
-			}
-			// w_bucket stores when a state will be out-of-reach given window size
-			// 'count_not_stopword % w' has range [0 ; w-1]
-			int wBucket = count_not_stopword % w;
-			newStates.clear();
-			states2remove.clear();
-			count_not_stopword++;
-
-			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
-
-			for (LinkedState<T> state : states)
-			{
-				if (state.getwBucket() == wBucket)
-					states2remove.add(state);
-
-				for (SynAlgos synAlgo : synAlgos)
-				{
-					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
-					if (node == EmptyNode.EMPTYNODE)
-						continue;
-					LinkedState<T> newState = new LinkedState<T>(state, node, token, synAlgo.getAlgos(), wBucket);
-					newStates.add(newState);
-					/**
-					 * Why 'states.contains(newState)': if node_num is already in the states set, it
-					 * means an annotation was already created for this state. For example 'cancer
-					 * cancer', if an annotation was created for the first 'cancer' then we don't
-					 * want to create a new one for the second 'cancer'.
-					 */
-
-					if (node.isAfinalState() && !states.contains(newState))
-					{
-						IAnnotation<T> annotation = this.createAnnot(newState, stopTokens);
-						annots.add(annotation);
-					}
-				}
-			}
-			/**
-			 * Prepare next iteration: first loop remove out-of-reach states. Second
-			 * iteration add new states.
-			 */
-			for (LinkedState<T> state : states2remove)
-			{
-				states.remove(state);
-			}
-			for (LinkedState<T> state : newStates)
-			{
-				if (states.contains(state))
-					states.remove(state);
-				states.add(state);
-			}
-		}
-		annots.sort(Comparator.naturalOrder());
-		return annots;
-	}
-
-	protected List<IAnnotation<T>> rmNestedAnnots(List<IAnnotation<T>> annots, boolean keepAncestors)
-	{
-		Set<Integer> ancestIndices = new HashSet<Integer>();
-		Set<Integer> shortIndices = new HashSet<Integer>();
-		int count = 0;
-		for (int i = 0; i < annots.size(); i++)
-		{
-			IAnnotation<T> annot = annots.get(i);
-			for (int y = i + 1; y < annots.size(); y++)
-			{
-				if (shortIndices.contains(y))
-					continue;
-				IAnnotation<T> other = annots.get(y);
-				if (!IOffsets.offsetsOverlap(annot, other))
-					break;
-				if (Span.isShorterSpanOf(annot, other))
-				{
-					shortIndices.add(i);
-					if (IAnnotation.isAncestorAnnotOf(annot, other))
-					{
-						ancestIndices.add(i);
-					}
-				}
-				if (Span.isShorterSpanOf(other, annot))
-				{
-					shortIndices.add(y);
-				}
-				count++;
-			}
-		}
-		Set<Integer> indices2remove;
-		if (!keepAncestors)
-		{
-			indices2remove = shortIndices;
-		} else
-		{
-			indices2remove = shortIndices.stream().filter(i -> !ancestIndices.contains(i)).collect(Collectors.toSet());
-		}
-		List<IAnnotation<T>> annots2keep = new ArrayList<IAnnotation<T>>(annots.size() - indices2remove.size());
-		for (int i = 0; i < annots.size(); i++)
-		{
-			if (!indices2remove.contains(i))
-			{
-				annots2keep.add(annots.get(i));
-			}
-		}
-		return annots2keep;
-	}
-
-	private List<LinkedState<T>> toList(LinkedState<T> last_el)
-	{
-		List<LinkedState<T>> transStates = new ArrayList<>();
-		transStates.add(last_el);
-		LinkedState<T> parent = last_el.getParent();
-		while (!LinkedState.isStartState(parent))
-		{
-			transStates.add(parent);
-			parent = parent.getParent();
-		}
-		Collections.reverse(transStates);
-		return transStates;
-	}
-}
-
-public class Matcher<T extends IToken>
-		implements IMatcher<T>, IStoreKeywords, ITokenizer<T>, IStopwords<T>, ISynsProvider<T>
-{
-
-	public static class Builder<T extends IToken>
-	{
-
-		private ITokenizer<T> tokenizer;
-		private IStopwords<T> stopwords;
-		private Collection<IKeyword> keywords = new ArrayList<IKeyword>();
-		private int w = 1;
-		private boolean removeNestedAnnot = true;
-		private IWord2ignore word2ignore = new NoWord2ignore();
-		private List<String> shortForms = new ArrayList<String>();
-		private List<String> longForms = new ArrayList<String>();
-		private int minNbcharLeven;
-		private int maxDistanceLeven;
-		private Algorithm algorithmLeven;
-		private boolean negativeStopwords = false;
-		private int minPrefixLengthClosest = -1;
-		private int maxDistanceClosest = -1;
-		private int minPrefixLengthTroncation;
-		private int maxDistanceTroncation;
-
-		public Builder()
-		{
-		}
-
-		public Builder<T> abbreviations(String shortForm, String longForm)
-		{
-			this.shortForms.add(shortForm);
-			this.longForms.add(longForm);
-			return this;
-		}
-
-		public Matcher<? extends IToken> build()
-		{
-			ITokenizer<T> tokenizer = (this.tokenizer != null) ? this.tokenizer
-					: (ITokenizer<T>) TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-			IStopwords<T> stopwords = (this.stopwords != null) ? this.stopwords : (IStopwords<T>) new NoStopwords();
-			Matcher<T> matcher = new Matcher<T>(tokenizer, stopwords);
-			matcher.setW(this.w);
-			matcher.setRemoveNestedAnnot(this.removeNestedAnnot);
-			matcher.addKeyword(this.keywords);
-			if (this.negativeStopwords)
-			{
-				matcher.setStopwords(new NegativeStopwords<T>());
-			}
-			CacheFuzzyAlgos<T> cache = new CacheFuzzyAlgos<T>("cache");
-			matcher.addFuzzyAlgo(cache);
-			if (this.algorithmLeven != null)
-			{
-				ITransducer<Candidate> transducer = Levenshtein.buildTransuder(this.maxDistanceLeven, matcher,
-						this.algorithmLeven);
-				Levenshtein<T> leven = new Levenshtein<T>("levenshtein", this.minNbcharLeven, word2ignore, transducer);
-				cache.addFuzzyAlgo(leven);
-			}
-			if (this.shortForms.size() != 0)
-			{
-
-				Abbreviations<T> abbs = new Abbreviations<T>("abbs");
-				matcher.addFuzzyAlgo(abbs);
-				for (int i = 0; i < this.shortForms.size(); i++)
-				{
-					String shortForm = this.shortForms.get(i);
-					String longForm = this.longForms.get(i);
-					abbs.add(shortForm, longForm, matcher);
-				}
-			}
-			if (this.minPrefixLengthClosest != -1)
-			{
-				PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
-				trie.addToken(matcher.getUnigrams());
-				ClosestSubString<T> closest = new ClosestSubString<T>("closest", trie, this.maxDistanceClosest);
-				cache.addFuzzyAlgo(closest);
-			}
-
-			if (this.minPrefixLengthTroncation != -1)
-			{
-				PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
-				trie.addToken(matcher.getUnigrams());
-				Troncation<T> troncation = new Troncation<T>("troncation", trie, this.maxDistanceTroncation);
-				cache.addFuzzyAlgo(troncation);
-			}
-			return matcher;
-		}
-
-		public Builder<T> closestSubString(int minPrefixLength, int maxDistance)
-		{
-			this.minPrefixLengthClosest = minPrefixLength;
-			this.maxDistanceClosest = maxDistance;
-			return this;
-		}
-
-		public Builder<T> keywords(Collection<IKeyword> keywords)
-		{
-			keywords.addAll(keywords);
-			return this;
-		}
-
-		public Builder<T> keywords(String... labels)
-		{
-			for (String label : labels)
-			{
-				IKeyword kw = new Keyword(label);
-				this.keywords.add(kw);
-			}
-			return this;
-		}
-
-		public Builder<T> levenshtein(int minNbChar, int maxDistance, Algorithm algorithm)
-		{
-			this.minNbcharLeven = minNbChar;
-			this.maxDistanceLeven = maxDistance;
-			this.algorithmLeven = algorithm;
-			return this;
-		}
-
-		public Builder<T> negativeStopwords(boolean negativeStopwords)
-		{
-			this.negativeStopwords = negativeStopwords;
-			return this;
-		}
-
-		public Builder<T> stopwords(Collection<String> stopwords)
-		{
-			this.stopwords = new Stopwords<T>(stopwords);
-			return this;
-		}
-
-		public Builder<T> stopwords(IStopwords<T> stopwords)
-		{
-			this.stopwords = stopwords;
-			return this;
-		}
-
-		public Builder<T> stopwords(String... words)
-		{
-			Stopwords<T> stopwords = new Stopwords<T>();
-			for (String stopword : words)
-			{
-				stopwords.add(stopword);
-			}
-			this.stopwords = stopwords;
-			return this;
-		}
-
-		public Builder<T> stringDistanceWords2ignore(Collection<String> words2ignore)
-		{
-			this.word2ignore = new SimpleWords2ignore(words2ignore);
-			return this;
-		}
-
-		public Builder<T> tokenizer(ITokenizer<T> tokenizer)
-		{
-			this.tokenizer = tokenizer;
-			return this;
-		}
-
-		public Builder<T> troncation(int minPrefixLength, int maxDistance)
-		{
-			this.minPrefixLengthTroncation = minPrefixLength;
-			this.maxDistanceTroncation = maxDistance;
-			return this;
-		}
-
-		public Builder<T> w(boolean removeNestedAnnot)
-		{
-			this.removeNestedAnnot = removeNestedAnnot;
-			return this;
-		}
-
-		public Builder<T> w(int w)
-		{
-			this.w = w;
-			return this;
-		}
-	}
-
-	private ITokenizer<T> tokenizer;
-	private IStopwords<T> stopwords;
-	private final Detector<T> detector;
+	private ITokenizer tokenizer;
+	private IStopwords stopwords;
+	private final Detector detector;
 	private int w = 1;
 	private final Trie trie = new Trie();
 	private Terminology termino = new Terminology();
 	private boolean removeNestedAnnot = true;
-	private TokStopImp<T> tokstop; // TODO set stopwords/tokenizer
-	private List<FuzzyAlgo<T>> fuzzyAlgos = new ArrayList<FuzzyAlgo<T>>();
-	private SynsProvider<T> synsProvider;
+	private TokStopImp tokstop; // TODO set stopwords/tokenizer
+	private List<FuzzyAlgo> fuzzyAlgos = new ArrayList<FuzzyAlgo>();
+	private SynsProvider synsProvider;
 
-	public Matcher(ITokenizer<T> tokenizer, IStopwords<T> stopwords)
+	public Matcher(ITokenizer tokenizer, IStopwords stopwords)
 	{
 		this.setTokenizer(tokenizer);
 		this.setStopwords(stopwords);
-		this.detector = new Detector<T>();
-		this.tokstop = new TokStopImp<T>(tokenizer, stopwords);
-		fuzzyAlgos.add(new ExactMatch<T>());
-		this.synsProvider = new SynsProvider<T>(fuzzyAlgos);
+		this.detector = new Detector();
+		this.tokstop = new TokStopImp(tokenizer, stopwords);
+		fuzzyAlgos.add(new ExactMatch());
+		this.synsProvider = new SynsProvider(fuzzyAlgos);
 	}
 
-	public void addFuzzyAlgo(FuzzyAlgo<T> fuzzyAlgo)
+	public void addFuzzyAlgo(FuzzyAlgo fuzzyAlgo)
 	{
 		this.fuzzyAlgos.add(fuzzyAlgo);
 	}
@@ -439,9 +79,9 @@ public class Matcher<T extends IToken>
 		}
 	}
 
-	public List<IAnnotation<T>> annot(List<T> tokens)
+	public List<IAnnotation> annot(List<IToken> tokens)
 	{
-		List<IAnnotation<T>> annots = detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
+		List<IAnnotation> annots = detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
 		if (this.removeNestedAnnot)
 		{
 			annots = this.detector.rmNestedAnnots(annots, false);
@@ -449,10 +89,10 @@ public class Matcher<T extends IToken>
 		return annots;
 	}
 
-	public List<IAnnotation<T>> annot(String text)
+	public List<IAnnotation> annot(String text)
 	{
-		List<T> tokens = tokenize(text);
-		List<IAnnotation<T>> annots = this.annot(tokens);
+		List<IToken> tokens = tokenize(text);
+		List<IAnnotation> annots = this.annot(tokens);
 		return annots;
 	}
 
@@ -462,23 +102,23 @@ public class Matcher<T extends IToken>
 		return termino.getKeywords();
 	}
 
-	public IStopwords<T> getStopwords()
+	public IStopwords getStopwords()
 	{
 		return stopwords;
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states)
 	{
 		return synsProvider.getSynonyms(tokens, token, states);
 	}
 
-	public ITokenizer<T> getTokenizer()
+	public ITokenizer getTokenizer()
 	{
 		return tokenizer;
 	}
 
-	public AbstractTokNorm<T> getTokStop()
+	public AbstractTokNorm getTokStop()
 	{
 		return this.tokstop;
 	}
@@ -494,7 +134,7 @@ public class Matcher<T extends IToken>
 	}
 
 	@Override
-	public boolean isTokenAStopword(T token)
+	public boolean isTokenAStopword(IToken token)
 	{
 		return stopwords.isTokenAStopword(token);
 	}
@@ -509,12 +149,12 @@ public class Matcher<T extends IToken>
 		this.removeNestedAnnot = removeNestedAnnot;
 	}
 
-	public void setStopwords(IStopwords<T> stopwords)
+	public void setStopwords(IStopwords stopwords)
 	{
 		this.stopwords = stopwords;
 	}
 
-	public void setTokenizer(ITokenizer<T> tokenizer)
+	public void setTokenizer(ITokenizer tokenizer)
 	{
 		this.tokenizer = tokenizer;
 	}
@@ -525,7 +165,7 @@ public class Matcher<T extends IToken>
 	}
 
 	@Override
-	public List<T> tokenize(String text)
+	public List<IToken> tokenize(String text)
 	{
 		return tokenizer.tokenize(text);
 	}

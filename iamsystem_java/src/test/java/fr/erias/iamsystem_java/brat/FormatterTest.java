@@ -22,7 +22,7 @@ import fr.erias.iamsystem_java.tree.Trie;
 class FormatterTest
 {
 
-	private ITokenizer<IToken> tokenizer;
+	private ITokenizer tokenizer;
 	private List<IToken> tokens;
 	private String text;
 
@@ -71,7 +71,7 @@ class FormatterTest
 	{
 		Trie trie = new Trie();
 		Node lastState = new Node("insuffisance", trie.getInitialState(), 1);
-		IAnnotation<IToken> annot = new Annotation<IToken>(this.tokens, new ArrayList<Collection<String>>(), lastState,
+		IAnnotation annot = new Annotation(this.tokens, new ArrayList<Collection<String>>(), lastState,
 				new ArrayList<>());
 		BratFormat format = BratFormatters.tokenFormatter.getFormat(annot);
 		assertEquals("cancer glande prostate", format.getText());

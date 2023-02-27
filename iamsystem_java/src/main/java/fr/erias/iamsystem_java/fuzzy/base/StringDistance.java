@@ -1,8 +1,6 @@
 package fr.erias.iamsystem_java.fuzzy.base;
 
-import fr.erias.iamsystem_java.tokenize.IToken;
-
-public abstract class StringDistance<T extends IToken> extends NormLabelAlgo<T>
+public abstract class StringDistance extends NormLabelAlgo
 {
 
 	private final int minNbChar;

@@ -1,8 +1,6 @@
 package fr.erias.iamsystem_java.stopwords;
 
-import fr.erias.iamsystem_java.tokenize.IToken;
-
-public interface ISimpleStopwords<T extends IToken> extends IStopwords<T>
+public interface ISimpleStopwords extends IStopwords
 {
 
 	/**

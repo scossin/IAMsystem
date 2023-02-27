@@ -8,12 +8,11 @@ import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
-import fr.erias.iamsystem_java.tokenize.IToken;
 
-public class CacheFuzzyAlgos<T extends IToken> extends NormLabelAlgo<T>
+public class CacheFuzzyAlgos extends NormLabelAlgo
 {
 
-	private List<NormLabelAlgo<T>> fuzzyAlgos;
+	private List<NormLabelAlgo> fuzzyAlgos;
 
 	private Map<String, List<SynAlgo>> cache = new HashMap<String, List<SynAlgo>>();
 
@@ -25,10 +24,10 @@ public class CacheFuzzyAlgos<T extends IToken> extends NormLabelAlgo<T>
 	public CacheFuzzyAlgos(String name)
 	{
 		super(name);
-		this.fuzzyAlgos = new ArrayList<NormLabelAlgo<T>>();
+		this.fuzzyAlgos = new ArrayList<NormLabelAlgo>();
 	}
 
-	public void addFuzzyAlgo(NormLabelAlgo<T> fuzzyAlgo)
+	public void addFuzzyAlgo(NormLabelAlgo fuzzyAlgo)
 	{
 		this.fuzzyAlgos.add(fuzzyAlgo);
 	}

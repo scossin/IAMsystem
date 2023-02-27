@@ -24,19 +24,19 @@ import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 class SynProviderTest
 {
 
-	private ISynsProvider<IToken> synProvider;
-	private List<FuzzyAlgo<IToken>> fuzzyAlgos;
-	private ITokenizer<IToken> tokenizer;
-	private Set<LinkedState<IToken>> states;
+	private ISynsProvider synProvider;
+	private List<FuzzyAlgo> fuzzyAlgos;
+	private ITokenizer tokenizer;
+	private Set<LinkedState> states;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		this.fuzzyAlgos = new ArrayList<FuzzyAlgo<IToken>>();
-		this.fuzzyAlgos.add(new ExactMatch<IToken>());
-		this.synProvider = new SynsProvider<IToken>(fuzzyAlgos);
-		this.states = new HashSet<LinkedState<IToken>>(0);
+		this.fuzzyAlgos = new ArrayList<FuzzyAlgo>();
+		this.fuzzyAlgos.add(new ExactMatch());
+		this.synProvider = new SynsProvider(fuzzyAlgos);
+		this.states = new HashSet<LinkedState>(0);
 	}
 
 	@Test

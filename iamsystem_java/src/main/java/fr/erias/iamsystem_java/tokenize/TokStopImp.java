@@ -11,26 +11,26 @@ import fr.erias.iamsystem_java.stopwords.IStopwords;
  * @author Sebastien Cossin
  * @param <T>
  */
-public class TokStopImp<T extends IToken> extends AbstractTokNorm<T>
+public class TokStopImp extends AbstractTokNorm
 {
 
-	private final ITokenizer<T> tokenizer;
-	private final IStopwords<T> stopwords;
+	private final ITokenizer tokenizer;
+	private final IStopwords stopwords;
 
-	public TokStopImp(ITokenizer<T> tokenizer, IStopwords<T> stopwords)
+	public TokStopImp(ITokenizer tokenizer, IStopwords stopwords)
 	{
 		this.tokenizer = tokenizer;
 		this.stopwords = stopwords;
 	}
 
 	@Override
-	public boolean isTokenAStopword(T token)
+	public boolean isTokenAStopword(IToken token)
 	{
 		return this.stopwords.isTokenAStopword(token);
 	}
 
 	@Override
-	public List<T> tokenize(String text)
+	public List<IToken> tokenize(String text)
 	{
 		return tokenizer.tokenize(text);
 	}

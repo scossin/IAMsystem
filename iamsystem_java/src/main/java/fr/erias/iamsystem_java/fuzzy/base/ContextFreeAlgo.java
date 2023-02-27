@@ -6,7 +6,7 @@ import java.util.Set;
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public abstract class ContextFreeAlgo<T extends IToken> extends FuzzyAlgo<T>
+public abstract class ContextFreeAlgo extends FuzzyAlgo
 {
 
 	public ContextFreeAlgo(String name)
@@ -14,11 +14,11 @@ public abstract class ContextFreeAlgo<T extends IToken> extends FuzzyAlgo<T>
 		super(name);
 	}
 
+	public abstract List<SynAlgo> getSynonyms(IToken token);
+
 	@Override
-	public List<SynAlgo> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states)
+	public List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states)
 	{
 		return this.getSynonyms(token);
 	}
-
-	public abstract List<SynAlgo> getSynonyms(T token);
 }

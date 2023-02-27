@@ -19,7 +19,6 @@ import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.utils.MockData;
 
@@ -40,7 +39,7 @@ class LevenshteinTest
 		List<String> unigrams = Arrays.asList("insuffisance", "cardiaque");
 		unigrams.sort(Comparator.naturalOrder());
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
-		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", 5, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", 5, transducer);
 		List<SynAlgo> syns = leven.getSynsOfWord("insuffisanse");
 		assertEquals(1, syns.size());
 	}
@@ -52,7 +51,7 @@ class LevenshteinTest
 		int maxdistance = 1;
 		List<String> unigrams = Arrays.asList("insuffisance");
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
-		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", 5, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", 5, transducer);
 		List<SynAlgo> syns = leven.getSynsOfWord("insuffisanse");
 		assertEquals(1, syns.size());
 	}
@@ -60,15 +59,14 @@ class LevenshteinTest
 	@Test
 	void testMatcher()
 	{
-		Matcher<IToken> matcher = new Matcher<IToken>(TokenizerFactory.getTokenizer(ETokenizer.FRENCH),
-				new NoStopwords());
+		Matcher matcher = new Matcher(TokenizerFactory.getTokenizer(ETokenizer.FRENCH), new NoStopwords());
 		matcher.addKeyword(MockData.getICG());
 		int maxdistance = 1;
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, matcher, Algorithm.TRANSPOSITION);
-		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", 5, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", 5, transducer);
 		matcher.addFuzzyAlgo(leven);
 		matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> annots = matcher.annot("insuffisanse cardique gache");
+		List<IAnnotation> annots = matcher.annot("insuffisanse cardique gache");
 		assertEquals(2, annots.size());
 	}
 
@@ -80,7 +78,7 @@ class LevenshteinTest
 		int maxdistance = 1;
 		List<String> unigrams = Arrays.asList("insuffisance");
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
-		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", minNbOfChar, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", minNbOfChar, transducer);
 		List<SynAlgo> syns = leven.getSynsOfWord("insuffisanse");
 		assertEquals(0, syns.size());
 	}
@@ -95,7 +93,7 @@ class LevenshteinTest
 		int maxdistance = 1;
 		List<String> unigrams = Arrays.asList("insuffisance");
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
-		Levenshtein<IToken> leven = new Levenshtein<IToken>("Levenshtein", 0, words2ignore, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", 0, words2ignore, transducer);
 		List<SynAlgo> syns = leven.getSynsOfWord("insuffisance");
 		assertEquals(0, syns.size());
 		syns = leven.getSynsOfWord("insuffisanze");

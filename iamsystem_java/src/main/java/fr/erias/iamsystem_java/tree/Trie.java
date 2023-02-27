@@ -6,7 +6,6 @@ import java.util.stream.Collectors;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.IToken;
 
 /**
  * IAMsystem algorithm utilizes a finate-state automata. <br>
@@ -61,7 +60,7 @@ public class Trie
 	 * @param tokenizer  to tokenize the label of the keyword
 	 * @param normalizer to normalize the label of the keyword
 	 */
-	public void addIKeyword(IKeyword keyword, AbstractTokNorm<? extends IToken> tokstop)
+	public void addIKeyword(IKeyword keyword, AbstractTokNorm tokstop)
 	{
 		List<String> stringSeq = tokstop.tokenizeRmStopwords(keyword.label()).stream().map(token -> token.normLabel())
 				.collect(Collectors.toList());
@@ -100,7 +99,7 @@ public class Trie
 	 * @param keyword a keyword label.
 	 * @param tokstop
 	 */
-	public void addKeyword(String keyword, AbstractTokNorm<? extends IToken> tokstop)
+	public void addKeyword(String keyword, AbstractTokNorm tokstop)
 	{
 		Keyword kw = new Keyword(keyword);
 		addIKeyword(kw, tokstop);
@@ -113,7 +112,7 @@ public class Trie
 	 * @param tokenizer      to tokenize the labels of the keywords
 	 * @param normalizer     to normalize the labels of the keywords
 	 */
-	public void addKeywords(Iterable<? extends IKeyword> keywords, AbstractTokNorm<? extends IToken> tokstop)
+	public void addKeywords(Iterable<? extends IKeyword> keywords, AbstractTokNorm tokstop)
 	{
 		for (IKeyword keyword : keywords)
 		{

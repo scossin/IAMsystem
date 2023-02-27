@@ -11,7 +11,7 @@ import com.github.liblevenshtein.transducer.Algorithm;
 
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
-import fr.erias.iamsystem_java.tokenize.IToken;
+import fr.erias.iamsystem_java.matcher.MatcherBuilder;
 
 class DocTest
 {
@@ -24,20 +24,19 @@ class DocTest
 	@Test
 	void testExactMatchKeyword()
 	{
-		Matcher matcher = new Matcher.Builder<IToken>().keywords("acute respiratory distress syndrome", "diarrrhea")
-				.build();
-		List<IAnnotation<IToken>> annots = matcher.annot("Pt c/o Acute Respiratory Distress Syndrome and diarrrhea");
+		Matcher matcher = new MatcherBuilder().keywords("acute respiratory distress syndrome", "diarrrhea").build();
+		List<IAnnotation> annots = matcher.annot("Pt c/o Acute Respiratory Distress Syndrome and diarrrhea");
 		assertEquals(2, annots.size());
-		IAnnotation<IToken> ann = annots.get(1);
+		IAnnotation ann = annots.get(1);
 		assertEquals(ann.toString(), "diarrrhea	47 56	diarrrhea");
 	}
 
 	@Test
 	void testReadmeExample()
 	{
-		Matcher matcher = new Matcher.Builder<IToken>().keywords("North America", "South America").stopwords("and")
+		Matcher matcher = new MatcherBuilder().keywords("North America", "South America").stopwords("and")
 				.abbreviations("amer", "America").levenshtein(4, 1, Algorithm.TRANSPOSITION).w(2).build();
-		List<IAnnotation<IToken>> annots = matcher.annot("Northh and south Amer.");
+		List<IAnnotation> annots = matcher.annot("Northh and south Amer.");
 		assertEquals(2, annots.size());
 	}
 

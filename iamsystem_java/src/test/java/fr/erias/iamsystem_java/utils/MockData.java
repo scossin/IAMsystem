@@ -10,7 +10,6 @@ import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokStopImp;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
@@ -18,11 +17,11 @@ import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 public class MockData
 {
 
-	public static AbstractTokNorm<IToken> getFrenchTokStop()
+	public static AbstractTokNorm getFrenchTokStop()
 	{
-		ITokenizer<IToken> tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		IStopwords<IToken> stopwords = new Stopwords<IToken>();
-		AbstractTokNorm<IToken> tokstop = new TokStopImp<IToken>(tokenizer, stopwords);
+		ITokenizer tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+		IStopwords stopwords = new Stopwords();
+		AbstractTokNorm tokstop = new TokStopImp(tokenizer, stopwords);
 		return (tokstop);
 	}
 

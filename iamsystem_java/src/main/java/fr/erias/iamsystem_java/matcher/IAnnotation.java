@@ -9,7 +9,7 @@ import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.INode;
 
-public interface IAnnotation<T extends IToken> extends ISpan<T>, Comparable<IAnnotation<T>>
+public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 {
 
 	/**
@@ -19,7 +19,7 @@ public interface IAnnotation<T extends IToken> extends ISpan<T>, Comparable<IAnn
 	 * @param b Annotation b.
 	 * @return True if a is an ancestor of b.
 	 */
-	public static boolean isAncestorAnnotOf(IAnnotation<? extends IToken> a, IAnnotation<? extends IToken> b)
+	public static boolean isAncestorAnnotOf(IAnnotation a, IAnnotation b)
 	{
 		if (a == b)
 			return false;
@@ -63,5 +63,5 @@ public interface IAnnotation<T extends IToken> extends ISpan<T>, Comparable<IAnn
 	 *
 	 * @return
 	 */
-	public List<T> stopTokens();
+	public List<IToken> stopTokens();
 }

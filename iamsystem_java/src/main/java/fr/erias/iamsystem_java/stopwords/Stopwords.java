@@ -4,14 +4,12 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import fr.erias.iamsystem_java.tokenize.IToken;
-
 /**
  * Simple Stopword implementation.
  *
  * @author Sebastien Cossin
  */
-public class Stopwords<T extends IToken> extends SimpleStopwords<T> implements IStoreStopwords<T>
+public class Stopwords extends SimpleStopwords implements IStoreStopwords
 {
 
 	private Set<String> stopwords = new HashSet<String>();

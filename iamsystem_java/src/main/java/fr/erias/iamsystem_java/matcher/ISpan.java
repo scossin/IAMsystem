@@ -5,7 +5,7 @@ import java.util.List;
 import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public interface ISpan<T extends IToken> extends IOffsets
+public interface ISpan extends IOffsets
 {
 
 	/**
@@ -27,5 +27,5 @@ public interface ISpan<T extends IToken> extends IOffsets
 	 *
 	 * @return A list of generic Token.
 	 */
-	public List<T> tokens();
+	public List<IToken> tokens();
 }

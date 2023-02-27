@@ -7,8 +7,8 @@ import java.util.Set;
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
-public interface ISynsProvider<T extends IToken>
+public interface ISynsProvider
 {
 
-	public Collection<SynAlgos> getSynonyms(List<T> tokens, T token, Set<LinkedState<T>> states);
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states);
 }

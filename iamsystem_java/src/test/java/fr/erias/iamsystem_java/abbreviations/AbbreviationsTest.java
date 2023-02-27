@@ -25,13 +25,13 @@ import fr.erias.iamsystem_java.utils.MockData;
 class AbbreviationsTest
 {
 
-	private Abbreviations<IToken> abbs;
-	private ITokenizer<IToken> tokenizer;
+	private Abbreviations abbs;
+	private ITokenizer tokenizer;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
-		this.abbs = new Abbreviations<IToken>("Abbs");
+		this.abbs = new Abbreviations("Abbs");
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
 	}
 
@@ -64,7 +64,7 @@ class AbbreviationsTest
 	@Test
 	void testIsTokenFun()
 	{
-		this.abbs = new Abbreviations<IToken>("Abbs", TokenIsAnAbbFactory.upperCaseOnly);
+		this.abbs = new Abbreviations("Abbs", TokenIsAnAbbFactory.upperCaseOnly);
 		this.abbs.add("ic", "insuffisance cardiaque", tokenizer);
 		IToken token = new Token(0, 1, "ic", "ic", 0);
 		List<SynAlgo> syns = this.abbs.getSynonyms(token);
@@ -77,13 +77,13 @@ class AbbreviationsTest
 	@Test
 	void testMatcher()
 	{
-		Matcher<IToken> matcher = new Matcher<IToken>(tokenizer, new NoStopwords());
-		this.abbs = new Abbreviations<IToken>("Abbs", TokenIsAnAbbFactory.upperCaseOnly);
+		Matcher matcher = new Matcher(tokenizer, new NoStopwords());
+		this.abbs = new Abbreviations("Abbs", TokenIsAnAbbFactory.upperCaseOnly);
 		this.abbs.add("ic", "insuffisance cardiaque", tokenizer);
 		matcher.addKeyword(MockData.getICG());
 		matcher.addFuzzyAlgo(abbs);
 		matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> anns = matcher.annot("IC gauche");
+		List<IAnnotation> anns = matcher.annot("IC gauche");
 		assertEquals(anns.size(), 2);
 	}
 

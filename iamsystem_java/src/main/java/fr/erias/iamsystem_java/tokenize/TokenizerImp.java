@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Sebastien Cossin
  */
-public class TokenizerImp implements ITokenizer<IToken>
+public class TokenizerImp implements ITokenizer
 {
 
 	private final INormalizeF normalizeF;

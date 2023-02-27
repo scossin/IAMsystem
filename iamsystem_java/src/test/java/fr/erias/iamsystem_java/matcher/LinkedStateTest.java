@@ -13,7 +13,6 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.Token;
 import fr.erias.iamsystem_java.tree.INode;
 import fr.erias.iamsystem_java.tree.Node;
@@ -22,15 +21,15 @@ import fr.erias.iamsystem_java.tree.Trie;
 class LinkedStateTest
 {
 
-	static LinkedState<IToken> createState(LinkedState<IToken> parent, INode node, Token token)
+	static LinkedState createState(LinkedState parent, INode node, Token token)
 	{
 		List<String> algos = Arrays.asList();
-		return new LinkedState<IToken>(parent, node, token, algos, 0);
+		return new LinkedState(parent, node, token, algos, 0);
 	}
 
-	private LinkedState<IToken> stateIns;
+	private LinkedState stateIns;
 
-	private LinkedState<IToken> stateCard;
+	private LinkedState stateCard;
 
 	@BeforeEach
 	void setUp() throws Exception
@@ -53,9 +52,9 @@ class LinkedStateTest
 		Trie trie = new Trie();
 		INode initialState = trie.getInitialState();
 		Node nodeIns2 = new Node("insuffisance", initialState, 1);
-		LinkedState<IToken> otherStateSameNum = createState(null, nodeIns2, null);
+		LinkedState otherStateSameNum = createState(null, nodeIns2, null);
 		assertEquals(stateIns, otherStateSameNum);
-		Set<LinkedState<IToken>> states = new HashSet<LinkedState<IToken>>();
+		Set<LinkedState> states = new HashSet<LinkedState>();
 		states.add(stateIns);
 		assertTrue(states.contains(otherStateSameNum));
 	}

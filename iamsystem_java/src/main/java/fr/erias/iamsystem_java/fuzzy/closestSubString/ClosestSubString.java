@@ -10,11 +10,10 @@ import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
 import fr.erias.iamsystem_java.keywords.IKeyword;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
-public class ClosestSubString<T extends IToken> extends NormLabelAlgo<T>
+public class ClosestSubString extends NormLabelAlgo
 {
 
 	private final PrefixTrie prefixTrie;

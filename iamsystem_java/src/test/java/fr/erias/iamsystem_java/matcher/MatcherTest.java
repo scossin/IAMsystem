@@ -15,7 +15,6 @@ import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.Token;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
@@ -24,16 +23,16 @@ import fr.erias.iamsystem_java.utils.MockData;
 class MatcherTest
 {
 
-	private Matcher<IToken> matcher;
-	private ITokenizer<IToken> tokenizer;
-	private Stopwords<IToken> stopwords;
+	private Matcher matcher;
+	private ITokenizer tokenizer;
+	private Stopwords stopwords;
 
 	private void setStopwords()
 	{
 		List<String> words = new ArrayList<String>();
 		words.add("le");
 		words.add("la");
-		this.stopwords = new Stopwords<IToken>(words);
+		this.stopwords = new Stopwords(words);
 	}
 
 	@BeforeEach
@@ -41,7 +40,7 @@ class MatcherTest
 	{
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
 		this.setStopwords();
-		this.matcher = new Matcher<IToken>(tokenizer, stopwords);
+		this.matcher = new Matcher(tokenizer, stopwords);
 	}
 
 	@Test
@@ -62,9 +61,9 @@ class MatcherTest
 	void testAnnot()
 	{
 		this.matcher.addKeyword(MockData.getICG());
-		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance cardiaque");
+		List<IAnnotation> anns = this.matcher.annot("insuffisance cardiaque");
 		assertEquals(anns.size(), 1);
-		IAnnotation<IToken> ann = anns.get(0);
+		IAnnotation ann = anns.get(0);
 		assertEquals(ann.start_i(), 0);
 		assertEquals(ann.end_i(), 1);
 		assertEquals(ann.getAlgos().size(), 2);
@@ -78,12 +77,12 @@ class MatcherTest
 	void testAnnotStopwords()
 	{
 		this.matcher.addKeyword(MockData.getICG());
-		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance de cardiaque");
+		List<IAnnotation> anns = this.matcher.annot("insuffisance de cardiaque");
 		assertEquals(anns.size(), 0);
 		this.stopwords.add("de");
 		anns = this.matcher.annot("insuffisance de cardiaque");
 		assertEquals(anns.size(), 1);
-		IAnnotation<IToken> ann = anns.get(0);
+		IAnnotation ann = anns.get(0);
 		assertEquals(ann.toString(), "insuffisance cardiaque	0 12;16 25	Insuffisance Cardiaque (I50.9)");
 	}
 
@@ -91,7 +90,7 @@ class MatcherTest
 	void testAnnotWindow()
 	{
 		this.matcher.addKeyword(MockData.getICG());
-		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance de cardiaque");
+		List<IAnnotation> anns = this.matcher.annot("insuffisance de cardiaque");
 		assertEquals(anns.size(), 0);
 		this.matcher.setW(2);
 		anns = this.matcher.annot("insuffisance de cardiaque");
@@ -104,7 +103,7 @@ class MatcherTest
 		IEntity ent1 = new Entity("fœtal", "C1305737");
 		this.matcher.addKeyword(ent1);
 		this.matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> anns = this.matcher.annot("foetal");
+		List<IAnnotation> anns = this.matcher.annot("foetal");
 		assertEquals(anns.size(), 1);
 	}
 
@@ -134,7 +133,7 @@ class MatcherTest
 	{
 		this.matcher.addKeyword(MockData.getICG());
 		this.matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffisance cardiaque gauche");
+		List<IAnnotation> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
 	}
 }

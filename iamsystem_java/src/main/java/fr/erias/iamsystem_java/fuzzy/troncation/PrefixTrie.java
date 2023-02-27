@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.NormFunctions;
 import fr.erias.iamsystem_java.tokenize.SplitFunctions;
@@ -21,8 +20,8 @@ public class PrefixTrie
 
 	private final int minPrefixLength;
 	private final Trie trie;
-	private final ITokenizer<IToken> charTokenizer;
-	private final AbstractTokNorm<IToken> toknorm;
+	private final ITokenizer charTokenizer;
+	private final AbstractTokNorm toknorm;
 
 	/**
 	 * Approximate String algorithm based on the prefix of a token
@@ -35,7 +34,7 @@ public class PrefixTrie
 		this.minPrefixLength = minPrefixLength;
 		this.trie = new Trie();
 		this.charTokenizer = new TokenizerImp(NormFunctions.rmAccents, SplitFunctions.splitChar);
-		this.toknorm = new TokStopImp<IToken>(charTokenizer, new NoStopwords());
+		this.toknorm = new TokStopImp(charTokenizer, new NoStopwords());
 	}
 
 	public void addToken(Collection<String> tokens)
@@ -53,7 +52,7 @@ public class PrefixTrie
 	 *
 	 * @return a tokenizer
 	 */
-	public ITokenizer<IToken> getCharTokenizer()
+	public ITokenizer getCharTokenizer()
 	{
 		return charTokenizer;
 	}

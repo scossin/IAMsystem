@@ -19,7 +19,6 @@ import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.IToken;
 
 /**
  *
@@ -32,7 +31,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
  * @author Sebastien Cossin
  *
  */
-public class StringEncoderSyn extends NormLabelAlgo<IToken>
+public class StringEncoderSyn extends NormLabelAlgo
 {
 
 	private Map<String, Set<String>> encoding2tokens = new HashMap<String, Set<String>>();
@@ -85,8 +84,7 @@ public class StringEncoderSyn extends NormLabelAlgo<IToken>
 		}
 	}
 
-	public void addTerminology(Iterable<IKeyword> keywords, AbstractTokNorm<? extends IToken> toknorm)
-			throws EncoderException
+	public void addTerminology(Iterable<IKeyword> keywords, AbstractTokNorm toknorm) throws EncoderException
 	{
 		Set<String> tokens = IStoreKeywords.getUnigrams(keywords, toknorm);
 		add(tokens);

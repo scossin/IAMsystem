@@ -18,9 +18,8 @@ import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.StringDistance;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.matcher.Matcher;
-import fr.erias.iamsystem_java.tokenize.IToken;
 
-public class Levenshtein<T extends IToken> extends StringDistance<T>
+public class Levenshtein extends StringDistance
 {
 
 	public static ITransducer<Candidate> buildTransuder(int maxDistance, Collection<String> unigrams,
@@ -34,7 +33,7 @@ public class Levenshtein<T extends IToken> extends StringDistance<T>
 		return transducer;
 	}
 
-	public static ITransducer<Candidate> buildTransuder(int maxDistance, Matcher<?> matcher, Algorithm algorithm)
+	public static ITransducer<Candidate> buildTransuder(int maxDistance, Matcher matcher, Algorithm algorithm)
 	{
 		return buildTransuder(maxDistance, matcher.getUnigrams(), algorithm);
 	}

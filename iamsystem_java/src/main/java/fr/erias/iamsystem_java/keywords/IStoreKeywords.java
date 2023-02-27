@@ -6,7 +6,6 @@ import java.util.Set;
 
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.AbstractTokNorm;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 
 public interface IStoreKeywords
@@ -20,7 +19,7 @@ public interface IStoreKeywords
 	 * @param stopwords a {@link IStopwords}
 	 * @return
 	 */
-	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, AbstractTokNorm<? extends IToken> toknorm)
+	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, AbstractTokNorm toknorm)
 	{
 		Set<String> unigrams = new HashSet<String>();
 

@@ -21,7 +21,6 @@ import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
@@ -74,12 +73,12 @@ public class Main
 
 	private Matcher matcher;
 
-	private ITokenizer<IToken> tokenizer;
+	private ITokenizer tokenizer;
 
 	public Main() throws IOException, EncoderException
 	{
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		matcher = new Matcher<IToken>(tokenizer, new NoStopwords());
+		matcher = new Matcher(tokenizer, new NoStopwords());
 		matcher.addKeyword(getTerminology(Main.filename));
 		matcher.setRemoveNestedAnnot(false);
 		matcher.setW(100);
@@ -107,7 +106,7 @@ public class Main
 			// System.out.println(file.getName());
 			String content = Files.readString(file.toPath(), Charset.defaultCharset());
 			long startTime = System.nanoTime();
-			List<IAnnotation<IToken>> anns = matcher.annot(content);
+			List<IAnnotation> anns = matcher.annot(content);
 			// for (CTcode ct : output.getCTcodes()) {
 			// System.out.println(ct.toString());
 			// w.write(ct.toString());

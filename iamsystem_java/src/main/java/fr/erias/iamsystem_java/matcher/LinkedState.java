@@ -5,22 +5,22 @@ import java.util.Collection;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.INode;
 
-public class LinkedState<T extends IToken>
+public class LinkedState
 {
 
-	public static boolean isStartState(LinkedState<? extends IToken> state)
+	public static boolean isStartState(LinkedState state)
 	{
 		return state.parent == null;
 	}
 
 	private final INode node;
-	private final LinkedState<T> parent;
+	private final LinkedState parent;
 	private final Collection<String> algos;
 
-	private final T token;
+	private final IToken token;
 	private final int wBucket;
 
-	public LinkedState(LinkedState<T> parent, INode node, T token, Collection<String> algos, int wBucket)
+	public LinkedState(LinkedState parent, INode node, IToken token, Collection<String> algos, int wBucket)
 	{
 		this.node = node;
 		this.parent = parent;
@@ -46,12 +46,12 @@ public class LinkedState<T extends IToken>
 		return node;
 	}
 
-	public LinkedState<T> getParent()
+	public LinkedState getParent()
 	{
 		return parent;
 	}
 
-	public T getToken()
+	public IToken getToken()
 	{
 		return token;
 	}

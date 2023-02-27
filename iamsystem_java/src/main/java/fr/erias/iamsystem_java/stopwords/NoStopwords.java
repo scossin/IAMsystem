@@ -7,7 +7,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
  *
  * @author Sebastien Cossin
  */
-public class NoStopwords implements ISimpleStopwords<IToken>
+public class NoStopwords implements ISimpleStopwords
 {
 
 	@Override

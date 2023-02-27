@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 class FrTokenizerTest
 {
 
-	private ITokenizer<IToken> tokenizer;
+	private ITokenizer tokenizer;
 	private List<IToken> tokens;
 
 	@BeforeEach

@@ -14,21 +14,19 @@ import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.utils.MockData;
 
 class TroncationTest
 {
 
-	Troncation<IToken> getTroncation(int minPrefixLength, int maxDistance)
+	Troncation getTroncation(int minPrefixLength, int maxDistance)
 	{
 		PrefixTrie trie = new PrefixTrie(minPrefixLength);
-		Matcher<IToken> matcher = new Matcher<IToken>(TokenizerFactory.getTokenizer(ETokenizer.FRENCH),
-				new NoStopwords());
+		Matcher matcher = new Matcher(TokenizerFactory.getTokenizer(ETokenizer.FRENCH), new NoStopwords());
 		matcher.addKeyword(MockData.getICG());
 		trie.addToken(matcher.getUnigrams());
-		Troncation<IToken> troncation = new Troncation<IToken>("troncation", trie, maxDistance);
+		Troncation troncation = new Troncation("troncation", trie, maxDistance);
 		return troncation;
 	}
 
@@ -40,7 +38,7 @@ class TroncationTest
 	@Test
 	void test()
 	{
-		Troncation<IToken> troncation = getTroncation(5, 9);
+		Troncation troncation = getTroncation(5, 9);
 		List<SynAlgo> syns = troncation.getSynsOfWord("insuffis");
 		assertEquals(1, syns.size());
 	}
@@ -49,14 +47,13 @@ class TroncationTest
 	void testMatcher()
 	{
 		PrefixTrie trie = new PrefixTrie(4);
-		Matcher<IToken> matcher = new Matcher<IToken>(TokenizerFactory.getTokenizer(ETokenizer.FRENCH),
-				new NoStopwords());
+		Matcher matcher = new Matcher(TokenizerFactory.getTokenizer(ETokenizer.FRENCH), new NoStopwords());
 		matcher.addKeyword(MockData.getICG());
 		trie.addToken(matcher.getUnigrams());
-		Troncation<IToken> troncation = new Troncation<IToken>("troncation", trie, 2);
+		Troncation troncation = new Troncation("troncation", trie, 2);
 		matcher.addFuzzyAlgo(troncation);
 		matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> annots = matcher.annot("insuffisan cardiaq gauc");
+		List<IAnnotation> annots = matcher.annot("insuffisan cardiaq gauc");
 		assertEquals(2, annots.size());
 	}
 
@@ -64,7 +61,7 @@ class TroncationTest
 	void testMaxDistance()
 	{
 		// insuffisance has 12 characters. More than 12, this word is ignored.
-		Troncation<IToken> troncation = getTroncation(5, 2);
+		Troncation troncation = getTroncation(5, 2);
 		List<SynAlgo> syns = troncation.getSynsOfWord("insuffisan");
 		assertEquals(syns.size(), 1);
 		troncation = getTroncation(5, 1);
@@ -76,7 +73,7 @@ class TroncationTest
 	void testMinPrefixLength()
 	{
 		// insuffisance has 12 characters. More than 12, this word is ignored.
-		Troncation<IToken> troncation = getTroncation(12, 9);
+		Troncation troncation = getTroncation(12, 9);
 		List<SynAlgo> syns = troncation.getSynsOfWord("insuffisance");
 		assertEquals(1, syns.size());
 		troncation = getTroncation(13, 9);

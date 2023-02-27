@@ -3,10 +3,10 @@ package fr.erias.iamsystem_java.tokenize;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class AbstractTokNorm<T extends IToken> implements ITokenizerStopwords<T>
+public abstract class AbstractTokNorm implements ITokenizerStopwords
 {
 
-	public static List<IToken> tokenizeRmStopwords(String text, ITokenizerStopwords<IToken> tokstop)
+	public static List<IToken> tokenizeRmStopwords(String text, ITokenizerStopwords tokstop)
 	{
 		return tokstop.tokenize(text).stream().filter(t -> !tokstop.isTokenAStopword(t)).collect(Collectors.toList());
 	}
@@ -17,7 +17,7 @@ public abstract class AbstractTokNorm<T extends IToken> implements ITokenizerSto
 	 * @param text A document/keyword.
 	 * @return Tokens without keywords.
 	 */
-	public List<T> tokenizeRmStopwords(String text)
+	public List<IToken> tokenizeRmStopwords(String text)
 	{
 		return this.tokenize(text).stream().filter(t -> !this.isTokenAStopword(t)).collect(Collectors.toList());
 	}

@@ -15,7 +15,6 @@ import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 import fr.erias.iamsystem_java.utils.MockData;
@@ -24,18 +23,18 @@ class CacheFuzzyAlgosTest
 {
 
 	private FakeFuzzyAlgo fakeFuzzy;
-	private CacheFuzzyAlgos<IToken> cache;
-	private ITokenizer<IToken> tokenizer;
-	private Matcher<IToken> matcher;
+	private CacheFuzzyAlgos cache;
+	private ITokenizer tokenizer;
+	private Matcher matcher;
 
 	@BeforeEach
 	void setUp() throws Exception
 	{
 		this.fakeFuzzy = new FakeFuzzyAlgo();
-		this.cache = new CacheFuzzyAlgos<IToken>();
+		this.cache = new CacheFuzzyAlgos();
 		this.cache.addFuzzyAlgo(fakeFuzzy);
 		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		this.matcher = new Matcher<IToken>(this.tokenizer, new NoStopwords());
+		this.matcher = new Matcher(this.tokenizer, new NoStopwords());
 		this.matcher.addFuzzyAlgo(cache);
 		this.matcher.addKeyword(MockData.getICG());
 	}
@@ -57,13 +56,13 @@ class CacheFuzzyAlgosTest
 		stringEncoder.addTerminology(this.matcher.getKeywords(), this.matcher.getTokStop());
 		this.cache.addFuzzyAlgo(stringEncoder);
 		this.matcher.setRemoveNestedAnnot(false);
-		List<IAnnotation<IToken>> anns = this.matcher.annot("insuffizzzance cardiaqu gauch");
+		List<IAnnotation> anns = this.matcher.annot("insuffizzzance cardiaqu gauch");
 		assertEquals(anns.size(), 2);
 	}
 
 }
 
-class FakeFuzzyAlgo extends NormLabelAlgo<IToken>
+class FakeFuzzyAlgo extends NormLabelAlgo
 {
 
 	public int count;
