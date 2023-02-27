@@ -165,7 +165,6 @@ public class MatcherBuilder
 		return this;
 	}
 
-	@SuppressWarnings("unchecked")
 	public MatcherBuilder stopwords(String... words)
 	{
 		Stopwords stopwords = new Stopwords();

@@ -112,7 +112,6 @@ public class Main
 			// w.write(ct.toString());
 			// }
 			long endTime = System.nanoTime();
-			long totalTime = endTime - startTime;
 			// double mem = (double) (Runtime.getRuntime().totalMemory() -
 			// Runtime.getRuntime().freeMemory() / (1024*1024));
 			System.out.println(file.getName() + "\t" + anns.size());

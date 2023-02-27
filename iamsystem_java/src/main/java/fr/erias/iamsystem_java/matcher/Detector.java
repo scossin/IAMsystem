@@ -47,7 +47,7 @@ public class Detector
 
 		// count_not_stopword allows a stopword-independent window size.
 		int count_not_stopword = 0;
-		List stopTokens = new ArrayList();
+		List<IToken> stopTokens = new ArrayList<IToken>();
 		List<LinkedState> newStates = new ArrayList<LinkedState>();
 		List<LinkedState> states2remove = new ArrayList<LinkedState>();
 

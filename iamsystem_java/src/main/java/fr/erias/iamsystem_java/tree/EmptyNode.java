@@ -1,8 +1,6 @@
 package fr.erias.iamsystem_java.tree;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
 
@@ -16,8 +14,6 @@ public class EmptyNode implements INode
 {
 
 	public static final EmptyNode EMPTYNODE = new EmptyNode();
-
-	private static final Set<INode> noNodes = new HashSet<INode>();;
 
 	private EmptyNode()
 	{
