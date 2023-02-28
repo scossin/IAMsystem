@@ -9,12 +9,14 @@ import com.github.liblevenshtein.transducer.Candidate;
 import com.github.liblevenshtein.transducer.ITransducer;
 
 import fr.erias.iamsystem_java.fuzzy.CacheFuzzyAlgos;
+import fr.erias.iamsystem_java.fuzzy.FuzzyRegex;
 import fr.erias.iamsystem_java.fuzzy.abbreviations.Abbreviations;
 import fr.erias.iamsystem_java.fuzzy.base.IWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.SimpleWords2ignore;
 import fr.erias.iamsystem_java.fuzzy.closestSubString.ClosestSubString;
 import fr.erias.iamsystem_java.fuzzy.levenshtein.Levenshtein;
+import fr.erias.iamsystem_java.fuzzy.normfun.WordNormalizer;
 import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
 import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
@@ -24,6 +26,7 @@ import fr.erias.iamsystem_java.stopwords.NegativeStopwords;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
+import fr.erias.iamsystem_java.tokenize.INormalizeF;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
@@ -46,6 +49,8 @@ public class MatcherBuilder
 	private int maxDistanceClosest = -1;
 	private int minPrefixLengthTroncation;
 	private int maxDistanceTroncation;
+	private List<WordNormalizer> wordNormalizers = new ArrayList<WordNormalizer>();
+	private List<FuzzyRegex> fuzzyRegex = new ArrayList<FuzzyRegex>();
 
 	public MatcherBuilder()
 	{
@@ -107,6 +112,18 @@ public class MatcherBuilder
 			Troncation troncation = new Troncation("troncation", trie, this.maxDistanceTroncation);
 			cache.addFuzzyAlgo(troncation);
 		}
+
+
+		for(WordNormalizer normalizer : wordNormalizers) {
+			matcher.addFuzzyAlgo(normalizer);
+			normalizer.add(matcher.getUnigrams());
+		}
+		
+		for (FuzzyRegex fuzzyRegex : fuzzyRegex) {
+			matcher.addFuzzyAlgo(fuzzyRegex);
+		}
+
+
 		return matcher;
 	}
 
@@ -153,6 +170,13 @@ public class MatcherBuilder
 		return this;
 	}
 
+	public MatcherBuilder wordNormalizer(String name, INormalizeF normfun)
+	{
+		WordNormalizer normalizer = new WordNormalizer(name, normfun);
+		this.wordNormalizers .add(normalizer);
+		return this;
+	}
+
 	public MatcherBuilder stopwords(Collection<String> stopwords)
 	{
 		this.stopwords = new Stopwords(stopwords);
@@ -192,6 +216,14 @@ public class MatcherBuilder
 	{
 		this.minPrefixLengthTroncation = minPrefixLength;
 		this.maxDistanceTroncation = maxDistance;
+		return this;
+	}
+
+
+	public MatcherBuilder fuzzyRegex(String name, String pattern, String patternName)
+	{
+		FuzzyRegex fuzzy = new FuzzyRegex(name, pattern, patternName);
+		this.fuzzyRegex.add(fuzzy);
 		return this;
 	}
 
