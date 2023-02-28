@@ -113,16 +113,16 @@ public class MatcherBuilder
 			cache.addFuzzyAlgo(troncation);
 		}
 
-
-		for(WordNormalizer normalizer : wordNormalizers) {
-			matcher.addFuzzyAlgo(normalizer);
+		for (WordNormalizer normalizer : wordNormalizers)
+		{
+			cache.addFuzzyAlgo(normalizer);
 			normalizer.add(matcher.getUnigrams());
 		}
-		
-		for (FuzzyRegex fuzzyRegex : fuzzyRegex) {
+
+		for (FuzzyRegex fuzzyRegex : fuzzyRegex)
+		{
 			matcher.addFuzzyAlgo(fuzzyRegex);
 		}
-
 
 		return matcher;
 	}
@@ -140,9 +140,19 @@ public class MatcherBuilder
 		return this;
 	}
 
-	public MatcherBuilder keywords(Collection<IKeyword> keywords)
+	public MatcherBuilder fuzzyRegex(String name, String pattern, String patternName)
 	{
-		keywords.addAll(keywords);
+		FuzzyRegex fuzzy = new FuzzyRegex(name, pattern, patternName);
+		this.fuzzyRegex.add(fuzzy);
+		return this;
+	}
+
+	public MatcherBuilder keywords(Iterable<IKeyword> keywords)
+	{
+		for (IKeyword kw : keywords)
+		{
+			this.keywords.add(kw);
+		}
 		return this;
 	}
 
@@ -170,10 +180,9 @@ public class MatcherBuilder
 		return this;
 	}
 
-	public MatcherBuilder wordNormalizer(String name, INormalizeF normfun)
+	public MatcherBuilder removeNestedAnnot(boolean removeNestedAnnot)
 	{
-		WordNormalizer normalizer = new WordNormalizer(name, normfun);
-		this.wordNormalizers .add(normalizer);
+		this.removeNestedAnnot = removeNestedAnnot;
 		return this;
 	}
 
@@ -219,23 +228,16 @@ public class MatcherBuilder
 		return this;
 	}
 
-
-	public MatcherBuilder fuzzyRegex(String name, String pattern, String patternName)
-	{
-		FuzzyRegex fuzzy = new FuzzyRegex(name, pattern, patternName);
-		this.fuzzyRegex.add(fuzzy);
-		return this;
-	}
-
-	public MatcherBuilder w(boolean removeNestedAnnot)
-	{
-		this.removeNestedAnnot = removeNestedAnnot;
-		return this;
-	}
-
 	public MatcherBuilder w(int w)
 	{
 		this.w = w;
+		return this;
+	}
+
+	public MatcherBuilder wordNormalizer(String name, INormalizeF normfun)
+	{
+		WordNormalizer normalizer = new WordNormalizer(name, normfun);
+		this.wordNormalizers.add(normalizer);
 		return this;
 	}
 }

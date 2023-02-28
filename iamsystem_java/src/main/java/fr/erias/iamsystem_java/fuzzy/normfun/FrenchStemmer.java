@@ -361,7 +361,7 @@ public class FrenchStemmer implements INormalizeF
 	 * corresponding string<br>
 	 * "R is the region after the first non-vowel following a vowel or is the null
 	 * region at the end of the word if there is no such non-vowel"<br>
-	 * 
+	 *
 	 * @param buffer java.lang.StringBuffer - the in buffer
 	 * @return java.lang.String - the resulting string
 	 */
@@ -401,7 +401,7 @@ public class FrenchStemmer implements INormalizeF
 	 * "If the word begins with two vowels, RV is the region after the third letter,
 	 * otherwise the region after the first vowel not at the beginning of the word,
 	 * or the end of the word if these positions cannot be found."<br>
-	 * 
+	 *
 	 * @param buffer java.lang.StringBuffer - the in buffer
 	 * @return java.lang.String - the resulting string
 	 */

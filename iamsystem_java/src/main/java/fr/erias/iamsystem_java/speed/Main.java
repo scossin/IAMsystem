@@ -13,15 +13,15 @@ import java.util.List;
 
 import org.apache.commons.codec.EncoderException;
 
+import fr.erias.iamsystem_java.fuzzy.normfun.FrenchStemmer;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
-import fr.erias.iamsystem_java.stopwords.NoStopwords;
+import fr.erias.iamsystem_java.matcher.MatcherBuilder;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
-import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
 public class Main
@@ -73,15 +73,13 @@ public class Main
 
 	private Matcher matcher;
 
-	private ITokenizer tokenizer;
-
 	public Main() throws IOException, EncoderException
 	{
-		this.tokenizer = TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		matcher = new Matcher(tokenizer, new NoStopwords());
-		matcher.addKeyword(getTerminology(Main.filename));
-		matcher.setRemoveNestedAnnot(false);
-		matcher.setW(100);
+		matcher = new MatcherBuilder()
+				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
+				.wordNormalizer("stemmer", new FrenchStemmer())
+				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH)).keywords(getTerminology(Main.filename))
+				.removeNestedAnnot(false).w(1).build();
 	}
 
 	// syndrome Triple X
