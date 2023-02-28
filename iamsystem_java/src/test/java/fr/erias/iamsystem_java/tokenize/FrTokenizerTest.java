@@ -93,4 +93,13 @@ class FrTokenizerTest
 		String label1 = unSortedList.get(1).normLabel();
 		assertEquals(label1, "encephalite");
 	}
+	
+	@Test
+	void testReverseOrder()
+	{
+		ITokenizer orderTokensTokenizer = new OrderTokensTokenizer(this.tokenizer);
+		List<IToken> tokens = orderTokensTokenizer.tokenize("Meningo-encéphalite");
+		assertEquals("Token(label='encéphalite', norm_label='encephalite', start=8, end=19, i=1)"
+				, tokens.get(0).toString());
+	}
 }

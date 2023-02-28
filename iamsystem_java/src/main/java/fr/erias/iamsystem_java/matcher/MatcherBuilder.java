@@ -28,12 +28,14 @@ import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.INormalizeF;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
+import fr.erias.iamsystem_java.tokenize.OrderTokensTokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
 public class MatcherBuilder
 {
 
 	private ITokenizer tokenizer;
+	private boolean orderTokens = false;
 	private IStopwords stopwords;
 	private Collection<IKeyword> keywords = new ArrayList<IKeyword>();
 	private int w = 1;
@@ -67,6 +69,9 @@ public class MatcherBuilder
 	{
 		ITokenizer tokenizer = (this.tokenizer != null) ? this.tokenizer
 				: (ITokenizer) TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
+		if (orderTokens) {
+			tokenizer = new OrderTokensTokenizer(tokenizer);
+		}
 		IStopwords stopwords = (this.stopwords != null) ? this.stopwords : (IStopwords) new NoStopwords();
 		Matcher matcher = new Matcher(tokenizer, stopwords);
 		matcher.setW(this.w);
@@ -155,6 +160,15 @@ public class MatcherBuilder
 		}
 		return this;
 	}
+	
+	public MatcherBuilder keywords(IKeyword... keywords)
+	{
+		for (IKeyword kw : keywords)
+		{
+			this.keywords.add(kw);
+		}
+		return this;
+	}
 
 	public MatcherBuilder keywords(String... labels)
 	{
@@ -231,6 +245,12 @@ public class MatcherBuilder
 	public MatcherBuilder w(int w)
 	{
 		this.w = w;
+		return this;
+	}
+	
+	public MatcherBuilder orderTokens(boolean orderTokens)
+	{
+		this.orderTokens = orderTokens;
 		return this;
 	}
 
