@@ -4,7 +4,7 @@ public interface INormalizeF
 {
 
 	/**
-	 * Normalize a strign.
+	 * Normalize a string.
 	 *
 	 * @param text a string to normalize.
 	 * @return A normalized string.
