@@ -69,11 +69,11 @@ public class Token implements IToken
 	{
 		return this.start;
 	}
-	
+
 	@Override
 	public String toString()
 	{
-		return String.format("Token(label='%s', norm_label='%s', start=%d, end=%d, i=%d)", 
-				label, norm_label, start, end, i);
+		return String.format("Token(label='%s', norm_label='%s', start=%d, end=%d, i=%d)", label, norm_label, start,
+				end, i);
 	}
 }

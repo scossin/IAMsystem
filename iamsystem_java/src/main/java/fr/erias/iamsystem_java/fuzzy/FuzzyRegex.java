@@ -33,6 +33,11 @@ public class FuzzyRegex extends ContextFreeAlgo
 
 	public boolean tokenMatchesPattern(IToken token)
 	{
-		return patternCompiled.matcher(token.label()).find();
+		return wordMatchesPattern(token.label());
+	}
+
+	public boolean wordMatchesPattern(String label)
+	{
+		return patternCompiled.matcher(label).find();
 	}
 }

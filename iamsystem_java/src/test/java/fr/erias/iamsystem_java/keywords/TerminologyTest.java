@@ -35,8 +35,11 @@ class TerminologyTest
 	{
 		Terminology termino = new Terminology();
 		termino.addKeyword(icg);
-		List<IEntity> entities = termino.getKeywords().stream().filter(kw -> kw instanceof IEntity)
-				.map(kw -> (IEntity) kw).collect(Collectors.toList());
+		List<IEntity> entities = termino.getKeywords()
+				.stream()
+				.filter(kw -> kw instanceof IEntity)
+				.map(kw -> (IEntity) kw)
+				.collect(Collectors.toList());
 		assertEquals(1, entities.size());
 	}
 

@@ -28,8 +28,10 @@ public class Levenshtein extends StringDistance
 		// unigrams must be ordered.
 		List<String> unigramsOrdered = new ArrayList<String>(unigrams);
 		unigramsOrdered.sort(Comparator.naturalOrder());
-		ITransducer<Candidate> transducer = new TransducerBuilder().algorithm(algorithm).defaultMaxDistance(maxDistance)
-				.dictionary(unigramsOrdered, true).build();
+		ITransducer<Candidate> transducer = new TransducerBuilder().algorithm(algorithm)
+				.defaultMaxDistance(maxDistance)
+				.dictionary(unigramsOrdered, true)
+				.build();
 		return transducer;
 	}
 

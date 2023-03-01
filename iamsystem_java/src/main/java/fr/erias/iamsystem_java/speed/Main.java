@@ -78,8 +78,11 @@ public class Main
 		matcher = new MatcherBuilder()
 				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
 				.wordNormalizer("stemmer", new FrenchStemmer())
-				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH)).keywords(getTerminology(Main.filename))
-				.removeNestedAnnot(false).w(1).build();
+				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords(getTerminology(Main.filename))
+				.removeNestedAnnot(false)
+				.w(1)
+				.build();
 	}
 
 	// syndrome Triple X

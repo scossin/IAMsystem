@@ -2,8 +2,6 @@ package fr.erias.iamsystem_java.tree;
 
 import java.util.Collection;
 
-import org.apache.lucene.index.Term;
-
 import fr.erias.iamsystem_java.keywords.IKeyword;
 
 public interface INode

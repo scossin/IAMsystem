@@ -34,7 +34,9 @@ public class CacheFuzzyAlgos extends NormLabelAlgo
 
 	private void callAlgos(String normLabel)
 	{
-		List<SynAlgo> synsAlgo = fuzzyAlgos.stream().map(fuzzy -> fuzzy.getSynsOfWord(normLabel)).flatMap(List::stream)
+		List<SynAlgo> synsAlgo = fuzzyAlgos.stream()
+				.map(fuzzy -> fuzzy.getSynsOfWord(normLabel))
+				.flatMap(List::stream)
 				.collect(Collectors.toList());
 		this.cache.put(normLabel, synsAlgo);
 	}

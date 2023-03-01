@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
+import fr.erias.iamsystem_java.fuzzy.encoder.StringEncoderSyn;
 
 class StringEncoderTest
 {

@@ -17,7 +17,8 @@ public interface IStoreKeywords
 
 		for (IKeyword kw : keywords)
 		{
-			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokenizer, stopwords).stream()
+			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokenizer, stopwords)
+					.stream()
 					.forEach(t -> unigrams.add(t.normLabel()));
 		}
 		return unigrams;
@@ -37,7 +38,8 @@ public interface IStoreKeywords
 
 		for (IKeyword kw : keywords)
 		{
-			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokstop).stream()
+			ITokenizerStopwords.tokenizeRmStopwords(kw.label(), tokstop)
+					.stream()
 					.forEach(t -> unigrams.add(t.normLabel()));
 		}
 		return unigrams;

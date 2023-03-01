@@ -7,10 +7,17 @@ public class OrderTokensTokenizer implements ITokenizer
 {
 
 	private ITokenizer tokenizer;
-	public OrderTokensTokenizer(ITokenizer tokenizer) {
+
+	public OrderTokensTokenizer(ITokenizer tokenizer)
+	{
 		this.tokenizer = tokenizer;
 	}
-	
+
+	public ITokenizer getInnerTokenizer()
+	{
+		return this.tokenizer;
+	}
+
 	@Override
 	public List<IToken> tokenize(String text)
 	{
@@ -25,9 +32,5 @@ public class OrderTokensTokenizer implements ITokenizer
 			}
 		});
 		return tokens;
-	}
-	
-	public ITokenizer getInnerTokenizer() {
-		return this.tokenizer;
 	}
 }

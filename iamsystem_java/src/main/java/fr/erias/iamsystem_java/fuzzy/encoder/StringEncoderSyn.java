@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.fuzzy;
+package fr.erias.iamsystem_java.fuzzy.encoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,8 +117,10 @@ public class StringEncoderSyn extends NormLabelAlgo
 		try
 		{
 			String encodedStr = this.stringEncoder.encode(token);
-			return Arrays.asList(encodedStr.split(this.encodedStrSpliter)).stream()
-					.map(encoded -> this.findWordWithSimilarEncoding(encoded)).flatMap(List::stream)
+			return Arrays.asList(encodedStr.split(this.encodedStrSpliter))
+					.stream()
+					.map(encoded -> this.findWordWithSimilarEncoding(encoded))
+					.flatMap(List::stream)
 					.collect(Collectors.toList());
 		} catch (EncoderException e)
 		{

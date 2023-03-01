@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.StringEncoder;
+
 import com.github.liblevenshtein.transducer.Algorithm;
 import com.github.liblevenshtein.transducer.Candidate;
 import com.github.liblevenshtein.transducer.ITransducer;
@@ -15,6 +18,7 @@ import fr.erias.iamsystem_java.fuzzy.base.IWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.SimpleWords2ignore;
 import fr.erias.iamsystem_java.fuzzy.closestSubString.ClosestSubString;
+import fr.erias.iamsystem_java.fuzzy.encoder.StringEncoderSyn;
 import fr.erias.iamsystem_java.fuzzy.levenshtein.Levenshtein;
 import fr.erias.iamsystem_java.fuzzy.normfun.WordNormalizer;
 import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
@@ -46,13 +50,14 @@ public class MatcherBuilder
 	private int minNbcharLeven;
 	private int maxDistanceLeven;
 	private Algorithm algorithmLeven;
-	private boolean negativeStopwords = false;
+	private boolean setNegativeStopwords = false;
 	private int minPrefixLengthClosest = -1;
 	private int maxDistanceClosest = -1;
 	private int minPrefixLengthTroncation;
 	private int maxDistanceTroncation;
 	private List<WordNormalizer> wordNormalizers = new ArrayList<WordNormalizer>();
 	private List<FuzzyRegex> fuzzyRegex = new ArrayList<FuzzyRegex>();
+	private List<StringEncoderSyn> stringEncoders = new ArrayList<StringEncoderSyn>();
 
 	public MatcherBuilder()
 	{
@@ -69,7 +74,8 @@ public class MatcherBuilder
 	{
 		ITokenizer tokenizer = (this.tokenizer != null) ? this.tokenizer
 				: (ITokenizer) TokenizerFactory.getTokenizer(ETokenizer.FRENCH);
-		if (orderTokens) {
+		if (orderTokens)
+		{
 			tokenizer = new OrderTokensTokenizer(tokenizer);
 		}
 		IStopwords stopwords = (this.stopwords != null) ? this.stopwords : (IStopwords) new NoStopwords();
@@ -77,9 +83,11 @@ public class MatcherBuilder
 		matcher.setW(this.w);
 		matcher.setRemoveNestedAnnot(this.removeNestedAnnot);
 		matcher.addKeyword(this.keywords);
-		if (this.negativeStopwords)
+		if (this.setNegativeStopwords)
 		{
-			matcher.setStopwords(new NegativeStopwords());
+			NegativeStopwords negativeStopwords = new NegativeStopwords();
+			negativeStopwords.add(matcher.getUnigrams());
+			matcher.setStopwords(negativeStopwords);
 		}
 		CacheFuzzyAlgos cache = new CacheFuzzyAlgos("cache");
 		matcher.addFuzzyAlgo(cache);
@@ -118,6 +126,18 @@ public class MatcherBuilder
 			cache.addFuzzyAlgo(troncation);
 		}
 
+		for (StringEncoderSyn stringEncoder : this.stringEncoders)
+		{
+			cache.addFuzzyAlgo(stringEncoder);
+			try
+			{
+				stringEncoder.add(matcher.getUnigrams());
+			} catch (EncoderException e)
+			{
+				e.printStackTrace();
+			}
+		}
+
 		for (WordNormalizer normalizer : wordNormalizers)
 		{
 			cache.addFuzzyAlgo(normalizer);
@@ -127,6 +147,11 @@ public class MatcherBuilder
 		for (FuzzyRegex fuzzyRegex : fuzzyRegex)
 		{
 			matcher.addFuzzyAlgo(fuzzyRegex);
+			if (matcher.getStopwords() instanceof NegativeStopwords)
+			{
+				NegativeStopwords negativeStop = (NegativeStopwords) matcher.getStopwords();
+				negativeStop.add((word) -> fuzzyRegex.wordMatchesPattern(word));
+			}
 		}
 
 		return matcher;
@@ -152,7 +177,7 @@ public class MatcherBuilder
 		return this;
 	}
 
-	public MatcherBuilder keywords(Iterable<IKeyword> keywords)
+	public MatcherBuilder keywords(IKeyword... keywords)
 	{
 		for (IKeyword kw : keywords)
 		{
@@ -160,8 +185,8 @@ public class MatcherBuilder
 		}
 		return this;
 	}
-	
-	public MatcherBuilder keywords(IKeyword... keywords)
+
+	public MatcherBuilder keywords(Iterable<IKeyword> keywords)
 	{
 		for (IKeyword kw : keywords)
 		{
@@ -188,9 +213,15 @@ public class MatcherBuilder
 		return this;
 	}
 
-	public MatcherBuilder negativeStopwords(boolean negativeStopwords)
+	public MatcherBuilder negative(boolean negativeStopwords)
 	{
-		this.negativeStopwords = negativeStopwords;
+		this.setNegativeStopwords = negativeStopwords;
+		return this;
+	}
+
+	public MatcherBuilder orderTokens(boolean orderTokens)
+	{
+		this.orderTokens = orderTokens;
 		return this;
 	}
 
@@ -229,6 +260,13 @@ public class MatcherBuilder
 		return this;
 	}
 
+	public MatcherBuilder stringEncoder(StringEncoder stringEncoder, int minTokenLength)
+	{
+		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, minTokenLength);
+		this.stringEncoders.add(encoder);
+		return this;
+	}
+
 	public MatcherBuilder tokenizer(ITokenizer tokenizer)
 	{
 		this.tokenizer = tokenizer;
@@ -245,12 +283,6 @@ public class MatcherBuilder
 	public MatcherBuilder w(int w)
 	{
 		this.w = w;
-		return this;
-	}
-	
-	public MatcherBuilder orderTokens(boolean orderTokens)
-	{
-		this.orderTokens = orderTokens;
 		return this;
 	}
 

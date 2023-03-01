@@ -10,7 +10,9 @@ public interface ITokenizerStopwords extends ITokenizer, IStopwords
 
 	public static List<IToken> tokenizeRmStopwords(String text, ITokenizer tokenizer, IStopwords stopwords)
 	{
-		return tokenizer.tokenize(text).stream().filter(t -> !stopwords.isTokenAStopword(t))
+		return tokenizer.tokenize(text)
+				.stream()
+				.filter(t -> !stopwords.isTokenAStopword(t))
 				.collect(Collectors.toList());
 	}
 

@@ -62,8 +62,10 @@ public class Trie
 	 */
 	public void addIKeyword(IKeyword keyword, ITokenizerStopwords tokstop)
 	{
-		List<String> stringSeq = ITokenizerStopwords.tokenizeRmStopwords(keyword.label(), tokstop).stream()
-				.map(token -> token.normLabel()).collect(Collectors.toList());
+		List<String> stringSeq = ITokenizerStopwords.tokenizeRmStopwords(keyword.label(), tokstop)
+				.stream()
+				.map(token -> token.normLabel())
+				.collect(Collectors.toList());
 		addIKeyword(keyword, stringSeq);
 	}
 

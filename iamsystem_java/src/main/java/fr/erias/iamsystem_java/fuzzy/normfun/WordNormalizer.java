@@ -1,10 +1,9 @@
 package fr.erias.iamsystem_java.fuzzy.normfun;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.collections4.map.HashedMap;
 
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
@@ -15,7 +14,7 @@ public class WordNormalizer extends NormLabelAlgo
 {
 
 	private INormalizeF normfun;
-	private Map<String, List<SynAlgo>> norm2syns = new HashedMap<String, List<SynAlgo>>();
+	private Map<String, List<SynAlgo>> norm2syns = new HashMap<String, List<SynAlgo>>();
 
 	public WordNormalizer(String name, INormalizeF normfun)
 	{

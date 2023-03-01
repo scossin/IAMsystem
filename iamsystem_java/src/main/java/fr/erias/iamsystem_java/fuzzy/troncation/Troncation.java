@@ -100,7 +100,10 @@ public class Troncation extends NormLabelAlgo
 
 	private Set<String> getTokenStartingWith(String token)
 	{
-		List<String> chars = this.prefixTrie.getCharTokenizer().tokenize(token).stream().map(t -> t.normLabel())
+		List<String> chars = this.prefixTrie.getCharTokenizer()
+				.tokenize(token)
+				.stream()
+				.map(t -> t.normLabel())
 				.collect(Collectors.toList());
 		INode node = this.prefixTrie.getTrie().getInitialState().gotoNode(chars);
 		ArrayList<INode> nodes = new ArrayList<INode>(1);

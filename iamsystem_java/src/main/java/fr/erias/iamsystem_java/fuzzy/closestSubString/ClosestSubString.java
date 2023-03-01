@@ -54,7 +54,10 @@ public class ClosestSubString extends NormLabelAlgo
 		// compare the node depth with maxDistance value: this is the number of
 		// characters between the closest substring and the token
 		Set<String> startsWith = new HashSet<String>();
-		List<String> chars = this.prefixTrie.getCharTokenizer().tokenize(token).stream().map(t -> t.normLabel())
+		List<String> chars = this.prefixTrie.getCharTokenizer()
+				.tokenize(token)
+				.stream()
+				.map(t -> t.normLabel())
 				.collect(Collectors.toList());
 		INode currentNode = this.prefixTrie.getTrie().getInitialState();
 		INode lastFinalNode = EmptyNode.EMPTYNODE;
