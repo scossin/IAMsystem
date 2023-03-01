@@ -47,31 +47,15 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
+
 	<dependencies>
-		<dependency>
-			<groupId>org.junit.platform</groupId>
-			<artifactId>junit-platform-launcher</artifactId>
-			<scope>test</scope>
-		</dependency>
+
+		<!-- unit tests -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-engine</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>org.junit.vintage</groupId>
-			<artifactId>junit-vintage-engine</artifactId>
-			<scope>test</scope>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-nop -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-nop</artifactId>
-			<version>2.0.6</version>
-			<scope>test</scope>
-		</dependency>
-
 
 		<!-- Updated dependency required to use liblevenshtein v3.0.0. Without 
 			it, an error is raised: 'Illegal reflective access by lombok.javac.apt.LombokProcessor 
@@ -83,31 +67,29 @@
 			<scope>provided</scope>
 		</dependency>
 
+		<!-- Make 'SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder". message
+		disappear. 
+		SLF4J: See http://www.slf4j.org/codes.html#StaticLoggerBinder for further details.
+		https://mvnrepository.com/artifact/org.slf4j/slf4j-nop -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-nop</artifactId>
+			<version>2.0.6</version>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- Levenshtein algorithm -->
 		<dependency>
 			<groupId>com.github.universal-automata</groupId>
 			<artifactId>liblevenshtein</artifactId>
 			<version>3.0.0</version>
 		</dependency>
 
-
-		<dependency>
-			<groupId>org.apache.commons</groupId>
-			<artifactId>commons-text</artifactId>
-			<version>1.2</version>
-		</dependency>
-
-		<!-- Approximate String matching methods -->
+		<!-- Other approximate string matching methods -->
 		<dependency>
 			<groupId>org.apache.directory.studio</groupId>
 			<artifactId>org.apache.commons.codec</artifactId>
 			<version>1.8</version>
-		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.json/json -->
-		<dependency>
-			<groupId>org.json</groupId>
-			<artifactId>json</artifactId>
-			<version>20160810</version>
 		</dependency>
 	</dependencies>
 
@@ -136,13 +118,13 @@
 
 	<build>
 		<plugins>
+			<!-- Unit tests -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<!-- JUnit 5 requires Surefire version 2.22.0 or higher -->
 				<version>2.22.0</version>
 			</plugin>
-
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
