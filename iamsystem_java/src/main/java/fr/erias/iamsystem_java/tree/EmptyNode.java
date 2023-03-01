@@ -1,12 +1,12 @@
 package fr.erias.iamsystem_java.tree;
 
 import java.util.Collection;
+import java.util.List;
 
 import fr.erias.iamsystem_java.keywords.IKeyword;
 
 /**
- * The empty node doesn't belong to a trie (no parentNode, no childNode) It
- * represents the emptyset in the set of states of a final-state automata.
+ * The empty node represents the empty set in the set of states of a final-state automata.
  *
  * @author Sebastien Cossin
  */
@@ -72,7 +72,7 @@ public class EmptyNode implements INode
 	}
 
 	@Override
-	public INode gotoNode(Collection<String> tokens)
+	public INode gotoNode(List<String> tokens)
 	{
 		return EMPTYNODE;
 	}

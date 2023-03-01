@@ -152,7 +152,7 @@ public class Node implements INode
 	}
 
 	@Override
-	public INode gotoNode(Collection<String> tokens)
+	public INode gotoNode(List<String> tokens)
 	{
 		INode node = this;
 		for (String token : tokens)
