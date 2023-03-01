@@ -9,6 +9,12 @@ import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.INode;
 
+/**
+ * Declare the attributes and methods expected by an Annotation.
+ * 
+ * @author Sebastien Cossin
+ *
+ */
 public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 {
 

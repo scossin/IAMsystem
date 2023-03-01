@@ -73,6 +73,11 @@ public class Annotation extends Span implements IAnnotation
 		return lastState.getKeywords();
 	}
 
+	/**
+	 * Utility function to retrieve keywords' label.
+	 * 
+	 * @return
+	 */
 	private String keywords2Str()
 	{
 		return this.getKeywords().stream().map(k -> k.toString()).collect(Collectors.joining(";"));

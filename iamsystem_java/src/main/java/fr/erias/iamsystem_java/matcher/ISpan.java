@@ -5,6 +5,12 @@ import java.util.List;
 import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
+/**
+ * A class that represents a sequence of tokens in a document.
+ * 
+ * @author Sebastien Cossin
+ *
+ */
 public interface ISpan extends IOffsets
 {
 

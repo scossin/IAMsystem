@@ -20,7 +20,7 @@ import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 import fr.erias.iamsystem_java.tree.Trie;
 
-public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, ISynsProvider
+public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopwords, ISynsProvider
 {
 
 	private ITokenizer tokenizer;
@@ -33,6 +33,12 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 	private List<FuzzyAlgo> fuzzyAlgos = new ArrayList<FuzzyAlgo>();
 	private SynsProvider synsProvider;
 
+	/**
+	 * Create a Matcher. I recommend you rather use {@link MatcherBuilder} class to build a matcher
+	 * since the API is easier to use. 
+	 * @param tokenizer the {@link ITokenizer} used to tokenize and normalize documents and keywords.
+	 * @param stopwords the {@link IStopwords} instance used to remove stopwords from keywords and ignore them in documents.
+	 */
 	public Matcher(ITokenizer tokenizer, IStopwords stopwords)
 	{
 		this.setTokenizer(tokenizer);
@@ -42,6 +48,10 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		this.synsProvider = new SynsProvider(fuzzyAlgos);
 	}
 
+	/**
+	 * Add a fuzzy algorithm to allow fuzzy matching.
+	 * @param fuzzyAlgo a class that extends {@link FuzzyAlgo}.
+	 */
 	public void addFuzzyAlgo(FuzzyAlgo fuzzyAlgo)
 	{
 		this.fuzzyAlgos.add(fuzzyAlgo);
@@ -54,6 +64,10 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		trie.addIKeyword(keyword, this);
 	}
 
+	/**
+	 * Add multiple keywords. 
+	 * @param keywords a class that implements {@link IKeyword} interface.
+	 */
 	public void addKeyword(Iterable<? extends IKeyword> keywords)
 	{
 		for (IKeyword kw : keywords)
@@ -63,7 +77,7 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 	}
 
 	/**
-	 * Add keywords by providing a String iterable.
+	 * Add keywords by providing an iterable of labels.
 	 *
 	 * @param keywords A collection of keywords to add.
 	 */
@@ -76,6 +90,7 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		}
 	}
 
+	@Override
 	public List<IAnnotation> annot(List<IToken> tokens)
 	{
 		List<IAnnotation> annots = detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
@@ -86,6 +101,7 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		return annots;
 	}
 
+	@Override
 	public List<IAnnotation> annot(String text)
 	{
 		List<IToken> tokens = tokenize(text);
@@ -99,6 +115,10 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		return termino.getKeywords();
 	}
 
+	/**
+	 * Retrieve the {@link IStopwords} instance.
+	 * @return the {@link IStopwords} instance.
+	 */
 	public IStopwords getStopwords()
 	{
 		return stopwords;
@@ -110,16 +130,30 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		return synsProvider.getSynonyms(tokens, token, states);
 	}
 
+	/**
+	 * Retrieve the {@link ITokenizer} instance.
+	 * @return the {@link ITokenizer} instance.
+	 */
 	public ITokenizer getTokenizer()
 	{
 		return tokenizer;
 	}
 
+	/**
+	 * Get all the unigrams (single words excluding stopwords) in keywords.
+	 * This function is often called by fuzzy algorithms to know which unigram are presents 
+	 * in the keywords.
+	 * @return a set of unigrams.
+	 */
 	public Set<String> getUnigrams()
 	{
 		return IStoreKeywords.getUnigrams(this.getKeywords(), this);
 	}
 
+	/**
+	 * Return the window parameter of this matcher.
+	 * @return an integer, default to 1.
+	 */
 	public int getW()
 	{
 		return w;
@@ -131,26 +165,48 @@ public class Matcher implements IMatcher, IStoreKeywords, ITokenizerStopwords, I
 		return stopwords.isTokenAStopword(token);
 	}
 
+	/**
+	 * Whether to remove nested annotations. 
+	 * @return Default to True.
+	 */
 	public boolean removeNestedAnnot()
 	{
 		return removeNestedAnnot;
 	}
 
+	/**
+	 * Set removeNestedAnnot attribute.
+	 * @param removeNestedAnnot False to not removed nested annotations.
+	 */
 	public void setRemoveNestedAnnot(boolean removeNestedAnnot)
 	{
 		this.removeNestedAnnot = removeNestedAnnot;
 	}
 
+	/**
+	 * Change the stopwords instance.
+	 *   Note that keywords already added will not be modified.
+	 * @param stopwords another {@link IStopwords} instance.
+	 */
 	public void setStopwords(IStopwords stopwords)
 	{
 		this.stopwords = stopwords;
 	}
 
+	/**
+	 * Change the tokenizer.
+	 *   Note that keywords already added will not be modified.
+	 * @param tokenizer another {@link ITokenizer} instance.
+	 */
 	public void setTokenizer(ITokenizer tokenizer)
 	{
 		this.tokenizer = tokenizer;
 	}
 
+	/**
+	 * Set the window parameter of this matcher. 
+	 * @param w Default to 1.
+	 */
 	public void setW(int w)
 	{
 		this.w = w;

@@ -6,7 +6,8 @@ import java.util.List;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 
 /**
- * The empty node represents the empty set in the set of states of a final-state automata.
+ * The empty node represents the empty set in the set of states of a final-state
+ * automata.
  *
  * @author Sebastien Cossin
  */

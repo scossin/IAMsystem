@@ -51,10 +51,11 @@ public class Trie
 	}
 
 	/**
-	 * Add a {@link IKeyword}. 
+	 * Add a {@link IKeyword}.
 	 *
-	 * @param keyword    A {@link IKeyword} instance.
-	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
+	 * @param keyword A {@link IKeyword} instance.
+	 * @param tokstop a {@link ITokenizerStopwords} to tokenize and normalize
+	 *                keyword's label.
 	 */
 	public void addIKeyword(IKeyword keyword, ITokenizerStopwords tokstop)
 	{
@@ -68,8 +69,8 @@ public class Trie
 	/**
 	 * Add a {@link IKeyword}.
 	 *
-	 * @param keyword a {@link IKeyword} instance.
-	 * @param stringSeq  an ordered sequence of keyword's label normalized.
+	 * @param keyword   a {@link IKeyword} instance.
+	 * @param stringSeq an ordered sequence of keyword's label normalized.
 	 */
 	public void addIKeyword(IKeyword keyword, List<String> stringSeq)
 	{
@@ -95,7 +96,8 @@ public class Trie
 	 * Add a {@link IKeyword}.
 	 *
 	 * @param keyword a keyword label.
-	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
+	 * @param tokstop a {@link ITokenizerStopwords} to tokenize and normalize
+	 *                keyword's label.
 	 */
 	public void addKeyword(String keyword, ITokenizerStopwords tokstop)
 	{
@@ -107,7 +109,8 @@ public class Trie
 	 * Add a collection of {@link IKeyword}.
 	 *
 	 * @param keywords multiple {@link IKeyword}.
-	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
+	 * @param tokstop  a {@link ITokenizerStopwords} to tokenize and normalize
+	 *                 keyword's label.
 	 */
 	public void addKeywords(Iterable<? extends IKeyword> keywords, ITokenizerStopwords tokstop)
 	{
@@ -119,7 +122,8 @@ public class Trie
 
 	/**
 	 * Construct the root node / initial state.
-	 * @return a root node. 
+	 * 
+	 * @return a root node.
 	 */
 	protected Node buildRootNode()
 	{

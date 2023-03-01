@@ -1,5 +1,11 @@
 package fr.erias.iamsystem_java.stopwords;
 
+/**
+ * IStopwords that check a stopword by its label.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public interface ISimpleStopwords extends IStopwords
 {
 

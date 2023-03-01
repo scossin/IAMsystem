@@ -55,6 +55,12 @@ public class NegativeStopwords implements IStopwords
 		this.funs.add(word2keepFunction);
 	}
 
+	/**
+	 * Check if a word is not a stopword.
+	 * 
+	 * @param word a word to check.
+	 * @return False if it's not known (so it's a stopword).
+	 */
 	private boolean isAword2keep(String word)
 	{
 		return words2keep.contains(word) || funs.stream().anyMatch(f -> f.isAword2keep(word));

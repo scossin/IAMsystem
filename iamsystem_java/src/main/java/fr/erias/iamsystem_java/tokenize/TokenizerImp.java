@@ -16,9 +16,10 @@ public class TokenizerImp implements ITokenizer
 	private final ISplitF splitF;
 
 	/**
-	 * Create a simple Tokenizer. 
+	 * Create a simple Tokenizer.
+	 * 
 	 * @param normalizeF A function that normalize each token's label.
-	 * @param splitF A function that performs the tokenization.
+	 * @param splitF     A function that performs the tokenization.
 	 */
 	public TokenizerImp(INormalizeF normalizeF, ISplitF splitF)
 	{

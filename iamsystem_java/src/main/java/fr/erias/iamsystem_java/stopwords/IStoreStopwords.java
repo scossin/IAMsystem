@@ -2,6 +2,12 @@ package fr.erias.iamsystem_java.stopwords;
 
 import java.util.Collection;
 
+/**
+ * A IStopwords that stores stopwords.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public interface IStoreStopwords extends IStopwords
 {
 

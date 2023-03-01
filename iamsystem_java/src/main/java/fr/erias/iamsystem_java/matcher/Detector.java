@@ -17,9 +17,23 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
+/**
+ * Main internal function that implements iamsystem's algorithm.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class Detector
 {
 
+	/**
+	 * Main function to create an {@link Annotation}
+	 * 
+	 * @param last_el    the last linked state that stores a final state containing
+	 *                   keywords.
+	 * @param stopTokens The list of stopwords tokens detected in the document.
+	 * @return An annotation.
+	 */
 	private Annotation createAnnot(LinkedState last_el, List<IToken> stopTokens)
 	{
 		List<LinkedState> transStates = this.toList(last_el);
@@ -30,11 +44,29 @@ public class Detector
 		return new Annotation(tokens, algos, lastState, stopTokens);
 	}
 
+	/**
+	 * Create the initial state used in each detection sequence.
+	 * 
+	 * @param initialState In general the root node of the trie.
+	 * @return A linked state with no parent.
+	 */
 	private LinkedState createStartState(INode initialState)
 	{
 		return new LinkedState(null, initialState, null, null, -1);
 	}
 
+	/**
+	 * Main internal function that implements iamsystem's algorithm.
+	 * 
+	 * @param tokens       a sequence of document's tokens.
+	 * @param w            window, how many previous tokens can the algorithm look
+	 *                     at.
+	 * @param initialState a node/state in the trie, i.e. the root node.
+	 * @param synsProvider a class that provides synonyms for each token.
+	 * @param stopwords    an instance of {@link IStopwords} that checks if a token
+	 *                     is a stopword.
+	 * @return An ordered list of {@link Annotation}.
+	 */
 	public List<IAnnotation> detect(List<IToken> tokens, int w, INode initialState, ISynsProvider synsProvider,
 			IStopwords stopwords)
 	{
@@ -112,6 +144,16 @@ public class Detector
 		return annots;
 	}
 
+	/**
+	 * In case of two nested annotations, remove the shorter one. For example, if we
+	 * have "prostate" and "prostate cancer" annnotations, "prostate" annotation is
+	 * removed.
+	 * 
+	 * @param annots  a list of annotations.
+	 * @param keepAncestors Whether to keep the nested 
+	 * annotations that are ancestors and remove only other cases.
+	 * @return a filtered list of annotations.
+	 */
 	protected List<IAnnotation> rmNestedAnnots(List<IAnnotation> annots, boolean keepAncestors)
 	{
 		Set<Integer> ancestIndices = new HashSet<Integer>();
@@ -159,6 +201,12 @@ public class Detector
 		return annots2keep;
 	}
 
+	/**
+	 * Convert a linked list to a list.
+	 * @param last_el the last linked state that stores a final state containing
+	 *                   keywords.
+	 * @return A list of {@link LinkedState}.
+	 */
 	private List<LinkedState> toList(LinkedState last_el)
 	{
 		List<LinkedState> transStates = new ArrayList<>();

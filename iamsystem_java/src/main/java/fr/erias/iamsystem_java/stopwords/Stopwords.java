@@ -14,6 +14,9 @@ public class Stopwords extends SimpleStopwords implements IStoreStopwords
 
 	private Set<String> stopwords = new HashSet<String>();
 
+	/**
+	 * Default constructor.
+	 */
 	public Stopwords()
 	{
 	}

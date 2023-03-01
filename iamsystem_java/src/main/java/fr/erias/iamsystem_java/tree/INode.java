@@ -24,6 +24,7 @@ public interface INode
 
 	/**
 	 * Retrieve the parents.
+	 * 
 	 * @return parents of this node
 	 */
 	public Collection<INode> getAncestors();
@@ -45,7 +46,7 @@ public interface INode
 	/**
 	 * Return this node number.
 	 *
-	 * @return A unique number that identifies this node. 
+	 * @return A unique number that identifies this node.
 	 */
 	public int getNodeNumber();
 
@@ -64,7 +65,8 @@ public interface INode
 	public String getToken();
 
 	/**
-	 *  From this node go to another node with child relations.
+	 * From this node go to another node with child relations.
+	 * 
 	 * @param tokens An ordered sequence of tokens.
 	 * @return
 	 */
@@ -97,7 +99,8 @@ public interface INode
 	public boolean hasTransitionTo(String token);
 
 	/**
-	 * A node is a final state iff it stores a keyword. It's not always a leaf in the trie.
+	 * A node is a final state iff it stores a keyword. It's not always a leaf in
+	 * the trie.
 	 *
 	 * @return true if it's a final state.
 	 */

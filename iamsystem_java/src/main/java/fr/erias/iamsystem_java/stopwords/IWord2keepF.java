@@ -1,5 +1,11 @@
 package fr.erias.iamsystem_java.stopwords;
 
+/**
+ * Negative Stopwords utility function.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public interface IWord2keepF
 {
 	/**

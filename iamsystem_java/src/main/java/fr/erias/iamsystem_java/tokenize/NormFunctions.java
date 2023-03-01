@@ -8,7 +8,8 @@ package fr.erias.iamsystem_java.tokenize;
 public class NormFunctions
 {
 
-	public static INormalizeF rmAccents = (s) -> {
+	public static INormalizeF rmAccents = (s) ->
+	{
 		// https://github.com/gcardone/junidecode
 		String normalized = java.text.Normalizer.normalize(s, java.text.Normalizer.Form.NFD);
 		String accentsgone = normalized.replaceAll("\\p{InCombiningDiacriticalMarks}+", "");
