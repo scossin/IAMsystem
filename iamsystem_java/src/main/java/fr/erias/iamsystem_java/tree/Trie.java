@@ -19,7 +19,6 @@ import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 public class Trie
 {
 
-	// RootNode
 	public static final int nodeRootNumber = 0;
 
 	/**
@@ -44,8 +43,7 @@ public class Trie
 	private int nodeNumber = 1; // each node in the trie has a unique number. This variable counts every node.
 
 	/**
-	 * Construct a trie to store a keywordinology. <br>
-	 * Each node is a state of a finite-state automata.
+	 * Construct a trie to store {@link IKeyword} <br>
 	 */
 	public Trie()
 	{
@@ -53,12 +51,10 @@ public class Trie
 	}
 
 	/**
-	 * Add a keyword of a keywordinology. The trie creates as many nodes (= a token
-	 * / state) as needed.
+	 * Add a {@link IKeyword}. 
 	 *
-	 * @param keyword    A keyword of a keywordinology
-	 * @param tokenizer  to tokenize the label of the keyword
-	 * @param normalizer to normalize the label of the keyword
+	 * @param keyword    A {@link IKeyword} instance.
+	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
 	 */
 	public void addIKeyword(IKeyword keyword, ITokenizerStopwords tokstop)
 	{
@@ -70,10 +66,10 @@ public class Trie
 	}
 
 	/**
-	 * Add a keyword of a keywordinology.
+	 * Add a {@link IKeyword}.
 	 *
-	 * @param keyword a keyword of a keywordinology
-	 * @param tokens  a sequence of normalized token of the label of the keyword
+	 * @param keyword a {@link IKeyword} instance.
+	 * @param stringSeq  an ordered sequence of keyword's label normalized.
 	 */
 	public void addIKeyword(IKeyword keyword, List<String> stringSeq)
 	{
@@ -96,10 +92,10 @@ public class Trie
 	}
 
 	/**
-	 * Add a keyword by its label.
+	 * Add a {@link IKeyword}.
 	 *
 	 * @param keyword a keyword label.
-	 * @param tokstop
+	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
 	 */
 	public void addKeyword(String keyword, ITokenizerStopwords tokstop)
 	{
@@ -108,11 +104,10 @@ public class Trie
 	}
 
 	/**
-	 * add every keyword of a keywordinology
+	 * Add a collection of {@link IKeyword}.
 	 *
-	 * @param keywordinology a {@link IKeywordinology}
-	 * @param tokenizer      to tokenize the labels of the keywords
-	 * @param normalizer     to normalize the labels of the keywords
+	 * @param keywords multiple {@link IKeyword}.
+	 * @param tokstop	a {@link ITokenizerStopwords} to tokenize and normalize keyword's label.
 	 */
 	public void addKeywords(Iterable<? extends IKeyword> keywords, ITokenizerStopwords tokstop)
 	{
@@ -122,13 +117,17 @@ public class Trie
 		}
 	}
 
+	/**
+	 * Construct the root node / initial state.
+	 * @return a root node. 
+	 */
 	protected Node buildRootNode()
 	{
 		return new Node("START_TOKEN", nodeRootNumber);
 	}
 
 	/**
-	 * The initial state of the final-state automata is the rootNode of the trie
+	 * The initial state of the final-state automata is the rootNode of the trie.
 	 *
 	 * @return the rootNode
 	 */
@@ -138,9 +137,9 @@ public class Trie
 	}
 
 	/**
-	 * Each node has a unique number. The trie keeps track of the number of nodes.
+	 * Each node has a unique number.
 	 *
-	 * @return The number of nodes/states in the trie
+	 * @return The number of nodes/states in the trie.
 	 */
 	public int getNumberOfNodes()
 	{
