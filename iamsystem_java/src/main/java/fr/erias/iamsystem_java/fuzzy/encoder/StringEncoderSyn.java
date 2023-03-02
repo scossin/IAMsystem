@@ -49,14 +49,14 @@ public class StringEncoderSyn extends NormLabelAlgo
 	 *
 	 * @param stringEncoder     an method that implements {@link StringEncoder} <br>
 	 *                          https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
-	 * @param minTokenLength    don't encode token less than this length (0 if you
+	 * @param minNbChar    don't encode token less than this length (0 if you
 	 *                          want to include them all)
 	 * @param encodedStrSpliter if the algorithm outputs a concatenated string, you
 	 *                          want to split it with this separator
 	 */
-	public StringEncoderSyn(StringEncoder stringEncoder, int minTokenLength)
+	public StringEncoderSyn(StringEncoder stringEncoder, int minNbChar)
 	{
-		this(stringEncoder.getClass().getSimpleName(), stringEncoder, minTokenLength);
+		this(stringEncoder.getClass().getSimpleName(), stringEncoder, minNbChar);
 	}
 
 	public void add(Collection<String> tokens) throws EncoderException

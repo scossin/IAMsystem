@@ -35,6 +35,13 @@ import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.OrderTokensTokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
+/**
+ * Main public API to build a matcher that will annotate a document with IAMsystem algorithm.
+ * 
+ * 
+ * @author Sebastien Cossin
+ *
+ */
 public class MatcherBuilder
 {
 
@@ -53,16 +60,25 @@ public class MatcherBuilder
 	private boolean setNegativeStopwords = false;
 	private int minPrefixLengthClosest = -1;
 	private int maxDistanceClosest = -1;
-	private int minPrefixLengthTroncation;
+	private int minNbCharTroncation;
 	private int maxDistanceTroncation;
 	private List<WordNormalizer> wordNormalizers = new ArrayList<WordNormalizer>();
 	private List<FuzzyRegex> fuzzyRegex = new ArrayList<FuzzyRegex>();
 	private List<StringEncoderSyn> stringEncoders = new ArrayList<StringEncoderSyn>();
 
+	/**
+	 * Start building an IAMsystem matcher to annotate documents.
+	 */
 	public MatcherBuilder()
 	{
 	}
 
+	/**
+	 * Add an abbreviation.
+	 * @param shortForm an abbreviation short form.
+	 * @param longForm  an abbreviation long form.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder abbreviations(String shortForm, String longForm)
 	{
 		this.shortForms.add(shortForm);
@@ -70,6 +86,10 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Call this function to construct a new {@link Matcher} instance.
+	 * @return a Matcher to annotate a document.
+	 */
 	public Matcher build()
 	{
 		ITokenizer tokenizer = (this.tokenizer != null) ? this.tokenizer
@@ -118,7 +138,7 @@ public class MatcherBuilder
 			cache.addFuzzyAlgo(closest);
 		}
 
-		if (this.minPrefixLengthTroncation != -1)
+		if (this.minNbCharTroncation != -1)
 		{
 			PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
 			trie.addToken(matcher.getUnigrams());
@@ -157,19 +177,28 @@ public class MatcherBuilder
 		return matcher;
 	}
 
-	public Matcher build(ITokenizer tokenizer)
+	/**
+	 * Add a {@link ClosestSubString} fuzzy algorithm. 
+	 * For example, if the document contains 'pressureee', the keyword token 'pressure' will be returned
+	 * by this algorithm if 'maxDistance' is equal or greater to 2. 
+	 * @param minNbChar  Ignore words that are less than this length.
+	 * @param maxDistance Maximum number of characters between a document token and a keyword substring token.
+	 * @return the builder instance.
+	 */
+	public MatcherBuilder closestSubString(int minNbChar, int maxDistance)
 	{
-		this.tokenizer = tokenizer;
-		return build();
-	}
-
-	public MatcherBuilder closestSubString(int minPrefixLength, int maxDistance)
-	{
-		this.minPrefixLengthClosest = minPrefixLength;
+		this.minPrefixLengthClosest = minNbChar;
 		this.maxDistanceClosest = maxDistance;
 		return this;
 	}
 
+	/**
+	 * Add a {@link FuzzyRegex} fuzzy algorithm.
+	 * @param name  a name given to this algorithm.
+	 * @param pattern  a regular expression.
+	 * @param patternName a name given to this pattern (ex: 'numval').
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder fuzzyRegex(String name, String pattern, String patternName)
 	{
 		FuzzyRegex fuzzy = new FuzzyRegex(name, pattern, patternName);
@@ -177,6 +206,11 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Add {@link IKeyword} you want to detect in a document.
+	 * @param keywords a collection of {@link IKeyword}.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder keywords(IKeyword... keywords)
 	{
 		for (IKeyword kw : keywords)
@@ -186,6 +220,11 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Add {@link IKeyword} you want to detect in a document.
+	 * @param keywords a collection of {@link IKeyword}.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder keywords(Iterable<IKeyword> keywords)
 	{
 		for (IKeyword kw : keywords)
@@ -195,6 +234,11 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Add {@link IKeyword} labels you want to detect in a document.
+	 * @param keywords a collection of {@link IKeyword}.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder keywords(String... labels)
 	{
 		for (String label : labels)
@@ -205,6 +249,13 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Add a Levenshtein distance to detect typos in a document.
+	 * @param minNbChar Ignore all words that have a length less than this number.
+	 * @param maxDistance Levenshtein distance.
+ 	 * @param algorithm See {@link com.github.liblevenshtein.transducer.Algorithm}
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder levenshtein(int minNbChar, int maxDistance, Algorithm algorithm)
 	{
 		this.minNbcharLeven = minNbChar;
@@ -213,36 +264,69 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Every unigram not in the keywords is a stopword. 
+	 * If stopwords are also passed, they will be 
+	 * removed from keywords' tokens and so still be stopwords.
+	 * @param negativeStopwords True to add negative stopwords. Default to False. 
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder negative(boolean negativeStopwords)
 	{
 		this.setNegativeStopwords = negativeStopwords;
 		return this;
 	}
 
+	/**
+	 * Order tokens alphabetically if order doesn't 
+	 * matter in the matching strategy.
+	 * @param orderTokens True to order tokens.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder orderTokens(boolean orderTokens)
 	{
 		this.orderTokens = orderTokens;
 		return this;
 	}
 
+	/**
+	 * If two annotations overlap, remove the shorter one. 
+	 * @param removeNestedAnnot Default to True.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder removeNestedAnnot(boolean removeNestedAnnot)
 	{
 		this.removeNestedAnnot = removeNestedAnnot;
 		return this;
 	}
 
+	/**
+	 * Stopwords to remove from keywords and to ignore in documents.
+	 * @param stopwords A collection of words to ignore. 
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder stopwords(Collection<String> stopwords)
 	{
 		this.stopwords = new Stopwords(stopwords);
 		return this;
 	}
 
+	/**
+	 * Stopwords to remove from keywords and to ignore in documents.
+	 * @param stopwords A {@link IStopwords} instance to detect stopwords.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder stopwords(IStopwords stopwords)
 	{
 		this.stopwords = stopwords;
 		return this;
 	}
 
+	/**
+	 * Stopwords to remove from keywords and to ignore in documents.
+	 * @param words A collection of words to ignore. 
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder stopwords(String... words)
 	{
 		Stopwords stopwords = new Stopwords();
@@ -254,28 +338,53 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * Words ignored by string distance algorithms to avoid false positives matched.
+	 * @param words2ignore A collection of words to ignore.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder stringDistanceWords2ignore(Collection<String> words2ignore)
 	{
 		this.word2ignore = new SimpleWords2ignore(words2ignore);
 		return this;
 	}
 
-	public MatcherBuilder stringEncoder(StringEncoder stringEncoder, int minTokenLength)
+	/**
+	 * Add an Apache string encoder like Soundex.
+	 * @param stringEncoder an apache {@link StringEncoder}. 
+	 * 	For example {@link org.apache.commons.codec.language.Soundex}.
+	 * @param minNbChar ignore tokens less than this length.
+	 * @return the builder instance.
+	 * @see https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
+	 */
+	public MatcherBuilder stringEncoder(StringEncoder stringEncoder, int minNbChar)
 	{
-		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, minTokenLength);
+		StringEncoderSyn encoder = new StringEncoderSyn(stringEncoder, minNbChar);
 		this.stringEncoders.add(encoder);
 		return this;
 	}
 
+	/**
+	 * Set the tokenizer.
+	 * @param tokenizer A {@link ITokenizer} instance. 
+	 * Default to French {@link ETokenizer}.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder tokenizer(ITokenizer tokenizer)
 	{
 		this.tokenizer = tokenizer;
 		return this;
 	}
 
-	public MatcherBuilder troncation(int minPrefixLength, int maxDistance)
+	/**
+	 * Add a troncation fuzzy algorithm.
+	 * @param minNbChar ignore tokens less than this length.
+	 * @param maxDistance
+	 * @return the builder instance.
+	 */
+	public MatcherBuilder troncation(int minNbChar, int maxDistance)
 	{
-		this.minPrefixLengthTroncation = minPrefixLength;
+		this.minNbCharTroncation = minNbChar;
 		this.maxDistanceTroncation = maxDistance;
 		return this;
 	}

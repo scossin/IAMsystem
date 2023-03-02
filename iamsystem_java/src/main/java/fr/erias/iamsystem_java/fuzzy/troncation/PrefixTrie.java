@@ -12,6 +12,8 @@ import fr.erias.iamsystem_java.tokenize.TokenizerImp;
 import fr.erias.iamsystem_java.tree.Trie;
 
 /**
+ * An approximate String algorithm based on the prefix of a token
+ * 
  * @author Sebastien Cossin
  *
  */
@@ -23,31 +25,37 @@ public class PrefixTrie implements ITokenizerStopwords
 	private final ITokenizer charTokenizer;
 
 	/**
-	 * Approximate String algorithm based on the prefix of a token
-	 *
-	 * @param minPrefixLength minimum number of characters of the prefix/token <br>
-	 *                        Ignore all token that has length below minPrefixLength
+	 * Build a character prefix trie.
+	 * @param minNbChar minimum number of characters. <br>
+	 *                  Ignore all token that has length below.
 	 */
-	public PrefixTrie(int minPrefixLength)
+	public PrefixTrie(int minNbChar)
 	{
-		this.minPrefixLength = minPrefixLength;
+		this.minPrefixLength = minNbChar;
 		this.trie = new Trie();
 		this.charTokenizer = new TokenizerImp(NormFunctions.rmAccents, SplitFunctions.splitChar);
 	}
 
-	public void addToken(Collection<String> tokens)
+	/**
+	 * Store the unigrams of the keywords.
+	 * @param unigrams A collection of word unigrams coming from the keywords.
+	 */
+	public void addToken(Collection<String> unigrams)
 	{
-		tokens.stream().filter(w -> !tokenLengthLessThanMinSize(w)).forEach((w) -> addToken(w));
-	}
-
-	public void addToken(String token)
-	{
-		trie.addKeyword(token, this);
+		unigrams.stream().filter(w -> !tokenLengthLessThanMinSize(w)).forEach((w) -> addToken(w));
 	}
 
 	/**
-	 * Retrieve the character tokenizer
-	 *
+	 * Add an unigram.
+	 * @param unigram an unigram from a Keyword.
+	 */
+	public void addToken(String unigram)
+	{
+		trie.addKeyword(unigram, this);
+	}
+
+	/**
+	 * Retrieve the character tokenizer.
 	 * @return a tokenizer
 	 */
 	public ITokenizer getCharTokenizer()
@@ -56,8 +64,8 @@ public class PrefixTrie implements ITokenizerStopwords
 	}
 
 	/**
-	 * Retrieve the tree storing the characters
-	 *
+	 * Retrieve the tree storing the characters.
+	 * 
 	 * @return {@link Trie}
 	 */
 	public Trie getTrie()

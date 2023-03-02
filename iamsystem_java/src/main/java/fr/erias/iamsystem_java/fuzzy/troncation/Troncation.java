@@ -55,7 +55,7 @@ class PrefixFounder
 }
 
 /**
- * Approximate String algorithm based on the prefix of a token It returns all
+ * Approximate String algorithm based on the prefix of a token. It returns all
  * the string, in the dictionary, that begins with a prefix of length
  * 'minPrefixLength' and with a maximum difference characters of 'maxDistance'
  * Ex: 'diabet' is the troncation of 'diabete', maxDistance must be greater than
