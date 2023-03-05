@@ -21,7 +21,7 @@ public class StrategyUtils
 {
 	/**
 	 * Main function to create an {@link Annotation}
-	 * 
+	 *
 	 * @param last_el    the last linked state that stores a final state containing
 	 *                   keywords.
 	 * @param stopTokens The list of stopwords tokens detected in the document.
@@ -38,28 +38,8 @@ public class StrategyUtils
 	}
 
 	/**
-	 * Convert a linked list to a list.
-	 * @param last_el the last linked state that stores a final state containing
-	 *                   keywords.
-	 * @return A list of {@link LinkedState}.
-	 */
-	private static List<LinkedState> toList(LinkedState last_el)
-	{
-		List<LinkedState> transStates = new ArrayList<>();
-		transStates.add(last_el);
-		LinkedState parent = last_el.getParent();
-		while (!LinkedState.isStartState(parent))
-		{
-			transStates.add(parent);
-			parent = parent.getParent();
-		}
-		Collections.reverse(transStates);
-		return transStates;
-	}
-
-	/**
 	 * Create the initial state used in each detection sequence.
-	 * 
+	 *
 	 * @param initialState In general the root node of the trie.
 	 * @return A linked state with no parent.
 	 */
@@ -72,10 +52,10 @@ public class StrategyUtils
 	 * In case of two nested annotations, remove the shorter one. For example, if we
 	 * have "prostate" and "prostate cancer" annnotations, "prostate" annotation is
 	 * removed.
-	 * 
-	 * @param annots  a list of annotations.
-	 * @param keepAncestors Whether to keep the nested 
-	 * annotations that are ancestors and remove only other cases.
+	 *
+	 * @param annots        a list of annotations.
+	 * @param keepAncestors Whether to keep the nested annotations that are
+	 *                      ancestors and remove only other cases.
 	 * @return a filtered list of annotations.
 	 */
 	public static List<IAnnotation> rmNestedAnnots(List<IAnnotation> annots, boolean keepAncestors)
@@ -123,6 +103,27 @@ public class StrategyUtils
 			}
 		}
 		return annots2keep;
+	}
+
+	/**
+	 * Convert a linked list to a list.
+	 * 
+	 * @param last_el the last linked state that stores a final state containing
+	 *                keywords.
+	 * @return A list of {@link LinkedState}.
+	 */
+	private static List<LinkedState> toList(LinkedState last_el)
+	{
+		List<LinkedState> transStates = new ArrayList<>();
+		transStates.add(last_el);
+		LinkedState parent = last_el.getParent();
+		while (!LinkedState.isStartState(parent))
+		{
+			transStates.add(parent);
+			parent = parent.getParent();
+		}
+		Collections.reverse(transStates);
+		return transStates;
 	}
 
 }

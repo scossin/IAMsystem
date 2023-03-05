@@ -17,7 +17,7 @@ public interface ITokenizerStopwords extends ITokenizer, IStopwords
 
 	/**
 	 * Tokenize the text, remove stopwords.
-	 * 
+	 *
 	 * @param text      a document / keyword.
 	 * @param tokenizer A {@link ITokenizer}
 	 * @param stopwords A {@link IStopwords}
@@ -33,7 +33,7 @@ public interface ITokenizerStopwords extends ITokenizer, IStopwords
 
 	/**
 	 * Tokenize the text, remove stopwords.
-	 * 
+	 *
 	 * @param text    a document / keyword.
 	 * @param tokstop a {@link ITokenizerStopwords} instance to tokenize and detect
 	 *                stopwords.

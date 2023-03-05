@@ -17,7 +17,7 @@ public class TokenizerImp implements ITokenizer
 
 	/**
 	 * Create a simple Tokenizer.
-	 * 
+	 *
 	 * @param normalizeF A function that normalize each token's label.
 	 * @param splitF     A function that performs the tokenization.
 	 */

@@ -57,7 +57,7 @@ public class NegativeStopwords implements IStopwords
 
 	/**
 	 * Check if a word is not a stopword.
-	 * 
+	 *
 	 * @param word a word to check.
 	 * @return False if it's not known (so it's a stopword).
 	 */

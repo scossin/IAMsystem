@@ -12,7 +12,7 @@ public interface IMatchingStrategy
 {
 	/**
 	 * Main internal function that implements iamsystem's algorithm.
-	 * 
+	 *
 	 * @param tokens       a sequence of document's tokens.
 	 * @param w            window, how many previous tokens can the algorithm look
 	 *                     at.

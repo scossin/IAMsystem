@@ -11,7 +11,7 @@ import fr.erias.iamsystem_java.tree.INode;
 
 /**
  * Declare the attributes and methods expected by an Annotation.
- * 
+ *
  * @author Sebastien Cossin
  *
  */

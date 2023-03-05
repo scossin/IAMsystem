@@ -122,7 +122,7 @@ public class Trie
 
 	/**
 	 * Construct the root node / initial state.
-	 * 
+	 *
 	 * @return a root node.
 	 */
 	protected Node buildRootNode()

@@ -16,7 +16,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
-public class WindowMatching  implements IMatchingStrategy 
+public class WindowMatching implements IMatchingStrategy
 {
 
 	@Override

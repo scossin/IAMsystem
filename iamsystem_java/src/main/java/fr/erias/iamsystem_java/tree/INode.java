@@ -24,7 +24,7 @@ public interface INode
 
 	/**
 	 * Retrieve the parents.
-	 * 
+	 *
 	 * @return parents of this node
 	 */
 	public Collection<INode> getAncestors();
@@ -66,7 +66,7 @@ public interface INode
 
 	/**
 	 * From this node go to another node with child relations.
-	 * 
+	 *
 	 * @param tokens An ordered sequence of tokens.
 	 * @return
 	 */

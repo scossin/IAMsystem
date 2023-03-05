@@ -7,7 +7,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 
 /**
  * A class that represents a sequence of tokens in a document.
- * 
+ *
  * @author Sebastien Cossin
  *
  */

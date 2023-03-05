@@ -75,7 +75,7 @@ public class Annotation extends Span implements IAnnotation
 
 	/**
 	 * Utility function to retrieve keywords' label.
-	 * 
+	 *
 	 * @return
 	 */
 	private String keywords2Str()
