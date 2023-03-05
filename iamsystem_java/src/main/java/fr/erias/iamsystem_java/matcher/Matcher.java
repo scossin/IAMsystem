@@ -14,6 +14,9 @@ import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.IStoreKeywords;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
+import fr.erias.iamsystem_java.matcher.strategy.IMatchingStrategy;
+import fr.erias.iamsystem_java.matcher.strategy.StrategyUtils;
+import fr.erias.iamsystem_java.matcher.strategy.WindowMatching;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -25,7 +28,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	private ITokenizer tokenizer;
 	private IStopwords stopwords;
-	private final Detector detector;
+	private final IMatchingStrategy strategy;
 	private int w = 1;
 	private final Trie trie = new Trie();
 	private Terminology termino = new Terminology();
@@ -43,7 +46,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	{
 		this.setTokenizer(tokenizer);
 		this.setStopwords(stopwords);
-		this.detector = new Detector();
+		this.strategy = new WindowMatching();
 		fuzzyAlgos.add(new ExactMatch());
 		this.synsProvider = new SynsProvider(fuzzyAlgos);
 	}
@@ -93,10 +96,10 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	@Override
 	public List<IAnnotation> annot(List<IToken> tokens)
 	{
-		List<IAnnotation> annots = detector.detect(tokens, w, trie.getInitialState(), this, stopwords);
+		List<IAnnotation> annots = strategy.detect(tokens, w, trie.getInitialState(), this, stopwords);
 		if (this.removeNestedAnnot)
 		{
-			annots = this.detector.rmNestedAnnots(annots, false);
+			annots = StrategyUtils.rmNestedAnnots(annots, false);
 		}
 		return annots;
 	}
