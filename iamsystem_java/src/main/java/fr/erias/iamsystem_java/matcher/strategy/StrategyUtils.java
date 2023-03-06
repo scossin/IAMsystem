@@ -107,7 +107,7 @@ public class StrategyUtils
 
 	/**
 	 * Convert a linked list to a list.
-	 * 
+	 *
 	 * @param last_el the last linked state that stores a final state containing
 	 *                keywords.
 	 * @return A list of {@link LinkedState}.

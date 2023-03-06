@@ -76,7 +76,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add an abbreviation.
-	 * 
+	 *
 	 * @param shortForm an abbreviation short form.
 	 * @param longForm  an abbreviation long form.
 	 * @return the builder instance.
@@ -90,7 +90,7 @@ public class MatcherBuilder
 
 	/**
 	 * Call this function to construct a new {@link Matcher} instance.
-	 * 
+	 *
 	 * @return a Matcher to annotate a document.
 	 */
 	public Matcher build()
@@ -184,7 +184,7 @@ public class MatcherBuilder
 	 * Add a {@link ClosestSubString} fuzzy algorithm. For example, if the document
 	 * contains 'pressureee', the keyword token 'pressure' will be returned by this
 	 * algorithm if 'maxDistance' is equal or greater to 2.
-	 * 
+	 *
 	 * @param minNbChar   Ignore words that are less than this length.
 	 * @param maxDistance Maximum number of characters between a document token and
 	 *                    a keyword substring token.
@@ -199,7 +199,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add a {@link FuzzyRegex} fuzzy algorithm.
-	 * 
+	 *
 	 * @param name        a name given to this algorithm.
 	 * @param pattern     a regular expression.
 	 * @param patternName a name given to this pattern (ex: 'numval').
@@ -214,7 +214,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add {@link IKeyword} you want to detect in a document.
-	 * 
+	 *
 	 * @param keywords a collection of {@link IKeyword}.
 	 * @return the builder instance.
 	 */
@@ -229,7 +229,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add {@link IKeyword} you want to detect in a document.
-	 * 
+	 *
 	 * @param keywords a collection of {@link IKeyword}.
 	 * @return the builder instance.
 	 */
@@ -244,7 +244,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add {@link IKeyword} labels you want to detect in a document.
-	 * 
+	 *
 	 * @param keywords a collection of {@link IKeyword}.
 	 * @return the builder instance.
 	 */
@@ -260,7 +260,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add a Levenshtein distance to detect typos in a document.
-	 * 
+	 *
 	 * @param minNbChar   Ignore all words that have a length less than this number.
 	 * @param maxDistance Levenshtein distance.
 	 * @param algorithm   See {@link com.github.liblevenshtein.transducer.Algorithm}
@@ -277,7 +277,7 @@ public class MatcherBuilder
 	/**
 	 * Every unigram not in the keywords is a stopword. If stopwords are also
 	 * passed, they will be removed from keywords' tokens and so still be stopwords.
-	 * 
+	 *
 	 * @param negativeStopwords True to add negative stopwords. Default to False.
 	 * @return the builder instance.
 	 */
@@ -289,7 +289,7 @@ public class MatcherBuilder
 
 	/**
 	 * Order tokens alphabetically if order doesn't matter in the matching strategy.
-	 * 
+	 *
 	 * @param orderTokens True to order tokens.
 	 * @return the builder instance.
 	 */
@@ -301,7 +301,7 @@ public class MatcherBuilder
 
 	/**
 	 * If two annotations overlap, remove the shorter one.
-	 * 
+	 *
 	 * @param removeNestedAnnot Default to True.
 	 * @return the builder instance.
 	 */
@@ -313,7 +313,7 @@ public class MatcherBuilder
 
 	/**
 	 * Stopwords to remove from keywords and to ignore in documents.
-	 * 
+	 *
 	 * @param stopwords A collection of words to ignore.
 	 * @return the builder instance.
 	 */
@@ -325,7 +325,7 @@ public class MatcherBuilder
 
 	/**
 	 * Stopwords to remove from keywords and to ignore in documents.
-	 * 
+	 *
 	 * @param stopwords A {@link IStopwords} instance to detect stopwords.
 	 * @return the builder instance.
 	 */
@@ -337,7 +337,7 @@ public class MatcherBuilder
 
 	/**
 	 * Stopwords to remove from keywords and to ignore in documents.
-	 * 
+	 *
 	 * @param words A collection of words to ignore.
 	 * @return the builder instance.
 	 */
@@ -354,7 +354,7 @@ public class MatcherBuilder
 
 	/**
 	 * Words ignored by string distance algorithms to avoid false positives matched.
-	 * 
+	 *
 	 * @param words2ignore A collection of words to ignore.
 	 * @return the builder instance.
 	 */
@@ -366,7 +366,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add an Apache string encoder like Soundex.
-	 * 
+	 *
 	 * @param stringEncoder an apache {@link StringEncoder}. For example
 	 *                      {@link org.apache.commons.codec.language.Soundex}.
 	 * @param minNbChar     ignore tokens less than this length.
@@ -382,7 +382,7 @@ public class MatcherBuilder
 
 	/**
 	 * Set the tokenizer.
-	 * 
+	 *
 	 * @param tokenizer A {@link ITokenizer} instance. Default to French
 	 *                  {@link ETokenizer}.
 	 * @return the builder instance.
@@ -395,7 +395,7 @@ public class MatcherBuilder
 
 	/**
 	 * Add a troncation fuzzy algorithm.
-	 * 
+	 *
 	 * @param minNbChar   ignore tokens less than this length.
 	 * @param maxDistance
 	 * @return the builder instance.

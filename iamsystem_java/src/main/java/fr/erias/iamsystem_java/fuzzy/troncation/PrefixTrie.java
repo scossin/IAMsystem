@@ -26,7 +26,7 @@ public class PrefixTrie implements ITokenizerStopwords
 
 	/**
 	 * Build a character prefix trie.
-	 * 
+	 *
 	 * @param minNbChar minimum number of characters. <br>
 	 *                  Ignore all token that has length below.
 	 */
@@ -39,7 +39,7 @@ public class PrefixTrie implements ITokenizerStopwords
 
 	/**
 	 * Store the unigrams of the keywords.
-	 * 
+	 *
 	 * @param unigrams A collection of word unigrams coming from the keywords.
 	 */
 	public void addToken(Collection<String> unigrams)
@@ -49,7 +49,7 @@ public class PrefixTrie implements ITokenizerStopwords
 
 	/**
 	 * Add an unigram.
-	 * 
+	 *
 	 * @param unigram an unigram from a Keyword.
 	 */
 	public void addToken(String unigram)
@@ -59,7 +59,7 @@ public class PrefixTrie implements ITokenizerStopwords
 
 	/**
 	 * Retrieve the character tokenizer.
-	 * 
+	 *
 	 * @return a tokenizer
 	 */
 	public ITokenizer getCharTokenizer()

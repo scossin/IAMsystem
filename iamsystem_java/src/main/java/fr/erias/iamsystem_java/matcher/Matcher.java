@@ -40,7 +40,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	/**
 	 * Create a Matcher. I recommend you rather use {@link MatcherBuilder} class to
 	 * build a matcher since the API is easier to use.
-	 * 
+	 *
 	 * @param tokenizer the {@link ITokenizer} used to tokenize and normalize
 	 *                  documents and keywords.
 	 * @param stopwords the {@link IStopwords} instance used to remove stopwords
@@ -50,14 +50,14 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	{
 		this.setTokenizer(tokenizer);
 		this.setStopwords(stopwords);
-		this.strategy = new WindowMatching();
+		this.strategy = new WindowMatching(); // LargeWindowStrategy();
 		fuzzyAlgos.add(new ExactMatch());
 		this.synsProvider = new SynsProvider(fuzzyAlgos);
 	}
 
 	/**
 	 * Add a fuzzy algorithm to allow fuzzy matching.
-	 * 
+	 *
 	 * @param fuzzyAlgo a class that extends {@link FuzzyAlgo}.
 	 */
 	public void addFuzzyAlgo(FuzzyAlgo fuzzyAlgo)
@@ -74,7 +74,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Add multiple keywords.
-	 * 
+	 *
 	 * @param keywords a class that implements {@link IKeyword} interface.
 	 */
 	public void addKeyword(Iterable<? extends IKeyword> keywords)
@@ -126,7 +126,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Retrieve the {@link IStopwords} instance.
-	 * 
+	 *
 	 * @return the {@link IStopwords} instance.
 	 */
 	public IStopwords getStopwords()
@@ -135,14 +135,14 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<LinkedState> states)
 	{
 		return synsProvider.getSynonyms(tokens, token, states);
 	}
 
 	/**
 	 * Retrieve the {@link ITokenizer} instance.
-	 * 
+	 *
 	 * @return the {@link ITokenizer} instance.
 	 */
 	public ITokenizer getTokenizer()
@@ -154,7 +154,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	 * Get all the unigrams (single words excluding stopwords) in keywords. This
 	 * function is often called by fuzzy algorithms to know which unigram are
 	 * presents in the keywords.
-	 * 
+	 *
 	 * @return a set of unigrams.
 	 */
 	public Set<String> getUnigrams()
@@ -164,7 +164,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Return the window parameter of this matcher.
-	 * 
+	 *
 	 * @return an integer, default to 1.
 	 */
 	public int getW()
@@ -180,7 +180,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Whether to remove nested annotations.
-	 * 
+	 *
 	 * @return Default to True.
 	 */
 	public boolean removeNestedAnnot()
@@ -190,7 +190,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Set removeNestedAnnot attribute.
-	 * 
+	 *
 	 * @param removeNestedAnnot False to not removed nested annotations.
 	 */
 	public void setRemoveNestedAnnot(boolean removeNestedAnnot)
@@ -201,7 +201,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	/**
 	 * Change the stopwords instance. Note that keywords already added will not be
 	 * modified.
-	 * 
+	 *
 	 * @param stopwords another {@link IStopwords} instance.
 	 */
 	public void setStopwords(IStopwords stopwords)
@@ -216,7 +216,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Change the tokenizer. Note that keywords already added will not be modified.
-	 * 
+	 *
 	 * @param tokenizer another {@link ITokenizer} instance.
 	 */
 	public void setTokenizer(ITokenizer tokenizer)
@@ -226,7 +226,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Set the window parameter of this matcher.
-	 * 
+	 *
 	 * @param w Default to 1.
 	 */
 	public void setW(int w)

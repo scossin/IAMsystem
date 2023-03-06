@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.matcher.LinkedState;
@@ -26,7 +25,7 @@ public abstract class FuzzyAlgo
 		return name;
 	}
 
-	public abstract List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states);
+	public abstract List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Iterable<LinkedState> states);
 
 	public List<SynAlgo> word2syn(String word)
 	{

@@ -13,7 +13,6 @@ import java.util.List;
 
 import org.apache.commons.codec.EncoderException;
 
-import fr.erias.iamsystem_java.fuzzy.normfun.FrenchStemmer;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.keywords.IKeyword;
@@ -77,7 +76,7 @@ public class Main
 	{
 		matcher = new MatcherBuilder()
 				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
-				.wordNormalizer("stemmer", new FrenchStemmer())
+				// .wordNormalizer("stemmer", new FrenchStemmer())
 				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
 				.keywords(getTerminology(Main.filename))
 				.removeNestedAnnot(false)

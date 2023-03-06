@@ -24,7 +24,7 @@ public class FuzzyRegex extends ContextFreeAlgo
 
 	/**
 	 * Create a fuzzy regex instance.
-	 * 
+	 *
 	 * @param name        a name given to this algorithm.
 	 * @param pattern     a regular expression.
 	 * @param patternName a name given to this pattern (ex: 'numval').
@@ -47,7 +47,7 @@ public class FuzzyRegex extends ContextFreeAlgo
 
 	/**
 	 * Test a token label matches the regular expression.
-	 * 
+	 *
 	 * @param token a document's token.
 	 * @return True if this token matches this instance's pattern.
 	 */
@@ -58,7 +58,7 @@ public class FuzzyRegex extends ContextFreeAlgo
 
 	/**
 	 * Test if a word matches the regular expression.
-	 * 
+	 *
 	 * @param label matches the regular expression.
 	 * @return True if this word matches this instance's pattern.
 	 */

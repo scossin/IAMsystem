@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import fr.erias.iamsystem_java.matcher.LinkedState;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -20,7 +19,7 @@ public class SynsProvider implements ISynsProvider
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Set<LinkedState> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<LinkedState> states)
 	{
 		Map<String, SynAlgos> syn2synAlgos = new HashMap<String, SynAlgos>();
 		for (FuzzyAlgo fuzzyAlgo : fuzzyAlgos)

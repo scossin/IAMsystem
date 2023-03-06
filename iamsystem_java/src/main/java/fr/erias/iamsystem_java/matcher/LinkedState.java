@@ -16,7 +16,6 @@ public class LinkedState
 	private final INode node;
 	private final LinkedState parent;
 	private final Collection<String> algos;
-
 	private final IToken token;
 	private final int wBucket;
 
@@ -39,6 +38,11 @@ public class LinkedState
 	public Collection<String> getAlgos()
 	{
 		return algos;
+	}
+
+	public int getId()
+	{
+		return this.node.getNodeNumber();
 	}
 
 	public INode getNode()
@@ -65,5 +69,13 @@ public class LinkedState
 	public int hashCode()
 	{
 		return (this.node.getNodeNumber());
+	}
+
+	public boolean isObsolete(int countNotStopWord, int w)
+	{
+		if (isStartState(this))
+			return false;
+		int distance2currentToken = countNotStopWord - this.wBucket;
+		return w - distance2currentToken < 0;
 	}
 }
