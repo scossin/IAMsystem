@@ -16,6 +16,15 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
+/**
+ * Default matching strategy. It keeps track of all states within a window range
+ * and can be produce overlapping/nested annotations. If you want to use a large
+ * window with a large dictionary, it is recommended to use
+ * 'LargeWindowMatching' instead.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class WindowMatching implements IMatchingStrategy
 {
 
@@ -31,7 +40,7 @@ public class WindowMatching implements IMatchingStrategy
 		states.add(startState);
 
 		// count_not_stopword allows a stopword-independent window size.
-		int count_not_stopword = 0;
+		int countNotStopword = 0;
 		List<IToken> stopTokens = new ArrayList<IToken>();
 		List<LinkedState> newStates = new ArrayList<LinkedState>();
 		List<LinkedState> states2remove = new ArrayList<LinkedState>();
@@ -45,10 +54,10 @@ public class WindowMatching implements IMatchingStrategy
 			}
 			// w_bucket stores when a state will be out-of-reach given window size
 			// 'count_not_stopword % w' has range [0 ; w-1]
-			int wBucket = count_not_stopword % w;
+			int wBucket = countNotStopword % w;
 			newStates.clear();
 			states2remove.clear();
-			count_not_stopword++;
+			countNotStopword++;
 
 			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
 

@@ -18,7 +18,16 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
-public class LargeWindowStrategy implements IMatchingStrategy
+/**
+ * A large window strategy suited for a large window (ex: w=1000) and a large
+ * dictionary. This strategy is faster than the Window strategy if the
+ * dictionary is large, otherwise it's slower. It trades space for time
+ * complexity (space memory increases but matching speed increases).
+ *
+ * @author Sebastien Cossin
+ *
+ */
+public class LargeWindowMatching implements IMatchingStrategy
 {
 
 	private boolean isInitialized = false;

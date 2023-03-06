@@ -25,6 +25,8 @@ import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
 import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Keyword;
+import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
+import fr.erias.iamsystem_java.matcher.strategy.IMatchingStrategy;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.stopwords.NegativeStopwords;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
@@ -66,6 +68,7 @@ public class MatcherBuilder
 	private List<WordNormalizer> wordNormalizers = new ArrayList<WordNormalizer>();
 	private List<FuzzyRegex> fuzzyRegex = new ArrayList<FuzzyRegex>();
 	private List<StringEncoderSyn> stringEncoders = new ArrayList<StringEncoderSyn>();
+	private IMatchingStrategy strategy;
 
 	/**
 	 * Start building an IAMsystem matcher to annotate documents.
@@ -349,6 +352,30 @@ public class MatcherBuilder
 			stopwords.add(stopword);
 		}
 		this.stopwords = stopwords;
+		return this;
+	}
+
+	/**
+	 * Set the strategy of the matching algorithm.
+	 *
+	 * @param strategy one of the {@link EMatchingStrategy} enumerated values.
+	 * @return the builder instance.
+	 */
+	public MatcherBuilder strategy(EMatchingStrategy strategy)
+	{
+		this.strategy = strategy.getInstance();
+		return this;
+	}
+
+	/**
+	 * Set the strategy of the matching algorithm.
+	 *
+	 * @param strategy a {@link IMatchingStrategy} implementation.
+	 * @return the builder instance.
+	 */
+	public MatcherBuilder strategy(IMatchingStrategy strategy)
+	{
+		this.strategy = strategy;
 		return this;
 	}
 
