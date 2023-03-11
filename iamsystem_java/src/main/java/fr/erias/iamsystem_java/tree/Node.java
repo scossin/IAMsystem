@@ -97,7 +97,7 @@ public class Node implements INode
 	}
 
 	@Override
-	public Collection<INode> getChildNodes()
+	public Collection<INode> getChildrenNodes()
 	{
 		return this.childNodes.values();
 	}

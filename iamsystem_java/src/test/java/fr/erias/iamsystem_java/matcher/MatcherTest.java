@@ -136,4 +136,15 @@ class MatcherTest
 		List<IAnnotation> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
 	}
+	
+	@Test
+	void testDuplicateStatesGenerateOverlaps()
+	{
+		Matcher matcher = new MatcherBuilder()
+				.keywords("cancer de la prostate")
+				.w(3)
+				.build();
+		List<IAnnotation> anns = matcher.annot("cancer cancer de de la la prostate prostate");
+		assertEquals(anns.size(), 1);
+	}
 }

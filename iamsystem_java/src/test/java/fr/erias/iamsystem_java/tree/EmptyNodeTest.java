@@ -27,7 +27,7 @@ class EmptyNodeTest
 	@Test
 	void testChildNodes()
 	{
-		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getChildNodes());
+		assertThrows(UnsupportedOperationException.class, () -> emptyNode.getChildrenNodes());
 	}
 
 	@Test

@@ -44,8 +44,8 @@ class NodeTest
 	@Test
 	void testGetChildNodes()
 	{
-		assertEquals(1, this.insNode.getChildNodes().size());
-		assertTrue(this.insNode.getChildNodes().contains(this.cardNode));
+		assertEquals(1, this.insNode.getChildrenNodes().size());
+		assertTrue(this.insNode.getChildrenNodes().contains(this.cardNode));
 	}
 
 	@Test

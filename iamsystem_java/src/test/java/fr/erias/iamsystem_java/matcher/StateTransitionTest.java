@@ -18,10 +18,10 @@ import fr.erias.iamsystem_java.tree.INode;
 import fr.erias.iamsystem_java.tree.Node;
 import fr.erias.iamsystem_java.tree.Trie;
 
-class LinkedStateTest
+class StateTransitionTest
 {
 
-	static StateTransition createState(StateTransition parent, INode node, Token token)
+	static StateTransition createTrans(StateTransition parent, INode node, Token token)
 	{
 		List<String> algos = Arrays.asList();
 		return new StateTransition(parent, node, token, algos, 0);
@@ -40,8 +40,8 @@ class LinkedStateTest
 		INode initialState = trie.getInitialState();
 		Node nodeIns = new Node("insuffisance", initialState, 1);
 		Node nodeCard = new Node("cardiaque", nodeIns, 2);
-		this.stateIns = createState(null, nodeIns, tokenIns);
-		this.stateCard = createState(stateIns, nodeCard, tokenCard);
+		this.stateIns = createTrans(null, nodeIns, tokenIns);
+		this.stateCard = createTrans(stateIns, nodeCard, tokenCard);
 	}
 
 	@Test
@@ -52,11 +52,11 @@ class LinkedStateTest
 		Trie trie = new Trie();
 		INode initialState = trie.getInitialState();
 		Node nodeIns2 = new Node("insuffisance", initialState, 1);
-		StateTransition otherStateSameNum = createState(null, nodeIns2, null);
+		StateTransition otherStateSameNum = createTrans(null, nodeIns2, null);
 		assertEquals(stateIns, otherStateSameNum);
-		Set<StateTransition> states = new HashSet<StateTransition>();
-		states.add(stateIns);
-		assertTrue(states.contains(otherStateSameNum));
+		Set<StateTransition> transitions = new HashSet<StateTransition>();
+		transitions.add(stateIns);
+		assertTrue(transitions.contains(otherStateSameNum));
 	}
 
 	@Test

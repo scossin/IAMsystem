@@ -47,7 +47,7 @@ class PrefixFounder
 
 		if (maxDistance > 0)
 		{ // go deeper in the trie
-			PrefixFounder sub = new PrefixFounder(node.getChildNodes(), maxDistance - 1);
+			PrefixFounder sub = new PrefixFounder(node.getChildrenNodes(), maxDistance - 1);
 			startsWith.addAll(sub.getTokenStartingWith());
 		}
 		return (startsWith);

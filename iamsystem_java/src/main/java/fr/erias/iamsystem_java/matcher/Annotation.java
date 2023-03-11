@@ -22,7 +22,8 @@ public class Annotation extends Span implements IAnnotation
 	private final List<Collection<String>> algos;
 	private final INode lastState;
 	private final List<IToken> stopTokens;
-	private IBratFormatterF bratFormatter = BratFormatters.tokenFormatter;
+	private IBratFormatterF bratFormatter = BratFormatters.contSeqFormatter;
+	private String text;
 
 	/**
 	 * Create an annotation
@@ -110,5 +111,20 @@ public class Annotation extends Span implements IAnnotation
 	public String toString()
 	{
 		return String.format("%s\t%s", this.bratFormatter.getFormat(this), keywords2Str());
+	}
+
+	@Override
+	public String getText()
+	{
+		return text;
+	}
+
+	/**
+	 * Return the annotation text (if set).
+	 * @param text
+	 */
+	public void setText(String text)
+	{
+		this.text = text;
 	}
 }

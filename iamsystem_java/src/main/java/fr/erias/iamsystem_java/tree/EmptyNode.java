@@ -39,7 +39,7 @@ public class EmptyNode implements INode
 	}
 
 	@Override
-	public Collection<INode> getChildNodes()
+	public Collection<INode> getChildrenNodes()
 	{
 		throw new UnsupportedOperationException("EmptyNode don't implement this operation.");
 	}

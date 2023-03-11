@@ -121,7 +121,7 @@ public class LargeWindowMatching implements IMatchingStrategy
 
 	private Set<String> getChildTokens(INode node)
 	{
-		return node.getChildNodes().stream().map(childNode -> childNode.getToken()).collect(Collectors.toSet());
+		return node.getChildrenNodes().stream().map(childNode -> childNode.getToken()).collect(Collectors.toSet());
 	}
 
 	/**

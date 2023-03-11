@@ -115,6 +115,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	{
 		List<IToken> tokens = tokenize(text);
 		List<IAnnotation> annots = this.annot(tokens);
+		annots.forEach(annot -> annot.setText(text));
 		return annots;
 	}
 

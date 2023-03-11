@@ -41,7 +41,7 @@ class FuzzyTest
 				.build();
 		List<IAnnotation> annots = matcher.annot("the blood calcium level is normal: 2.1 mmol/L");
 		assertEquals(annots.size(), 1);
-		assertEquals(annots.get(0).toString(), "calcium 2.1 mmol L	10 17;35 45	calcium numval mmol/L");
+		assertEquals(annots.get(0).toString(), "calcium 2.1 mmol/L	10 17;35 45	calcium numval mmol/L");
 	}
 
 	@Test
@@ -55,7 +55,7 @@ class FuzzyTest
 				.build();
 		List<IAnnotation> annots = matcher.annot("the blood calcium level is normal: 2.1 mmol/L");
 		assertEquals(annots.size(), 1);
-		assertEquals(annots.get(0).toString(), "calcium 2.1 mmol L	10 17;35 45	calcium numval mmol/L");
+		assertEquals(annots.get(0).toString(), "calcium 2.1 mmol/L	10 17;35 45	calcium numval mmol/L");
 	}
 
 	@Test

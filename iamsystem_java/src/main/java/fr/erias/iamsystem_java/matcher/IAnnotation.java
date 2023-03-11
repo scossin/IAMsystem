@@ -70,4 +70,15 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	 * @return
 	 */
 	public List<IToken> stopTokens();
+	
+	/**
+	 * Get the text associated to this annotation.
+	 * @return Text annotated
+	 */
+	public String getText();
+	
+	/**
+	 * Set the annotated text.
+	 */
+	public void setText(String text);
 }

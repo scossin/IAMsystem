@@ -30,11 +30,11 @@ public interface INode
 	public Collection<INode> getAncestors();
 
 	/**
-	 * Get the child nodes.
+	 * Get the children nodes.
 	 *
 	 * @return a collection of child nodes of a node, empty if it's a leaf.
 	 */
-	public Collection<INode> getChildNodes();
+	public Collection<INode> getChildrenNodes();
 
 	/**
 	 * Retrieve the keywords stored by this node.
