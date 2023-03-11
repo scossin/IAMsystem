@@ -3,7 +3,6 @@ package fr.erias.iamsystem_java.matcher;
 import java.util.Collection;
 import java.util.List;
 
-import fr.erias.iamsystem_java.brat.IBratFormatterF;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -36,13 +35,6 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	}
 
 	/**
-	 * A Brat annotation formatter.
-	 *
-	 * @return the formatter.
-	 */
-	public IBratFormatterF formatter();
-
-	/**
 	 * For each token, the list of algorithms that matched.
 	 *
 	 * @return One to several algorithms per token.
@@ -57,11 +49,23 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	public Collection<IKeyword> getKeywords();
 
 	/**
+	 * Get the text associated to this annotation.
+	 * 
+	 * @return Text annotated
+	 */
+	public String getText();
+
+	/**
 	 * Retrieve the algorithm last state containing the keywords.
 	 *
 	 * @return a final state.
 	 */
 	public INode lastState();
+
+	/**
+	 * Set the annotated text.
+	 */
+	public void setText(String text);
 
 	/**
 	 * The list of stopwords tokens inside the annotation detected by the Matcher's
@@ -70,15 +74,4 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	 * @return
 	 */
 	public List<IToken> stopTokens();
-	
-	/**
-	 * Get the text associated to this annotation.
-	 * @return Text annotated
-	 */
-	public String getText();
-	
-	/**
-	 * Set the annotated text.
-	 */
-	public void setText(String text);
 }

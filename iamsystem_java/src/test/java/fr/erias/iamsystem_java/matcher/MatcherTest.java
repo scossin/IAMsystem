@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
+import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -98,6 +99,14 @@ class MatcherTest
 	}
 
 	@Test
+	void testDuplicateStatesGenerateOverlaps()
+	{
+		Matcher matcher = new MatcherBuilder().keywords("cancer de la prostate").w(3).build();
+		List<IAnnotation> anns = matcher.annot("cancer cancer de de la la prostate prostate");
+		assertEquals(anns.size(), 1);
+	}
+
+	@Test
 	void testEdansO()
 	{
 		IEntity ent1 = new Entity("fœtal", "C1305737");
@@ -136,15 +145,15 @@ class MatcherTest
 		List<IAnnotation> anns = this.matcher.annot("insuffisance cardiaque gauche");
 		assertEquals(anns.size(), 2);
 	}
-	
+
 	@Test
-	void testDuplicateStatesGenerateOverlaps()
+	void testNoOverlapEndToken()
 	{
-		Matcher matcher = new MatcherBuilder()
-				.keywords("cancer de la prostate")
+		Matcher matcher = new MatcherBuilder().keywords("portail de la médecine instutionnelle", "médecine")
+				.strategy(EMatchingStrategy.NoOverlapStrategy)
 				.w(3)
 				.build();
-		List<IAnnotation> anns = matcher.annot("cancer cancer de de la la prostate prostate");
+		List<IAnnotation> anns = matcher.annot("Portail de la médecine");
 		assertEquals(anns.size(), 1);
 	}
 }

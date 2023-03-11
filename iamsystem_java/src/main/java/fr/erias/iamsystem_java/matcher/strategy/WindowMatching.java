@@ -19,7 +19,8 @@ import fr.erias.iamsystem_java.tree.INode;
 /**
  * Default matching strategy. It keeps track of all states within a window range
  * and can be produce overlapping/nested annotations. If you want to use a large
- * window with a large dictionary, it is recommended to use {@link LargeWindowMatching} instead.
+ * window with a large dictionary, it is recommended to use
+ * {@link LargeWindowMatching} instead.
  *
  * @author Sebastien Cossin
  *
@@ -56,7 +57,8 @@ public class WindowMatching implements IMatchingStrategy
 
 			for (StateTransition trans : transitions)
 			{
-				if (trans.isObsolete(countNotStopword, w)) {
+				if (trans.isObsolete(countNotStopword, w))
+				{
 					trans2remove.add(trans);
 					continue;
 				}
@@ -66,7 +68,8 @@ public class WindowMatching implements IMatchingStrategy
 					INode node = trans.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(), countNotStopword);
+					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(),
+							countNotStopword);
 					newTransitions.add(nextTrans);
 					if (node.isAfinalState() && !transitions.contains(nextTrans))
 					{

@@ -2,9 +2,7 @@ package fr.erias.iamsystem_java.matcher;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
-import fr.erias.iamsystem_java.brat.BratFormatters;
 import fr.erias.iamsystem_java.brat.IBratFormatterF;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -20,13 +18,20 @@ public class Annotation extends Span implements IAnnotation
 {
 
 	public static IPrintAnnot printAnnot = new PrintAnnot();
-	public static void setPrintAnnot(IPrintAnnot printAnnot) {
+
+	public static void setBratFormatter(IBratFormatterF bratFormatter)
+	{
+		Annotation.printAnnot = new PrintAnnot(bratFormatter);
+	}
+
+	public static void setPrintAnnot(IPrintAnnot printAnnot)
+	{
 		Annotation.printAnnot = printAnnot;
 	}
+
 	private final List<Collection<String>> algos;
 	private final INode lastState;
 	private final List<IToken> stopTokens;
-	private IBratFormatterF bratFormatter = BratFormatters.contSeqFormatter;
 	private String text;
 
 	/**
@@ -61,12 +66,6 @@ public class Annotation extends Span implements IAnnotation
 	}
 
 	@Override
-	public IBratFormatterF formatter()
-	{
-		return this.bratFormatter;
-	}
-
-	@Override
 	public List<Collection<String>> getAlgos()
 	{
 		return algos;
@@ -79,20 +78,26 @@ public class Annotation extends Span implements IAnnotation
 	}
 
 	@Override
+	public String getText()
+	{
+		return text;
+	}
+
+	@Override
 	public INode lastState()
 	{
 		return this.lastState;
 	}
 
 	/**
-	 * Change the BratFormatter.
-	 *
-	 * @param bratFormatter a {@link IBratFormatterF} available in
-	 *                      {@link BratFormatters}.
+	 * Return the annotation text (if set).
+	 * 
+	 * @param text
 	 */
-	public void setBratFormatter(IBratFormatterF bratFormatter)
+	@Override
+	public void setText(String text)
 	{
-		this.bratFormatter = bratFormatter;
+		this.text = text;
 	}
 
 	@Override
@@ -105,20 +110,5 @@ public class Annotation extends Span implements IAnnotation
 	public String toString()
 	{
 		return Annotation.printAnnot.toString(this);
-	}
-
-	@Override
-	public String getText()
-	{
-		return text;
-	}
-
-	/**
-	 * Return the annotation text (if set).
-	 * @param text
-	 */
-	public void setText(String text)
-	{
-		this.text = text;
 	}
 }

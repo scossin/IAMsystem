@@ -61,14 +61,14 @@ public class NegativeStopwords implements IStopwords
 	 * @param word a word to check.
 	 * @return False if it's not known (so it's a stopword).
 	 */
-	private boolean isAword2keep(String word)
+	public boolean isAtoken2keep(IToken token)
 	{
-		return words2keep.contains(word) || funs.stream().anyMatch(f -> f.isAword2keep(word));
+		return words2keep.contains(token.normLabel()) || funs.stream().anyMatch(f -> f.isAword2keep(token));
 	}
 
 	@Override
 	public boolean isTokenAStopword(IToken token)
 	{
-		return !this.isAword2keep(token.normLabel());
+		return !this.isAtoken2keep(token);
 	}
 }

@@ -9,18 +9,22 @@ public class PrintAnnot implements IPrintAnnot
 
 	private IBratFormatterF bratFormatter;
 
-	public PrintAnnot() {
+	public PrintAnnot()
+	{
 		this.bratFormatter = BratFormatters.contSeqFormatter;
 	};
-	
-	public PrintAnnot(IBratFormatterF bratFormatter) {
+
+	public PrintAnnot(IBratFormatterF bratFormatter)
+	{
 		this.bratFormatter = bratFormatter;
 	}
-	
+
 	@Override
-	public String toString(IAnnotation annot) {
+	public String toString(IAnnotation annot)
+	{
 		IBratFormatterF bratFormatter = this.bratFormatter;
-		if (annot.getText() == null) {
+		if (annot.getText() == null)
+		{
 			bratFormatter = BratFormatters.tokenFormatter;
 		}
 		BratFormat format = bratFormatter.getFormat(annot);

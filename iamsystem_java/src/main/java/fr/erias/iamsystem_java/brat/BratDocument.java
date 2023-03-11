@@ -13,10 +13,21 @@ public class BratDocument<T extends IKeyword>
 	private final List<BratEntity> bratEntities = new ArrayList<BratEntity>();
 	private final List<BratNote> bratNotes = new ArrayList<BratNote>();
 	private INoteF noteFunction = NoteFunctions.keywordsToString;
+	private IBratFormatterF formatter;
+
+	public BratDocument()
+	{
+		this.formatter = BratFormatters.defaultFormatter;
+	}
+
+	public BratDocument(IBratFormatterF formatter)
+	{
+		this.formatter = formatter;
+	}
 
 	public void addAnnot(IAnnotation annot, String bratType)
 	{
-		BratFormat bratFormat = annot.formatter().getFormat(annot);
+		BratFormat bratFormat = this.formatter.getFormat(annot);
 		String entityId = getEntityId();
 		BratEntity entity = new BratEntity(entityId, bratType, bratFormat.getOffsets(), bratFormat.getText());
 		bratEntities.add(entity);

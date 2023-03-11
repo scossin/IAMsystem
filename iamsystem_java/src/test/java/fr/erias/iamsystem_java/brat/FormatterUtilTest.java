@@ -24,7 +24,7 @@ import fr.erias.iamsystem_java.tokenize.TokenizerImp;
 import fr.erias.iamsystem_java.tree.Node;
 import fr.erias.iamsystem_java.tree.Trie;
 
-class FormatterTest
+class FormatterUtilTest
 {
 
 	private ITokenizer tokenizer;
@@ -41,6 +41,19 @@ class FormatterTest
 		this.tokens.add(tokens.get(0));
 		this.tokens.add(tokens.get(3));
 		this.tokens.add(tokens.get(4));
+	}
+
+	@Test
+	void testContSeqFormatterFormatter()
+	{
+		Trie trie = new Trie();
+		Node lastState = new Node("insuffisance", trie.getInitialState(), 1);
+		IAnnotation annot = new Annotation(this.tokens, new ArrayList<Collection<String>>(), lastState,
+				new ArrayList<>());
+		annot.setText(this.text);
+		BratFormat format = BratFormatters.contSeqFormatter.getFormat(annot);
+		assertEquals("cancer glande prostate", format.getText());
+		assertEquals("0 6;13 28", format.getOffsets());
 	}
 
 	@Test
@@ -72,26 +85,10 @@ class FormatterTest
 	}
 
 	@Test
-	void testContSeqFormatterFormatter()
-	{
-		Trie trie = new Trie();
-		Node lastState = new Node("insuffisance", trie.getInitialState(), 1);
-		IAnnotation annot = new Annotation(this.tokens, new ArrayList<Collection<String>>(), lastState,
-				new ArrayList<>());
-		annot.setText(this.text);
-		BratFormat format = BratFormatters.contSeqFormatter.getFormat(annot);
-		assertEquals("cancer glande prostate", format.getText());
-		assertEquals("0 6;13 28", format.getOffsets());
-	}
-	
-	@Test
 	void testTokenFormatterPunctuation()
 	{
 		ITokenizer tokenizer = new TokenizerImp(NormFunctions.lowerCase, SplitFunctions.splitAlphaNumFloat);
-		Matcher matcher = new MatcherBuilder()
-				.keywords("calcium 2.6 mmol/L")
-				.tokenizer(tokenizer)
-				.build();
+		Matcher matcher = new MatcherBuilder().keywords("calcium 2.6 mmol/L").tokenizer(tokenizer).build();
 		List<IAnnotation> anns = matcher.annot("calcium 2.6 mmol/L");
 		assertEquals(anns.size(), 1);
 		assertEquals(anns.get(0).toString(), "calcium 2.6 mmol/L	0 18	calcium 2.6 mmol/L");

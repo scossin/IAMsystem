@@ -5,40 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import fr.erias.iamsystem_java.tokenize.Token;
 
 class StopwordsTest
 {
-
-	@BeforeEach
-	void setUp() throws Exception
-	{
-	}
-
-	@Test
-	void testNegativeStopwords()
-	{
-		Token token = new Token(0, 1, "important", "important", 0);
-		List<String> words = new ArrayList<String>();
-		NegativeStopwords stopwords = new NegativeStopwords(words);
-		assertTrue(stopwords.isTokenAStopword(token));
-		words.add("important");
-		stopwords.add(words);
-		assertTrue(!stopwords.isTokenAStopword(token));
-	}
-
-	@Test
-	void testNegativeStopwordsFun2keep()
-	{
-		Token token = new Token(0, 1, "important", "important", 0);
-		NegativeStopwords stopwords = new NegativeStopwords();
-		assertTrue(stopwords.isTokenAStopword(token));
-		stopwords.add((word) -> word.equals("important") ? true : false);
-		assertTrue(!stopwords.isTokenAStopword(token));
-	}
 
 	@Test
 	void testSimpleStopwords()

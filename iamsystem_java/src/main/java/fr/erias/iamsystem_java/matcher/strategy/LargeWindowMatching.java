@@ -96,7 +96,8 @@ public class LargeWindowMatching implements IMatchingStrategy
 					INode node = trans.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(), countNotStopWord);
+					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(),
+							countNotStopWord);
 					newTransitions.add(nextTrans);
 				}
 				availableTransitionsCopy.put(firstSynToken, newTransId);

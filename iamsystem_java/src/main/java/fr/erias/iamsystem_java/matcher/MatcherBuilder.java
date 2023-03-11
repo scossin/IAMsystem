@@ -28,9 +28,11 @@ import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
 import fr.erias.iamsystem_java.matcher.strategy.IMatchingStrategy;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
+import fr.erias.iamsystem_java.stopwords.IWord2keepF;
 import fr.erias.iamsystem_java.stopwords.NegativeStopwords;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
+import fr.erias.iamsystem_java.stopwords.Word2KeepFuzzy;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.INormalizeF;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -174,13 +176,15 @@ public class MatcherBuilder
 		for (FuzzyRegex fuzzyRegex : fuzzyRegex)
 		{
 			matcher.addFuzzyAlgo(fuzzyRegex);
-			if (matcher.getStopwords() instanceof NegativeStopwords)
-			{
-				NegativeStopwords negativeStop = (NegativeStopwords) matcher.getStopwords();
-				negativeStop.add((word) -> fuzzyRegex.wordMatchesPattern(word));
-			}
+
 		}
 
+		if (matcher.getStopwords() instanceof NegativeStopwords)
+		{
+			NegativeStopwords negativeStop = (NegativeStopwords) matcher.getStopwords();
+			IWord2keepF words2keepFuzzy = new Word2KeepFuzzy(stopwords, matcher.getFuzzyAlgos());
+			negativeStop.add(words2keepFuzzy);
+		}
 		return matcher;
 	}
 

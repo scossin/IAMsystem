@@ -30,20 +30,8 @@ import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
 public class Main
 {
-	public Main() throws IOException, EncoderException
-	{
-		matcher = new MatcherBuilder()
-				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
-				// .wordNormalizer("stemmer", new FrenchStemmer())
-				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
-				.keywords(getTerminology(Main.filename))
-				.removeNestedAnnot(false)
-				.strategy(EMatchingStrategy.NoOverlapStrategy)
-				.w(1)
-				.build();
-	}
-	
 	private final static String FOLDER = "/media/cossin/5980c25d-cf59-4fca-b649-c8c2f241fb1c/home/cossin15072019/Documents/DetectTerms/Detector/IAMsystemTerminos/src/main/resources/UMLS/";
+
 	private final static String filename = FOLDER + "full_umls.tsv";
 
 	public static Iterable<IKeyword> getTerminology(String filename) throws IOException
@@ -90,7 +78,18 @@ public class Main
 
 	private Matcher matcher;
 
-
+	public Main() throws IOException, EncoderException
+	{
+		matcher = new MatcherBuilder()
+				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
+				// .wordNormalizer("stemmer", new FrenchStemmer())
+				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords(getTerminology(Main.filename))
+				.removeNestedAnnot(false)
+				.strategy(EMatchingStrategy.NoOverlapStrategy)
+				.w(1)
+				.build();
+	}
 
 	// syndrome Triple X
 	public void speedTest() throws IOException

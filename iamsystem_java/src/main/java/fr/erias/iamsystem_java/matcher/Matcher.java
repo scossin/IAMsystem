@@ -119,6 +119,16 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 		return annots;
 	}
 
+	/**
+	 * Get the list of fuzzy algorithms.
+	 * 
+	 * @return {@link FuzzyAlgo} algorithms.
+	 */
+	public List<FuzzyAlgo> getFuzzyAlgos()
+	{
+		return (this.fuzzyAlgos);
+	}
+
 	@Override
 	public Collection<IKeyword> getKeywords()
 	{

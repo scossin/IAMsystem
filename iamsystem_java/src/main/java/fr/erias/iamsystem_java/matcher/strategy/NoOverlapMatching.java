@@ -20,28 +20,28 @@ import fr.erias.iamsystem_java.tree.INode;
 /**
  * The old matching strategy that was in used till 2022. The 'w' parameter has
  * no effect. It annotates the longest path and outputs no overlapping
- * annotation except in case of ambiguity.
- * Algorithm formalized in https://ceur-ws.org/Vol-3202/livingner-paper11.pdf
+ * annotation except in case of ambiguity. Algorithm formalized in
+ * https://ceur-ws.org/Vol-3202/livingner-paper11.pdf
  *
  * @author Sebastien Cossin
  *
  */
 public class NoOverlapMatching implements IMatchingStrategy
 {
-	private final static Token END_TOKEN = new Token(-1, -1, 
-			"IAMSYSTEM_END_TOKEN", "IAMSYSTEM_END_TOKEN", -1);
+	private final static Token END_TOKEN = new Token(-1, -1, "IAMSYSTEM_END_TOKEN", "IAMSYSTEM_END_TOKEN", -1);
 
 	/**
 	 * Create annotations and mutate annots list.
-	 * 
-	 * @param annots     the list of annotations.
-	 * @param transitions     the current algorithm's transitions.
-	 * @param startedAt  the 'i' token at which the algorithm started a search.
-	 * @param stopTokens stopwords.
+	 *
+	 * @param annots      the list of annotations.
+	 * @param transitions the current algorithm's transitions.
+	 * @param startedAt   the 'i' token at which the algorithm started a search.
+	 * @param stopTokens  stopwords.
 	 * @return the last annotation 'i' value or started_at if no annotation
 	 *         generated.
 	 */
-	private int addAnnots(List<IAnnotation> annots, Set<StateTransition> transitions, int startedAt, List<IToken> stopTokens)
+	private int addAnnots(List<IAnnotation> annots, Set<StateTransition> transitions, int startedAt,
+			List<IToken> stopTokens)
 	{
 		int lastAnnotI = -1;
 		for (StateTransition trans : transitions)
@@ -76,7 +76,7 @@ public class NoOverlapMatching implements IMatchingStrategy
 		int startedAt = 0;
 		while (i < tokens.size() + 1)
 		{
-			IToken token = (i == tokens.size())? NoOverlapMatching.END_TOKEN : tokens.get(i);
+			IToken token = (i == tokens.size()) ? NoOverlapMatching.END_TOKEN : tokens.get(i);
 			if (stopwords.isTokenAStopword(token))
 			{
 				stopTokens.add(token);
