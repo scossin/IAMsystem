@@ -15,6 +15,17 @@ public class StateTransition
 {
 
 	/**
+	 * Create the first transition with the initial state.
+	 *
+	 * @param initialState In general the root node of the trie.
+	 * @return A transition with no parent.
+	 */
+	public static StateTransition createFristTrans(INode initialState)
+	{
+		return new StateTransition(null, initialState, null, null, -1);
+	}
+	
+	/**
 	 * Check if a transition is the first transition (no previous transition). 
 	 * @param trans a transition is check.
 	 * @return True if it's the first.

@@ -20,8 +20,8 @@ import fr.erias.iamsystem_java.tree.INode;
 /**
  * The old matching strategy that was in used till 2022. The 'w' parameter has
  * no effect. It annotates the longest path and outputs no overlapping
- * annotation except in case of ambiguity. It's the fastest strategy. Algorithm
- * formalized in https://ceur-ws.org/Vol-3202/livingner-paper11.pdf
+ * annotation except in case of ambiguity.
+ * Algorithm formalized in https://ceur-ws.org/Vol-3202/livingner-paper11.pdf
  *
  * @author Sebastien Cossin
  *
@@ -35,25 +35,27 @@ public class NoOverlapMatching implements IMatchingStrategy
 	 * Create annotations and mutate annots list.
 	 * 
 	 * @param annots     the list of annotations.
-	 * @param states     the current algorithm's states.
+	 * @param transitions     the current algorithm's transitions.
 	 * @param startedAt  the 'i' token at which the algorithm started a search.
 	 * @param stopTokens stopwords.
 	 * @return the last annotation 'i' value or started_at if no annotation
 	 *         generated.
 	 */
-	private int addAnnots(List<IAnnotation> annots, Set<StateTransition> states, int startedAt, List<IToken> stopTokens)
+	private int addAnnots(List<IAnnotation> annots, Set<StateTransition> transitions, int startedAt, List<IToken> stopTokens)
 	{
 		int lastAnnotI = -1;
-		for (StateTransition state : states)
+		for (StateTransition trans : transitions)
 		{
-			StateTransition currentState = state;
-			while (!currentState.getNode().isAfinalState() && !StateTransition.isFirstTrans(currentState))
+			StateTransition currentTrans = trans;
+			while (!currentTrans.getNode().isAfinalState())
 			{
-				currentState = currentState.getPreviousTrans();
+				currentTrans = currentTrans.getPreviousTrans();
+				if (StateTransition.isFirstTrans(currentTrans))
+					break;
 			}
-			if (currentState.getNode().isAfinalState())
+			if (currentTrans.getNode().isAfinalState())
 			{
-				IAnnotation annotation = StrategyUtils.createAnnot(currentState, stopTokens);
+				IAnnotation annotation = StrategyUtils.createAnnot(currentTrans, stopTokens);
 				annots.add(annotation);
 				lastAnnotI = Math.max(annotation.end_i(), lastAnnotI);
 			}
@@ -66,9 +68,9 @@ public class NoOverlapMatching implements IMatchingStrategy
 			IStopwords stopwords)
 	{
 		List<IAnnotation> annots = new ArrayList<IAnnotation>();
-		Set<StateTransition> states = new HashSet<>();
-		StateTransition startState = StrategyUtils.createStartState(initialState);
-		states.add(startState);
+		Set<StateTransition> transitions = new HashSet<>();
+		StateTransition firstTrans = StateTransition.createFristTrans(initialState);
+		transitions.add(firstTrans);
 		List<IToken> stopTokens = new ArrayList<IToken>();
 		int i = 0;
 		int startedAt = 0;
@@ -82,39 +84,38 @@ public class NoOverlapMatching implements IMatchingStrategy
 				startedAt += 1;
 				continue;
 			}
-			Set<StateTransition> newStates = new HashSet<StateTransition>();
-			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
-			for (StateTransition state : states)
+			Set<StateTransition> newTransitions = new HashSet<StateTransition>();
+			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, transitions);
+			for (StateTransition trans : transitions)
 			{
 				for (SynAlgos synAlgo : synAlgos)
 				{
-					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
+					INode node = trans.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), -1);
-					newStates.add(newState);
+					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(), -1);
+					newTransitions.add(nextTrans);
 				}
 			}
-			if (newStates.size() != 0)
+			if (newTransitions.size() != 0)
 			{
-				states = newStates;
+				transitions = newTransitions;
 				i += 1;
 			} else
 			{
-				if ((states.size() == 1) && states.contains(startState))
+				if ((transitions.size() == 1) && transitions.contains(firstTrans))
 				{
 					i += 1;
 					startedAt += 1;
 					continue;
 				}
-				int lastI = this.addAnnots(annots, states, startedAt, stopTokens);
+				int lastI = this.addAnnots(annots, transitions, startedAt, stopTokens);
 				i = lastI + 1;
 				startedAt = startedAt + 1;
-				states.clear();
-				states.add(startState);
+				transitions.clear();
+				transitions.add(firstTrans);
 			}
 		}
-		this.addAnnots(annots, states, startedAt, stopTokens);
 		annots.sort(Comparator.naturalOrder());
 		return annots;
 	}

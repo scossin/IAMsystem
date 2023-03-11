@@ -38,17 +38,6 @@ public class StrategyUtils
 	}
 
 	/**
-	 * Create the initial state used in each detection sequence.
-	 *
-	 * @param initialState In general the root node of the trie.
-	 * @return A linked state with no parent.
-	 */
-	public static StateTransition createStartState(INode initialState)
-	{
-		return new StateTransition(null, initialState, null, null, -1);
-	}
-
-	/**
 	 * In case of two nested annotations, remove the shorter one. For example, if we
 	 * have "prostate" and "prostate cancer" annnotations, "prostate" annotation is
 	 * removed.

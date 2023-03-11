@@ -19,8 +19,7 @@ import fr.erias.iamsystem_java.tree.INode;
 /**
  * Default matching strategy. It keeps track of all states within a window range
  * and can be produce overlapping/nested annotations. If you want to use a large
- * window with a large dictionary, it is recommended to use
- * 'LargeWindowMatching' instead.
+ * window with a large dictionary, it is recommended to use {@link LargeWindowMatching} instead.
  *
  * @author Sebastien Cossin
  *
@@ -33,17 +32,14 @@ public class WindowMatching implements IMatchingStrategy
 			IStopwords stopwords)
 	{
 		List<IAnnotation> annots = new ArrayList<IAnnotation>();
-		// states stores linkedstate instance that keeps track of a tree path
-		// and document's tokens that matched.
-		Set<StateTransition> states = new HashSet<StateTransition>();
-		StateTransition startState = StrategyUtils.createStartState(initialState);
-		states.add(startState);
-
+		Set<StateTransition> transitions = new HashSet<StateTransition>();
+		StateTransition fistTrans = StateTransition.createFristTrans(initialState);
+		transitions.add(fistTrans);
 		// count_not_stopword allows a stopword-independent window size.
 		int countNotStopword = 0;
 		List<IToken> stopTokens = new ArrayList<IToken>();
-		List<StateTransition> newStates = new ArrayList<StateTransition>();
-		List<StateTransition> states2remove = new ArrayList<StateTransition>();
+		List<StateTransition> newTransitions = new ArrayList<StateTransition>();
+		List<StateTransition> trans2remove = new ArrayList<StateTransition>();
 
 		for (IToken token : tokens)
 		{
@@ -52,54 +48,42 @@ public class WindowMatching implements IMatchingStrategy
 				stopTokens.add(token);
 				continue;
 			}
-			// w_bucket stores when a state will be out-of-reach given window size
-			// 'count_not_stopword % w' has range [0 ; w-1]
-			int wBucket = countNotStopword % w;
-			newStates.clear();
-			states2remove.clear();
+			newTransitions.clear();
+			trans2remove.clear();
 			countNotStopword++;
 
-			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
+			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, transitions);
 
-			for (StateTransition state : states)
+			for (StateTransition trans : transitions)
 			{
-				if (state.getCountNotStopword() == wBucket)
-					states2remove.add(state);
+				if (trans.isObsolete(countNotStopword, w)) {
+					trans2remove.add(trans);
+					continue;
+				}
 
 				for (SynAlgos synAlgo : synAlgos)
 				{
-					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
+					INode node = trans.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), wBucket);
-					newStates.add(newState);
-					/**
-					 * Why 'states.contains(newState)': if node_num is already in the states set, it
-					 * means an annotation was already created for this state. For example 'cancer
-					 * cancer', if an annotation was created for the first 'cancer' then we don't
-					 * want to create a new one for the second 'cancer'.
-					 */
-
-					if (node.isAfinalState() && !states.contains(newState))
+					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(), countNotStopword);
+					newTransitions.add(nextTrans);
+					if (node.isAfinalState() && !transitions.contains(nextTrans))
 					{
-						IAnnotation annotation = StrategyUtils.createAnnot(newState, stopTokens);
+						IAnnotation annotation = StrategyUtils.createAnnot(nextTrans, stopTokens);
 						annots.add(annotation);
 					}
 				}
 			}
-			/**
-			 * Prepare next iteration: first loop remove out-of-reach states. Second
-			 * iteration add new states.
-			 */
-			for (StateTransition state : states2remove)
+			for (StateTransition trans : trans2remove)
 			{
-				states.remove(state);
+				transitions.remove(trans);
 			}
-			for (StateTransition state : newStates)
+			for (StateTransition trans : newTransitions)
 			{
-				if (states.contains(state))
-					states.remove(state);
-				states.add(state);
+				if (transitions.contains(trans))
+					transitions.remove(trans);
+				transitions.add(trans);
 			}
 		}
 		annots.sort(Comparator.naturalOrder());

@@ -59,9 +59,9 @@ public class LargeWindowMatching implements IMatchingStrategy
 
 		int countNotStopWord = 0;
 		List<IToken> stopTokens = new ArrayList<IToken>();
-		Set<StateTransition> newStates = new HashSet<StateTransition>();
+		Set<StateTransition> newTransitions = new HashSet<StateTransition>();
 
-		Map<Integer, StateTransition> statesCopy = new HashMap<>(this.transitions);
+		Map<Integer, StateTransition> transitionsCopy = new HashMap<>(this.transitions);
 		Map<String, Set<Integer>> availableTransitionsCopy = new HashMap<>(availableTransitions);
 
 		for (IToken token : tokens)
@@ -71,49 +71,49 @@ public class LargeWindowMatching implements IMatchingStrategy
 				stopTokens.add(token);
 				continue;
 			}
-			newStates.clear();
+			newTransitions.clear();
 			countNotStopWord += 1;
-			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, statesCopy.values());
+			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, transitionsCopy.values());
 
 			for (SynAlgos synAlgo : synAlgos)
 			{
 				String firstSynToken = synAlgo.getSynToken()[0];
 				if (!availableTransitionsCopy.containsKey(firstSynToken))
 					continue;
-				Set<Integer> statesId = availableTransitionsCopy.get(firstSynToken);
-				Set<Integer> newStatesTransitions = new HashSet<Integer>();
-				for (int stateId : statesId)
+				Set<Integer> transitionsId = availableTransitionsCopy.get(firstSynToken);
+				Set<Integer> newTransId = new HashSet<Integer>();
+				for (int transId : transitionsId)
 				{
-					if (!statesCopy.containsKey(stateId))
+					if (!transitionsCopy.containsKey(transId))
 						continue;
-					StateTransition state = statesCopy.get(stateId);
-					if (state.isObsolete(countNotStopWord, w))
+					StateTransition trans = transitionsCopy.get(transId);
+					if (trans.isObsolete(countNotStopWord, w))
 					{
-						statesCopy.remove(stateId);
+						transitionsCopy.remove(transId);
 						continue;
 					}
-					newStatesTransitions.add(stateId);
-					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
+					newTransId.add(transId);
+					INode node = trans.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), countNotStopWord);
-					newStates.add(newState);
+					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(), countNotStopWord);
+					newTransitions.add(nextTrans);
 				}
-				availableTransitionsCopy.put(firstSynToken, newStatesTransitions);
+				availableTransitionsCopy.put(firstSynToken, newTransId);
 			}
-			for (StateTransition state : newStates)
+			for (StateTransition trans : newTransitions)
 			{
-				if (state.getNode().isAfinalState())
+				if (trans.getNode().isAfinalState())
 				{
-					StateTransition oldState = statesCopy.get(state.getId());
-					if (oldState == null || oldState.isObsolete(countNotStopWord, w))
+					StateTransition oldtrans = transitionsCopy.get(trans.getId());
+					if (oldtrans == null || oldtrans.isObsolete(countNotStopWord, w))
 					{
-						IAnnotation annot = StrategyUtils.createAnnot(state, stopTokens);
+						IAnnotation annot = StrategyUtils.createAnnot(trans, stopTokens);
 						annots.add(annot);
 					}
 				}
-				this.addTransition(state, availableTransitionsCopy);
-				statesCopy.put(state.getId(), state);
+				this.addTransition(trans, availableTransitionsCopy);
+				transitionsCopy.put(trans.getId(), trans);
 			}
 		}
 		return annots;
@@ -131,8 +131,8 @@ public class LargeWindowMatching implements IMatchingStrategy
 	 */
 	private void initialize(INode initialState)
 	{
-		StateTransition startState = StrategyUtils.createStartState(initialState);
-		transitions.put(startState.getId(), startState);
-		addTransition(startState, availableTransitions);
+		StateTransition firstTrans = StateTransition.createFristTrans(initialState);
+		transitions.put(firstTrans.getId(), firstTrans);
+		addTransition(firstTrans, availableTransitions);
 	}
 }
