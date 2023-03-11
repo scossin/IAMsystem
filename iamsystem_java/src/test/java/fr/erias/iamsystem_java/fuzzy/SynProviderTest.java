@@ -15,7 +15,7 @@ import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.fuzzy.base.SynsProvider;
-import fr.erias.iamsystem_java.matcher.LinkedState;
+import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -27,7 +27,7 @@ class SynProviderTest
 	private ISynsProvider synProvider;
 	private List<FuzzyAlgo> fuzzyAlgos;
 	private ITokenizer tokenizer;
-	private Set<LinkedState> states;
+	private Set<StateTransition> states;
 
 	@BeforeEach
 	void setUp() throws Exception
@@ -36,7 +36,7 @@ class SynProviderTest
 		this.fuzzyAlgos = new ArrayList<FuzzyAlgo>();
 		this.fuzzyAlgos.add(new ExactMatch());
 		this.synProvider = new SynsProvider(fuzzyAlgos);
-		this.states = new HashSet<LinkedState>(0);
+		this.states = new HashSet<StateTransition>(0);
 	}
 
 	@Test

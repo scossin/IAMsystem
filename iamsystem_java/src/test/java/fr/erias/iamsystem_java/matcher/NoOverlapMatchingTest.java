@@ -43,6 +43,18 @@ class NoOverlapMatchingTest
 		assertEquals("de la	7 12	de la", annots.get(1).toString());
 		assertEquals("prostate	28 36	prostate", annots.get(2).toString());
 	}
+	
+	@Test
+	void testNoOverlapLastStates()
+	{
+		Matcher matcher = new MatcherBuilder()
+				.keywords("portail de la médecine instutionnelle", "médecine")
+				.strategy(EMatchingStrategy.NoOverlapStrategy)
+				.build();
+		String text = "Portail de la médecine";
+		List<IAnnotation> annots = matcher.annot(text);
+		assertEquals(1, annots.size());
+	}
 
 	@Test
 	void testNoOverlapStopwords()

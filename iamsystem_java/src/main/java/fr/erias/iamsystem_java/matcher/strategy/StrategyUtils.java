@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import fr.erias.iamsystem_java.matcher.Annotation;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
-import fr.erias.iamsystem_java.matcher.LinkedState;
+import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.matcher.Span;
 import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
@@ -27,9 +27,9 @@ public class StrategyUtils
 	 * @param stopTokens The list of stopwords tokens detected in the document.
 	 * @return An annotation.
 	 */
-	public static Annotation createAnnot(LinkedState last_el, List<IToken> stopTokens)
+	public static Annotation createAnnot(StateTransition last_el, List<IToken> stopTokens)
 	{
-		List<LinkedState> transStates = toList(last_el);
+		List<StateTransition> transStates = toList(last_el);
 		INode lastState = last_el.getNode();
 		List<IToken> tokens = transStates.stream().map(t -> t.getToken()).collect(Collectors.toList());
 		tokens.sort(Comparator.naturalOrder());
@@ -43,9 +43,9 @@ public class StrategyUtils
 	 * @param initialState In general the root node of the trie.
 	 * @return A linked state with no parent.
 	 */
-	public static LinkedState createStartState(INode initialState)
+	public static StateTransition createStartState(INode initialState)
 	{
-		return new LinkedState(null, initialState, null, null, -1);
+		return new StateTransition(null, initialState, null, null, -1);
 	}
 
 	/**
@@ -110,17 +110,17 @@ public class StrategyUtils
 	 *
 	 * @param last_el the last linked state that stores a final state containing
 	 *                keywords.
-	 * @return A list of {@link LinkedState}.
+	 * @return A list of {@link StateTransition}.
 	 */
-	private static List<LinkedState> toList(LinkedState last_el)
+	private static List<StateTransition> toList(StateTransition last_el)
 	{
-		List<LinkedState> transStates = new ArrayList<>();
+		List<StateTransition> transStates = new ArrayList<>();
 		transStates.add(last_el);
-		LinkedState parent = last_el.getParent();
-		while (!LinkedState.isStartState(parent))
+		StateTransition parent = last_el.getPreviousTrans();
+		while (!StateTransition.isFirstTrans(parent))
 		{
 			transStates.add(parent);
-			parent = parent.getParent();
+			parent = parent.getPreviousTrans();
 		}
 		Collections.reverse(transStates);
 		return transStates;

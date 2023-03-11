@@ -10,9 +10,10 @@ import java.util.Set;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
-import fr.erias.iamsystem_java.matcher.LinkedState;
+import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
+import fr.erias.iamsystem_java.tokenize.Token;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
@@ -27,6 +28,8 @@ import fr.erias.iamsystem_java.tree.INode;
  */
 public class NoOverlapMatching implements IMatchingStrategy
 {
+	private final static Token END_TOKEN = new Token(-1, -1, 
+			"IAMSYSTEM_END_TOKEN", "IAMSYSTEM_END_TOKEN", -1);
 
 	/**
 	 * Create annotations and mutate annots list.
@@ -38,15 +41,15 @@ public class NoOverlapMatching implements IMatchingStrategy
 	 * @return the last annotation 'i' value or started_at if no annotation
 	 *         generated.
 	 */
-	private int addAnnots(List<IAnnotation> annots, Set<LinkedState> states, int startedAt, List<IToken> stopTokens)
+	private int addAnnots(List<IAnnotation> annots, Set<StateTransition> states, int startedAt, List<IToken> stopTokens)
 	{
 		int lastAnnotI = -1;
-		for (LinkedState state : states)
+		for (StateTransition state : states)
 		{
-			LinkedState currentState = state;
-			while (!currentState.getNode().isAfinalState() && !LinkedState.isStartState(currentState))
+			StateTransition currentState = state;
+			while (!currentState.getNode().isAfinalState() && !StateTransition.isFirstTrans(currentState))
 			{
-				currentState = currentState.getParent();
+				currentState = currentState.getPreviousTrans();
 			}
 			if (currentState.getNode().isAfinalState())
 			{
@@ -63,15 +66,15 @@ public class NoOverlapMatching implements IMatchingStrategy
 			IStopwords stopwords)
 	{
 		List<IAnnotation> annots = new ArrayList<IAnnotation>();
-		Set<LinkedState> states = new HashSet<>();
-		LinkedState startState = StrategyUtils.createStartState(initialState);
+		Set<StateTransition> states = new HashSet<>();
+		StateTransition startState = StrategyUtils.createStartState(initialState);
 		states.add(startState);
 		List<IToken> stopTokens = new ArrayList<IToken>();
 		int i = 0;
 		int startedAt = 0;
-		while (i < tokens.size())
+		while (i < tokens.size() + 1)
 		{
-			IToken token = tokens.get(i);
+			IToken token = (i == tokens.size())? NoOverlapMatching.END_TOKEN : tokens.get(i);
 			if (stopwords.isTokenAStopword(token))
 			{
 				stopTokens.add(token);
@@ -79,16 +82,16 @@ public class NoOverlapMatching implements IMatchingStrategy
 				startedAt += 1;
 				continue;
 			}
-			Set<LinkedState> newStates = new HashSet<LinkedState>();
+			Set<StateTransition> newStates = new HashSet<StateTransition>();
 			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
-			for (LinkedState state : states)
+			for (StateTransition state : states)
 			{
 				for (SynAlgos synAlgo : synAlgos)
 				{
 					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					LinkedState newState = new LinkedState(state, node, token, synAlgo.getAlgos(), -1);
+					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), -1);
 					newStates.add(newState);
 				}
 			}
@@ -115,5 +118,4 @@ public class NoOverlapMatching implements IMatchingStrategy
 		annots.sort(Comparator.naturalOrder());
 		return annots;
 	}
-
 }

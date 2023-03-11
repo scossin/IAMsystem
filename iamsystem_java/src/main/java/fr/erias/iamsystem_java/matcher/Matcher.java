@@ -135,7 +135,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<LinkedState> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> states)
 	{
 		return synsProvider.getSynonyms(tokens, token, states);
 	}

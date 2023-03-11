@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
-import fr.erias.iamsystem_java.matcher.LinkedState;
+import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
@@ -30,11 +30,11 @@ import fr.erias.iamsystem_java.tree.INode;
 public class LargeWindowMatching implements IMatchingStrategy
 {
 
-	private boolean isInitialized = false;
-	private final Map<Integer, LinkedState> states = new HashMap<>();
+	private INode initialState = null;
+	private final Map<Integer, StateTransition> transitions = new HashMap<>();
 	private final Map<String, Set<Integer>> availableTransitions = new HashMap<>();
 
-	private void addTransition(LinkedState state, Map<String, Set<Integer>> availableTransitions)
+	private void addTransition(StateTransition state, Map<String, Set<Integer>> availableTransitions)
 	{
 		Set<String> childTokens = getChildTokens(state.getNode());
 		childTokens.stream().forEach(token ->
@@ -51,18 +51,17 @@ public class LargeWindowMatching implements IMatchingStrategy
 	public List<IAnnotation> detect(List<IToken> tokens, int w, INode initialState, ISynsProvider synsProvider,
 			IStopwords stopwords)
 	{
-		if (!isInitialized)
+		if (initialState == null || this.initialState != initialState)
 		{
 			this.initialize(initialState);
-			isInitialized = true;
 		}
 		List<IAnnotation> annots = new ArrayList<IAnnotation>();
 
 		int countNotStopWord = 0;
 		List<IToken> stopTokens = new ArrayList<IToken>();
-		Set<LinkedState> newStates = new HashSet<LinkedState>();
+		Set<StateTransition> newStates = new HashSet<StateTransition>();
 
-		Map<Integer, LinkedState> statesCopy = new HashMap<>(this.states);
+		Map<Integer, StateTransition> statesCopy = new HashMap<>(this.transitions);
 		Map<String, Set<Integer>> availableTransitionsCopy = new HashMap<>(availableTransitions);
 
 		for (IToken token : tokens)
@@ -87,7 +86,7 @@ public class LargeWindowMatching implements IMatchingStrategy
 				{
 					if (!statesCopy.containsKey(stateId))
 						continue;
-					LinkedState state = statesCopy.get(stateId);
+					StateTransition state = statesCopy.get(stateId);
 					if (state.isObsolete(countNotStopWord, w))
 					{
 						statesCopy.remove(stateId);
@@ -97,16 +96,16 @@ public class LargeWindowMatching implements IMatchingStrategy
 					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					LinkedState newState = new LinkedState(state, node, token, synAlgo.getAlgos(), countNotStopWord);
+					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), countNotStopWord);
 					newStates.add(newState);
 				}
 				availableTransitionsCopy.put(firstSynToken, newStatesTransitions);
 			}
-			for (LinkedState state : newStates)
+			for (StateTransition state : newStates)
 			{
 				if (state.getNode().isAfinalState())
 				{
-					LinkedState oldState = statesCopy.get(state.getId());
+					StateTransition oldState = statesCopy.get(state.getId());
 					if (oldState == null || oldState.isObsolete(countNotStopWord, w))
 					{
 						IAnnotation annot = StrategyUtils.createAnnot(state, stopTokens);
@@ -132,8 +131,8 @@ public class LargeWindowMatching implements IMatchingStrategy
 	 */
 	private void initialize(INode initialState)
 	{
-		LinkedState startState = StrategyUtils.createStartState(initialState);
-		states.put(startState.getId(), startState);
+		StateTransition startState = StrategyUtils.createStartState(initialState);
+		transitions.put(startState.getId(), startState);
 		addTransition(startState, availableTransitions);
 	}
 }

@@ -68,7 +68,7 @@ public class MatcherBuilder
 	private List<WordNormalizer> wordNormalizers = new ArrayList<WordNormalizer>();
 	private List<FuzzyRegex> fuzzyRegex = new ArrayList<FuzzyRegex>();
 	private List<StringEncoderSyn> stringEncoders = new ArrayList<StringEncoderSyn>();
-	private IMatchingStrategy strategy;
+	private IMatchingStrategy strategy = EMatchingStrategy.WindowStrategy.getInstance();
 
 	/**
 	 * Start building an IAMsystem matcher to annotate documents.
@@ -109,6 +109,7 @@ public class MatcherBuilder
 		matcher.setW(this.w);
 		matcher.setRemoveNestedAnnot(this.removeNestedAnnot);
 		matcher.addKeyword(this.keywords);
+		matcher.setStrategy(this.strategy);
 		if (this.setNegativeStopwords)
 		{
 			NegativeStopwords negativeStopwords = new NegativeStopwords();

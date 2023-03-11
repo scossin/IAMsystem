@@ -21,15 +21,15 @@ import fr.erias.iamsystem_java.tree.Trie;
 class LinkedStateTest
 {
 
-	static LinkedState createState(LinkedState parent, INode node, Token token)
+	static StateTransition createState(StateTransition parent, INode node, Token token)
 	{
 		List<String> algos = Arrays.asList();
-		return new LinkedState(parent, node, token, algos, 0);
+		return new StateTransition(parent, node, token, algos, 0);
 	}
 
-	private LinkedState stateIns;
+	private StateTransition stateIns;
 
-	private LinkedState stateCard;
+	private StateTransition stateCard;
 
 	@BeforeEach
 	void setUp() throws Exception
@@ -52,9 +52,9 @@ class LinkedStateTest
 		Trie trie = new Trie();
 		INode initialState = trie.getInitialState();
 		Node nodeIns2 = new Node("insuffisance", initialState, 1);
-		LinkedState otherStateSameNum = createState(null, nodeIns2, null);
+		StateTransition otherStateSameNum = createState(null, nodeIns2, null);
 		assertEquals(stateIns, otherStateSameNum);
-		Set<LinkedState> states = new HashSet<LinkedState>();
+		Set<StateTransition> states = new HashSet<StateTransition>();
 		states.add(stateIns);
 		assertTrue(states.contains(otherStateSameNum));
 	}
@@ -63,7 +63,7 @@ class LinkedStateTest
 	void testsStartState()
 	// A start state has a null parent.
 	{
-		assertTrue(LinkedState.isStartState(stateIns));
-		assertFalse(LinkedState.isStartState(stateCard));
+		assertTrue(StateTransition.isFirstTrans(stateIns));
+		assertFalse(StateTransition.isFirstTrans(stateCard));
 	}
 }

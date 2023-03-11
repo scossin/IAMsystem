@@ -20,11 +20,29 @@ import fr.erias.iamsystem_java.keywords.Terminology;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.matcher.MatcherBuilder;
+import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.TokenizerFactory;
 
+// WindowStrategy(false) : 686735 annotations en 10 secondes environ
+// WindowStrategy(true) : 666970 annotations en 14 secondes environ
+// NoOverlap : 688551 annotations en 10 secondes environ
+
 public class Main
 {
+	public Main() throws IOException, EncoderException
+	{
+		matcher = new MatcherBuilder()
+				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
+				// .wordNormalizer("stemmer", new FrenchStemmer())
+				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords(getTerminology(Main.filename))
+				.removeNestedAnnot(false)
+				.strategy(EMatchingStrategy.NoOverlapStrategy)
+				.w(1)
+				.build();
+	}
+	
 	private final static String FOLDER = "/media/cossin/5980c25d-cf59-4fca-b649-c8c2f241fb1c/home/cossin15072019/Documents/DetectTerms/Detector/IAMsystemTerminos/src/main/resources/UMLS/";
 	private final static String filename = FOLDER + "full_umls.tsv";
 
@@ -72,17 +90,7 @@ public class Main
 
 	private Matcher matcher;
 
-	public Main() throws IOException, EncoderException
-	{
-		matcher = new MatcherBuilder()
-				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
-				// .wordNormalizer("stemmer", new FrenchStemmer())
-				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
-				.keywords(getTerminology(Main.filename))
-				.removeNestedAnnot(false)
-				.w(1)
-				.build();
-	}
+
 
 	// syndrome Triple X
 	public void speedTest() throws IOException
@@ -99,31 +107,17 @@ public class Main
 		while (iter.hasNext())
 		{
 			File file = iter.next();
-//			if (!file.getName().equals("Placenta_praevia.txt"))
-//			{
-//				continue;
-//			}
-			// System.out.println(file.getName());
 			String content = Files.readString(file.toPath(), Charset.defaultCharset());
-			long startTime = System.nanoTime();
 			List<IAnnotation> anns = matcher.annot(content);
-			// for (CTcode ct : output.getCTcodes()) {
-			// System.out.println(ct.toString());
-			// w.write(ct.toString());
-			// }
-			long endTime = System.nanoTime();
-			// double mem = (double) (Runtime.getRuntime().totalMemory() -
-			// Runtime.getRuntime().freeMemory() / (1024*1024));
 			System.out.println(file.getName() + "\t" + anns.size());
-//			if (count == 1000)
-//				break;
-//			count++;
+			count += anns.size();
 		}
+		System.out.println("Number of annotations: " + count);
 		long endTimeAll = System.nanoTime();
 		long totalTime = endTimeAll - startTimeAll;
 		System.out.println(endTimeAll);
 		System.out.println("KB: "
 				+ (double) (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / (1024 * 1024));
-		System.out.println(totalTime / 1000000);
+		System.out.println("Time: " + totalTime / 1000000);
 	}
 }

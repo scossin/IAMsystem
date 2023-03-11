@@ -10,7 +10,7 @@ import java.util.Set;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
 import fr.erias.iamsystem_java.matcher.IAnnotation;
-import fr.erias.iamsystem_java.matcher.LinkedState;
+import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.EmptyNode;
@@ -35,15 +35,15 @@ public class WindowMatching implements IMatchingStrategy
 		List<IAnnotation> annots = new ArrayList<IAnnotation>();
 		// states stores linkedstate instance that keeps track of a tree path
 		// and document's tokens that matched.
-		Set<LinkedState> states = new HashSet<LinkedState>();
-		LinkedState startState = StrategyUtils.createStartState(initialState);
+		Set<StateTransition> states = new HashSet<StateTransition>();
+		StateTransition startState = StrategyUtils.createStartState(initialState);
 		states.add(startState);
 
 		// count_not_stopword allows a stopword-independent window size.
 		int countNotStopword = 0;
 		List<IToken> stopTokens = new ArrayList<IToken>();
-		List<LinkedState> newStates = new ArrayList<LinkedState>();
-		List<LinkedState> states2remove = new ArrayList<LinkedState>();
+		List<StateTransition> newStates = new ArrayList<StateTransition>();
+		List<StateTransition> states2remove = new ArrayList<StateTransition>();
 
 		for (IToken token : tokens)
 		{
@@ -61,9 +61,9 @@ public class WindowMatching implements IMatchingStrategy
 
 			Collection<SynAlgos> synAlgos = synsProvider.getSynonyms(tokens, token, states);
 
-			for (LinkedState state : states)
+			for (StateTransition state : states)
 			{
-				if (state.getwBucket() == wBucket)
+				if (state.getCountNotStopword() == wBucket)
 					states2remove.add(state);
 
 				for (SynAlgos synAlgo : synAlgos)
@@ -71,7 +71,7 @@ public class WindowMatching implements IMatchingStrategy
 					INode node = state.getNode().gotoNode(synAlgo.getSynToken());
 					if (node == EmptyNode.EMPTYNODE)
 						continue;
-					LinkedState newState = new LinkedState(state, node, token, synAlgo.getAlgos(), wBucket);
+					StateTransition newState = new StateTransition(state, node, token, synAlgo.getAlgos(), wBucket);
 					newStates.add(newState);
 					/**
 					 * Why 'states.contains(newState)': if node_num is already in the states set, it
@@ -91,11 +91,11 @@ public class WindowMatching implements IMatchingStrategy
 			 * Prepare next iteration: first loop remove out-of-reach states. Second
 			 * iteration add new states.
 			 */
-			for (LinkedState state : states2remove)
+			for (StateTransition state : states2remove)
 			{
 				states.remove(state);
 			}
-			for (LinkedState state : newStates)
+			for (StateTransition state : newStates)
 			{
 				if (states.contains(state))
 					states.remove(state);
