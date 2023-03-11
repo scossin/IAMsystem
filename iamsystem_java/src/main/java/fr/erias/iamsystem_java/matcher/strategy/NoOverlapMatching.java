@@ -7,9 +7,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgos;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;

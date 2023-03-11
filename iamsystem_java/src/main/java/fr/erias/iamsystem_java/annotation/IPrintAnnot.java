@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.matcher;
+package fr.erias.iamsystem_java.annotation;
 
 import java.util.stream.Collectors;
 
@@ -17,7 +17,7 @@ public interface IPrintAnnot
 
 	/**
 	 * Return a string representation of an annotation.
-	 * 
+	 *
 	 * @param annotation an {@link IAnnotation} produced by IAMsystem.
 	 * @return a human readable string.
 	 */

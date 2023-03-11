@@ -7,10 +7,10 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
 import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;

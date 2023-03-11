@@ -8,11 +8,11 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import fr.erias.iamsystem_java.matcher.Annotation;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
+import fr.erias.iamsystem_java.annotation.Annotation;
+import fr.erias.iamsystem_java.annotation.IAnnotation;
+import fr.erias.iamsystem_java.annotation.PrintAnnot;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.matcher.MatcherBuilder;
-import fr.erias.iamsystem_java.matcher.PrintAnnot;
 
 class BratFormattersTest
 {
@@ -38,6 +38,13 @@ class BratFormattersTest
 	}
 
 	@Test
+	void testContSeqStop()
+	{
+		Annotation.setBratFormatter(BratFormatters.contSeqStopFormatter);
+		assertEquals(annot.toString(), "cancer prostate	0 6;20 28	cancer prostate");
+	}
+
+	@Test
 	void testDefault()
 	{
 		assertEquals(annot.toString(), "cancer prostate	0 6;20 28	cancer prostate");
@@ -48,12 +55,5 @@ class BratFormattersTest
 	{
 		Annotation.setBratFormatter(BratFormatters.spanFormatter);
 		assertEquals(annot.toString(), "cancer de la glande prostate	0 28	cancer prostate");
-	}
-
-	@Test
-	void testStop()
-	{
-		Annotation.setBratFormatter(BratFormatters.contSeqStopFormatter);
-		assertEquals(annot.toString(), "cancer prostate	0 6;20 28	cancer prostate");
 	}
 }

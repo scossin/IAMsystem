@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 
 public class BratDocument<T extends IKeyword>
 {
@@ -29,9 +29,9 @@ public class BratDocument<T extends IKeyword>
 	{
 		BratFormat bratFormat = this.formatter.getFormat(annot);
 		String entityId = getEntityId();
-		BratEntity entity = new BratEntity(entityId, bratType, bratFormat.getOffsets(), bratFormat.getText());
+		BratEntity entity = new BratEntity(entityId, bratType, bratFormat.getOffsets(),
+				bratFormat.getTextEscapeNewLine());
 		bratEntities.add(entity);
-
 		BratNote bratNote = new BratNote(getNoteId(), entityId, noteFunction.getNote(annot));
 		bratNotes.add(bratNote);
 	}

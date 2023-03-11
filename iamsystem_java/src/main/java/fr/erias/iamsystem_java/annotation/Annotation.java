@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.matcher;
+package fr.erias.iamsystem_java.annotation;
 
 import java.util.Collection;
 import java.util.List;
@@ -91,7 +91,7 @@ public class Annotation extends Span implements IAnnotation
 
 	/**
 	 * Return the annotation text (if set).
-	 * 
+	 *
 	 * @param text
 	 */
 	@Override

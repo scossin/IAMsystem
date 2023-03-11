@@ -22,6 +22,11 @@ public class BratFormat
 		return text;
 	}
 
+	public String getTextEscapeNewLine()
+	{
+		return text.replace("\n", "\\n");
+	}
+
 	@Override
 	public String toString()
 	{

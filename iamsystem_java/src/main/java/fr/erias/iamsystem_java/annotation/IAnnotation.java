@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.matcher;
+package fr.erias.iamsystem_java.annotation;
 
 import java.util.Collection;
 import java.util.List;
@@ -50,7 +50,7 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 
 	/**
 	 * Get the text associated to this annotation.
-	 * 
+	 *
 	 * @return Text annotated
 	 */
 	public String getText();

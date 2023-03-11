@@ -2,6 +2,8 @@ package fr.erias.iamsystem_java.matcher;
 
 import java.util.List;
 
+import fr.erias.iamsystem_java.annotation.Annotation;
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
 /**

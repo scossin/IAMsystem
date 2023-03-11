@@ -2,8 +2,8 @@ package fr.erias.iamsystem_java.matcher.strategy;
 
 import java.util.List;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tree.INode;

@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.fuzzy.ExactMatch;
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.ISynsProvider;
@@ -121,7 +122,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 
 	/**
 	 * Get the list of fuzzy algorithms.
-	 * 
+	 *
 	 * @return {@link FuzzyAlgo} algorithms.
 	 */
 	public List<FuzzyAlgo> getFuzzyAlgos()

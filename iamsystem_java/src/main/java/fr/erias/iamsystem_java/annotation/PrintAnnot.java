@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.matcher;
+package fr.erias.iamsystem_java.annotation;
 
 import fr.erias.iamsystem_java.brat.BratFormat;
 import fr.erias.iamsystem_java.brat.BratFormatters;
@@ -29,6 +29,6 @@ public class PrintAnnot implements IPrintAnnot
 		}
 		BratFormat format = bratFormatter.getFormat(annot);
 		String kwStr = IPrintAnnot.keywords2Str(annot);
-		return String.format("%s\t%s\t%s", format.getText(), format.getOffsets(), kwStr);
+		return String.format("%s\t%s\t%s", format.getTextEscapeNewLine(), format.getOffsets(), kwStr);
 	}
 }

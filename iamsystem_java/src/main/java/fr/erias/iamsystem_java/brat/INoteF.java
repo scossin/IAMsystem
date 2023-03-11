@@ -1,6 +1,6 @@
 package fr.erias.iamsystem_java.brat;
 
-import fr.erias.iamsystem_java.matcher.IAnnotation;
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 
 public interface INoteF
 {

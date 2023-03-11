@@ -11,6 +11,7 @@ import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
@@ -135,6 +136,15 @@ class MatcherTest
 		assertFalse(this.matcher.isTokenAStopword(token));
 		this.stopwords.add("important");
 		assertTrue(this.matcher.isTokenAStopword(token));
+	}
+
+	@Test
+	void testLineBreak()
+	{
+		Matcher matcher = new MatcherBuilder().keywords("cancer du poumon").stopwords("de", "la").w(2).build();
+		List<IAnnotation> anns = matcher.annot("cancer du\npoumon");
+		assertEquals(anns.size(), 1);
+		assertEquals(anns.get(0).toString(), "cancer du\\npoumon	0 16	cancer du poumon");
 	}
 
 	@Test

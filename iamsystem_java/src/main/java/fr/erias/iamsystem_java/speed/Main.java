@@ -13,11 +13,11 @@ import java.util.List;
 
 import org.apache.commons.codec.EncoderException;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Terminology;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.matcher.MatcherBuilder;
 import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;

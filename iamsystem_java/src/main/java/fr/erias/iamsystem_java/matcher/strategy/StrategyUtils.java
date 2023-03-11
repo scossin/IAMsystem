@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import fr.erias.iamsystem_java.matcher.Annotation;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
-import fr.erias.iamsystem_java.matcher.Span;
+import fr.erias.iamsystem_java.annotation.Annotation;
+import fr.erias.iamsystem_java.annotation.IAnnotation;
+import fr.erias.iamsystem_java.annotation.Span;
 import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;

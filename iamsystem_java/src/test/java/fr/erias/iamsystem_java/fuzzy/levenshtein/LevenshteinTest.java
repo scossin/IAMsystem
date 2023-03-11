@@ -13,9 +13,9 @@ import com.github.liblevenshtein.transducer.Algorithm;
 import com.github.liblevenshtein.transducer.Candidate;
 import com.github.liblevenshtein.transducer.ITransducer;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.fuzzy.base.SimpleWords2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.stopwords.NoStopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;

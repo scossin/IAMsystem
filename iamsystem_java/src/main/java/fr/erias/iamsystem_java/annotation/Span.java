@@ -1,4 +1,4 @@
-package fr.erias.iamsystem_java.matcher;
+package fr.erias.iamsystem_java.annotation;
 
 import java.util.List;
 

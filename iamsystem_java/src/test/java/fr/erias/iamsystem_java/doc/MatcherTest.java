@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.github.liblevenshtein.transducer.Algorithm;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.matcher.MatcherBuilder;
 

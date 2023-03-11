@@ -9,12 +9,12 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.brat.BratDocument;
 import fr.erias.iamsystem_java.brat.BratWriter;
 import fr.erias.iamsystem_java.brat.IBratTypeF;
 import fr.erias.iamsystem_java.brat.IBratWriterF;
 import fr.erias.iamsystem_java.keywords.Entity;
-import fr.erias.iamsystem_java.matcher.IAnnotation;
 import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.matcher.MatcherBuilder;
 
