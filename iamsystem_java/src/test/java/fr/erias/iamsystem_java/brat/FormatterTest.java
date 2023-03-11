@@ -83,7 +83,7 @@ class FormatterTest
 		assertEquals("cancer glande prostate", format.getText());
 		assertEquals("0 6;13 28", format.getOffsets());
 	}
-
+	
 	@Test
 	void testTokenFormatterPunctuation()
 	{

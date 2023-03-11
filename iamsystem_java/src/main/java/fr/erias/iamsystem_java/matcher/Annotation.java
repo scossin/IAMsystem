@@ -19,6 +19,10 @@ import fr.erias.iamsystem_java.tree.INode;
 public class Annotation extends Span implements IAnnotation
 {
 
+	public static IPrintAnnot printAnnot = new PrintAnnot();
+	public static void setPrintAnnot(IPrintAnnot printAnnot) {
+		Annotation.printAnnot = printAnnot;
+	}
 	private final List<Collection<String>> algos;
 	private final INode lastState;
 	private final List<IToken> stopTokens;
@@ -74,16 +78,6 @@ public class Annotation extends Span implements IAnnotation
 		return lastState.getKeywords();
 	}
 
-	/**
-	 * Utility function to retrieve keywords' label.
-	 *
-	 * @return
-	 */
-	private String keywords2Str()
-	{
-		return this.getKeywords().stream().map(k -> k.toString()).collect(Collectors.joining(";"));
-	}
-
 	@Override
 	public INode lastState()
 	{
@@ -110,7 +104,7 @@ public class Annotation extends Span implements IAnnotation
 	@Override
 	public String toString()
 	{
-		return String.format("%s\t%s", this.bratFormatter.getFormat(this), keywords2Str());
+		return Annotation.printAnnot.toString(this);
 	}
 
 	@Override
