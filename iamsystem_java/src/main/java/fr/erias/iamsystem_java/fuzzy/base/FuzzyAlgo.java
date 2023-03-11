@@ -25,7 +25,7 @@ public abstract class FuzzyAlgo
 		return name;
 	}
 
-	public abstract List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> states);
+	public abstract List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> transitions);
 
 	public List<SynAlgo> word2syn(String word)
 	{

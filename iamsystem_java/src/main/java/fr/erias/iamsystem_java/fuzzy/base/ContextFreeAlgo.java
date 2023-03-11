@@ -16,7 +16,7 @@ public abstract class ContextFreeAlgo extends FuzzyAlgo
 	public abstract List<SynAlgo> getSynonyms(IToken token);
 
 	@Override
-	public List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> states)
+	public List<SynAlgo> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> transitions)
 	{
 		return this.getSynonyms(token);
 	}

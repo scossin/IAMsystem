@@ -19,14 +19,14 @@ public class SynsProvider implements ISynsProvider
 	}
 
 	@Override
-	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> states)
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> transitions)
 	{
 		Map<String, SynAlgos> syn2synAlgos = new HashMap<String, SynAlgos>();
 		for (FuzzyAlgo fuzzyAlgo : fuzzyAlgos)
 		{
 			// synsAlgo: multiple synonym for one algorithm.
 			// synAlgos: one synonym for multiple algorithms.
-			List<SynAlgo> synsAlgo = fuzzyAlgo.getSynonyms(tokens, token, states);
+			List<SynAlgo> synsAlgo = fuzzyAlgo.getSynonyms(tokens, token, transitions);
 
 			for (SynAlgo synAlgo : synsAlgo)
 			{
