@@ -83,7 +83,7 @@ public class BratFormatters
 	/**
 	 * Group continuous sequences. From a sequence of tokens, group tokens that
 	 * follow each other by their indice. Ex: [1,2,3,5,6] => [[1,2,3], [5,6]]
-	 * 
+	 *
 	 * @param tokens the tokens to group.
 	 * @return multiple continuous sequences.
 	 */
@@ -135,7 +135,7 @@ public class BratFormatters
 	/**
 	 * In each continuous sequence, we want to remove trailing stopwords. Ex:
 	 * [['North', 'and'], ['America']] -> [['North'], ['America']]
-	 * 
+	 *
 	 * @param sequences   : multiple continuous sequences.
 	 * @param stopIndices stopwords indices.
 	 * @return sequences without trailing stopwords.

@@ -21,7 +21,7 @@ public class Annotation extends Span implements IAnnotation
 
 	/**
 	 * Change Brat Formatter to change text-span and offsets.
-	 * 
+	 *
 	 * @param bratFormatter A Brat formatter to produce a different Brat annotation.
 	 */
 	public static void setBratFormatter(IBratFormatterF bratFormatter)
@@ -31,7 +31,7 @@ public class Annotation extends Span implements IAnnotation
 
 	/**
 	 * Change toString() of every annotation (visitor pattern).
-	 * 
+	 *
 	 * @param printAnnot {@link IPrintAnnot} a class to print annotation.
 	 */
 	public static void setPrintAnnot(IPrintAnnot printAnnot)

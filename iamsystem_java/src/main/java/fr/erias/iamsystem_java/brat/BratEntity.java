@@ -10,7 +10,7 @@ public class BratEntity
 
 	/**
 	 * Create a Brat Entity.
-	 * 
+	 *
 	 * @param entityId a unique ID (^T[0-9]+$).
 	 * @param bratType A Brat entity type (see Brat documentation).
 	 * @param offsets  (start,end) offsets.
@@ -30,7 +30,7 @@ public class BratEntity
 
 	/**
 	 * The Brat type of this entity.
-	 * 
+	 *
 	 * @return brat type.
 	 */
 	public String getBratType()
@@ -40,7 +40,7 @@ public class BratEntity
 
 	/**
 	 * The unique id of this entity.
-	 * 
+	 *
 	 * @return a string id.
 	 */
 	public String getEntityId()
@@ -50,7 +50,7 @@ public class BratEntity
 
 	/**
 	 * Brat offsets of the entity in the document.
-	 * 
+	 *
 	 * @return (start,end) offsets.
 	 */
 	public String getOffsets()
@@ -60,7 +60,7 @@ public class BratEntity
 
 	/**
 	 * Brat text-span of this entity.
-	 * 
+	 *
 	 * @return a substring of the document.
 	 */
 	public String getText()

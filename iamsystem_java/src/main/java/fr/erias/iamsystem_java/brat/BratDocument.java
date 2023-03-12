@@ -13,7 +13,7 @@ import fr.erias.iamsystem_java.keywords.IKeyword;
  * Entity and Brat Note in this package. A BratDocument should be linked to a
  * single text document. Entities and notes can be serialized in a text file
  * with 'ann' extension, one per line. See https://brat.nlplab.org/standoff.html
- * 
+ *
  * @author Sebastien Cossin
  *
  * @param <T> Keyword type.
@@ -36,7 +36,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Create a BratDocument to serialize annotations to Brat ann format.
-	 * 
+	 *
 	 * @param formatter The Brat formatter that generates Brat span.
 	 */
 	public BratDocument(IBratFormatterF formatter)
@@ -46,7 +46,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Add iamsystem annotations to convert them to Brat format.
-	 * 
+	 *
 	 * @param annot    matcher annotation output.
 	 * @param bratType A string, the Brat entity type.
 	 */
@@ -63,7 +63,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Add iamsystem annotations to convert them to Brat format.
-	 * 
+	 *
 	 * @param annots      matcher output.
 	 * @param bratTypeFun A function to retrieve dynamically the brat type from an
 	 *                    annotation.
@@ -81,7 +81,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Add iamsystem annotations to convert them to Brat format.
-	 * 
+	 *
 	 * @param annots   matcher output.
 	 * @param bratType A Brat entity type for all the annotations.
 	 */
@@ -95,7 +95,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Convert Brat entities to String.
-	 * 
+	 *
 	 * @return Lines of Brat entities.
 	 */
 	public String entitiesToString()
@@ -105,7 +105,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Get the list of Brat entities.
-	 * 
+	 *
 	 * @return Brat entities added to this document.
 	 */
 	public List<BratEntity> getBratEntities()
@@ -115,7 +115,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Get the list of Brat notes.
-	 * 
+	 *
 	 * @return Brat notes added to this document.
 	 */
 	public List<BratNote> getBratNotes()
@@ -130,7 +130,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * getNoteFunction
-	 * 
+	 *
 	 * @return the function that converts an annotation to a Brat Note.
 	 */
 	public INoteF getNoteFunction()
@@ -145,7 +145,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Convert Brat notes to String.
-	 * 
+	 *
 	 * @return Lines of Brat note.
 	 */
 	public String notesToString()
@@ -155,7 +155,7 @@ public class BratDocument<T extends IKeyword>
 
 	/**
 	 * Change the function that converts an annotation to a Brat Note.
-	 * 
+	 *
 	 * @param noteFunction a {@link INoteF}.
 	 */
 	public void setNoteFunction(INoteF noteFunction)

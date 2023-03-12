@@ -37,7 +37,7 @@ public class CacheFuzzyAlgos extends NormLabelAlgo
 
 	/**
 	 * Add a fuzzy algorithm in cache.
-	 * 
+	 *
 	 * @param fuzzyAlgo a {@link NormLabelAlgo} algorithm.
 	 */
 	public void addFuzzyAlgo(NormLabelAlgo fuzzyAlgo)

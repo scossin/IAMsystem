@@ -124,7 +124,8 @@ public class MatcherBuilder
 		{
 			ITransducer<Candidate> transducer = Levenshtein.buildTransuder(this.maxDistanceLeven, matcher,
 					this.algorithmLeven);
-			Levenshtein leven = new Levenshtein("levenshtein", this.minNbcharLeven, word2ignore, transducer);
+			Levenshtein leven = new Levenshtein("levenshtein", this.minNbcharLeven, transducer);
+			leven.setWords2ignore(word2ignore);
 			cache.addFuzzyAlgo(leven);
 		}
 		if (this.shortForms.size() != 0)
@@ -170,7 +171,7 @@ public class MatcherBuilder
 		for (WordNormalizer normalizer : wordNormalizers)
 		{
 			cache.addFuzzyAlgo(normalizer);
-			normalizer.add(matcher.getUnigrams());
+			normalizer.addWords(matcher.getUnigrams());
 		}
 
 		for (FuzzyRegex fuzzyRegex : fuzzyRegex)

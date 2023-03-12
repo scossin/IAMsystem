@@ -11,7 +11,7 @@ public class BratNote
 	 * Class representing a Brat Note. https://brat.nlplab.org/standoff.html. Brat
 	 * notes are used to store additionnal information on a detected entity. Format:
 	 * #ID \t TYPE REFID \t NOTE
-	 * 
+	 *
 	 * @param noteId a unique ID (^#[0-9]+$).
 	 * @param refId  a unique ID. For a BratEntity, the format is (^T[0-9]+$).
 	 * @param note   any string comment.
@@ -33,7 +33,7 @@ public class BratNote
 
 	/**
 	 * Retrieve note uniqeu id.
-	 * 
+	 *
 	 * @return a string id.
 	 */
 	public String getNodeId()
@@ -43,7 +43,7 @@ public class BratNote
 
 	/**
 	 * Retrieve the Brat note (text comment).
-	 * 
+	 *
 	 * @return a Brat note.
 	 */
 	public String getNote()
@@ -53,7 +53,7 @@ public class BratNote
 
 	/**
 	 * Get the id of the Brat annotation linked to this note.
-	 * 
+	 *
 	 * @return A unique string id.
 	 */
 	public String getRefId()

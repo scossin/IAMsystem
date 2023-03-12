@@ -18,7 +18,7 @@ public class SynAlgos
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param syn  a synonym.
 	 * @param algo a fuzzy algorithm name.
 	 */
@@ -31,7 +31,7 @@ public class SynAlgos
 
 	/**
 	 * Add another algorithm name that generated the same synonym.
-	 * 
+	 *
 	 * @param algo a fuzzy algorithm name.
 	 */
 	public void addAlgo(String algo)
@@ -58,7 +58,7 @@ public class SynAlgos
 
 	/**
 	 * Retrieve all algorithms that generated this synonym.
-	 * 
+	 *
 	 * @return algorithm names.
 	 */
 	public Collection<String> getAlgos()
@@ -68,7 +68,7 @@ public class SynAlgos
 
 	/**
 	 * synonym getter.
-	 * 
+	 *
 	 * @return the synonym.
 	 */
 	public String getSyn()
@@ -79,7 +79,7 @@ public class SynAlgos
 	/**
 	 * In case the synonym is composed of multiple tokens (ex: 'ic' -> 'insuffisance
 	 * cardiaque'), split the tokens.
-	 * 
+	 *
 	 * @return the synonym in an array.
 	 */
 	public String[] getSynToken()

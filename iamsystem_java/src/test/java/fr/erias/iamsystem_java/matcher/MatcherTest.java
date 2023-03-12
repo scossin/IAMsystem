@@ -15,7 +15,6 @@ import fr.erias.iamsystem_java.annotation.IAnnotation;
 import fr.erias.iamsystem_java.keywords.Entity;
 import fr.erias.iamsystem_java.keywords.IEntity;
 import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
-import fr.erias.iamsystem_java.speed.Main;
 import fr.erias.iamsystem_java.stopwords.Stopwords;
 import fr.erias.iamsystem_java.tokenize.ETokenizer;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
@@ -167,13 +166,12 @@ class MatcherTest
 		List<IAnnotation> anns = matcher.annot("Portail de la médecine");
 		assertEquals(anns.size(), 1);
 	}
-	
+
 	@Test
 	void testRemoveNestedAnnot()
 	{
-		Matcher matcher = new MatcherBuilder()
-				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
-				.keywords("nævus","nævus anemique","anemique")
+		Matcher matcher = new MatcherBuilder().tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords("nævus", "nævus anemique", "anemique")
 				.removeNestedAnnot(true)
 				.strategy(EMatchingStrategy.WindowStrategy)
 				.w(3)
@@ -181,7 +179,7 @@ class MatcherTest
 		List<IAnnotation> anns = matcher.annot("nævus anemique");
 		assertEquals(anns.size(), 1);
 	}
-//	
+//
 //	Leucodermie.txt	nævus anémique	616 630	naevus anemique (C0265982)
 //	Leucodermie.txt	anémique	622 630	anemique (C0857322)
 }

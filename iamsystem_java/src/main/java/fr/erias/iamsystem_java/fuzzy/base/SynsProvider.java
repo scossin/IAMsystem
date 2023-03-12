@@ -21,7 +21,7 @@ public class SynsProvider implements ISynsProvider
 
 	/**
 	 * A list of fuzzy algorithms stored by this provider.
-	 * 
+	 *
 	 * @param fuzzyAlgos multiple {@link FuzzyAlgo}.
 	 */
 	public SynsProvider(List<? extends FuzzyAlgo> fuzzyAlgos)

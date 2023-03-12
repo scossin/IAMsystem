@@ -41,7 +41,7 @@ class StemTest
 	@Test
 	void testGetSynonyms()
 	{
-		this.fuzzyStemmer.add(Arrays.asList("insuffisance"));
+		this.fuzzyStemmer.addWords(Arrays.asList("insuffisance"));
 		List<SynAlgo> syns = this.fuzzyStemmer.getSynsOfWord("insuffisant");
 		assertEquals(syns.size(), 1);
 	}
@@ -49,7 +49,7 @@ class StemTest
 	@Test
 	void testMatcher()
 	{
-		this.fuzzyStemmer.add(Arrays.asList("insuffisance", "cardiaque", "gauche"));
+		this.fuzzyStemmer.addWords(Arrays.asList("insuffisance", "cardiaque", "gauche"));
 		matcher.addKeyword(MockData.getICG());
 		List<IAnnotation> annots = matcher.annot("insuffisant cardiaqu gauch");
 		assertEquals(annots.size(), 2);

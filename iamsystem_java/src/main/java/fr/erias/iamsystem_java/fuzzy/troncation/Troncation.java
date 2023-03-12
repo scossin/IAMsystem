@@ -55,12 +55,10 @@ class PrefixFounder
 }
 
 /**
- * Approximate String algorithm based on the prefix of a token. It returns all
- * the string, in the dictionary, that begins with a prefix of length
- * 'minPrefixLength' and with a maximum difference characters of 'maxDistance'
- * Ex: 'diabet' is the troncation of 'diabete', maxDistance must be greater than
- * 1 Ex: 'ins' is the troncation of 'insuffisance', maxDistance must be greater
- * than 9 (12 - 3)
+ * A fuzzy algorithm based on the prefix of a token: it returns all the unigrams
+ * of the dictionary that begins with the same prefix. Ex: 'diabet' is the
+ * troncation of 'diabete'. Ex: 'ins' is the troncation of 'insuffisance' and
+ * maxDistance must be greater than 9 (12 - 3).
  *
  * @author Sebastien Cossin
  *
@@ -72,11 +70,10 @@ public class Troncation extends NormLabelAlgo
 	private final int maxDistance;
 
 	/**
-	 * Fuzzy string matching algorithm to find tokens in the terminology that ends
-	 * by the token (truncated word) in the document
+	 * A fuzzy matching algorithm to handle word troncation in a document.
 	 *
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
-	 *                    unique tokens in the terminology in a trie
+	 *                    unique tokens in the terminology in a trie.
 	 * @param maxDistance maximum number of character between the prefix and a
 	 *                    string (ex: diabet --- diabetes ; 2 char)
 	 */

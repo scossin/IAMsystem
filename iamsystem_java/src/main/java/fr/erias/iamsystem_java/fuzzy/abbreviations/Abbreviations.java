@@ -28,7 +28,7 @@ public class Abbreviations extends ContextFreeAlgo
 
 	/**
 	 * Create a new Abbreviations instance.
-	 * 
+	 *
 	 * @param name a name given to these abbreviations.
 	 */
 	public Abbreviations(String name)
@@ -38,7 +38,7 @@ public class Abbreviations extends ContextFreeAlgo
 
 	/**
 	 * Create a new Abbreviations instance.
-	 * 
+	 *
 	 * @param name        a name given to these abbreviations.
 	 * @param abbsChecker a function that checks if a token is an abbreviation
 	 *                    before searching and returning long forms.

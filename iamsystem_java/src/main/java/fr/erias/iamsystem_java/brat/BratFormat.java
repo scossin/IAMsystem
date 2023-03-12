@@ -14,7 +14,7 @@ public class BratFormat
 
 	/**
 	 * Create a BratFormat.
-	 * 
+	 *
 	 * @param text    Brat text-span
 	 * @param offsets (start end) offsets in the document.
 	 */
@@ -26,7 +26,7 @@ public class BratFormat
 
 	/**
 	 * Get offsets.
-	 * 
+	 *
 	 * @return (start end) offsets in the document.
 	 */
 	public String getOffsets()
@@ -36,7 +36,7 @@ public class BratFormat
 
 	/**
 	 * Get Brat text-span.
-	 * 
+	 *
 	 * @return a substring of the document.
 	 */
 	public String getText()
@@ -46,7 +46,7 @@ public class BratFormat
 
 	/**
 	 * Get Brat text-span and escape newlines.
-	 * 
+	 *
 	 * @return a substring of the document.
 	 */
 	public String getTextEscapeNewLine()

@@ -14,9 +14,9 @@ import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
 /**
- * A fuzzy algorithm that returns the closest token substring. 
- * Ex: If a keyword is "high blood pressure", for token 'pressures' it returns 'pressure'.
- * 
+ * A fuzzy algorithm that returns the closest token substring. Ex: If a keyword
+ * is "high blood pressure", for token 'pressures' it returns 'pressure'.
+ *
  * @author Sebastien Cossin
  *
  */

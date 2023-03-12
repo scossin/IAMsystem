@@ -13,12 +13,16 @@ import com.github.liblevenshtein.transducer.ITransducer;
 import com.github.liblevenshtein.transducer.factory.TransducerBuilder;
 
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
-import fr.erias.iamsystem_java.fuzzy.base.IWord2ignore;
-import fr.erias.iamsystem_java.fuzzy.base.NoWord2ignore;
 import fr.erias.iamsystem_java.fuzzy.base.StringDistance;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 import fr.erias.iamsystem_java.matcher.Matcher;
 
+/**
+ * A fuzzy algorithm based on the Levenshtein distance.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class Levenshtein extends StringDistance
 {
 
@@ -42,14 +46,15 @@ public class Levenshtein extends StringDistance
 
 	private final ITransducer<Candidate> transducer;
 
+	/**
+	 *
+	 * @param name
+	 * @param minNbChar
+	 * @param transducer
+	 */
 	public Levenshtein(String name, int minNbChar, ITransducer<Candidate> transducer)
 	{
-		this(name, minNbChar, new NoWord2ignore(), transducer);
-	}
-
-	public Levenshtein(String name, int minNbChar, IWord2ignore word2ignore, ITransducer<Candidate> transducer)
-	{
-		super(name, minNbChar, word2ignore);
+		super(name, minNbChar);
 		this.transducer = transducer;
 	}
 

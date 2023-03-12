@@ -93,7 +93,8 @@ class LevenshteinTest
 		int maxdistance = 1;
 		List<String> unigrams = Arrays.asList("insuffisance");
 		ITransducer<Candidate> transducer = Levenshtein.buildTransuder(maxdistance, unigrams, Algorithm.TRANSPOSITION);
-		Levenshtein leven = new Levenshtein("Levenshtein", 0, words2ignore, transducer);
+		Levenshtein leven = new Levenshtein("Levenshtein", 0, transducer);
+		leven.setWords2ignore(words2ignore);
 		List<SynAlgo> syns = leven.getSynsOfWord("insuffisance");
 		assertEquals(0, syns.size());
 		syns = leven.getSynsOfWord("insuffisanze");

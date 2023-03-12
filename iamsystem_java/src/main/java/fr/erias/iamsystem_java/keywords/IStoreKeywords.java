@@ -8,9 +8,23 @@ import fr.erias.iamsystem_java.stopwords.IStopwords;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 import fr.erias.iamsystem_java.tokenize.ITokenizerStopwords;
 
+/**
+ * A class that stores keywords.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public interface IStoreKeywords
 {
 
+	/**
+	 * Return all the unigrams of a dictionary (collection of keywords).
+	 * 
+	 * @param keywords  collections of {@link IKeyword}.
+	 * @param tokenizer to tokenize and normalize keywords.
+	 * @param stopwords to remove stopwords.
+	 * @return all the unigrams of the dictionary except stopwords.
+	 */
 	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, ITokenizer tokenizer, IStopwords stopwords)
 	{
 		Set<String> unigrams = new HashSet<String>();

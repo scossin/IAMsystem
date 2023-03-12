@@ -23,7 +23,7 @@ public abstract class FuzzyAlgo
 
 	/**
 	 * Create a new fuzzy algorithm.
-	 * 
+	 *
 	 * @param name A name given to the algorithm (ex: "french stemmer").
 	 */
 	public FuzzyAlgo(String name)
@@ -33,7 +33,7 @@ public abstract class FuzzyAlgo
 
 	/**
 	 * name getter.
-	 * 
+	 *
 	 * @return the algorithm name.
 	 */
 	public String getName()
@@ -43,7 +43,7 @@ public abstract class FuzzyAlgo
 
 	/**
 	 * Main fuzzy algorithm function that is called to retrieve synonyms.
-	 * 
+	 *
 	 * @param tokens      the sequence of tokens of the document. Useful when the
 	 *                    fuzzy algorithm needs context, namely the tokens around
 	 *                    the token of interest.
@@ -58,7 +58,7 @@ public abstract class FuzzyAlgo
 
 	/**
 	 * Utility function to transform a string to a list of {@link SynAlgo}.
-	 * 
+	 *
 	 * @param word a word synonym produced by the algorithm. Ex: word='insuffisance'
 	 *             for token 'ins'.
 	 * @return a list of {@link SynAlgo}.
@@ -74,7 +74,7 @@ public abstract class FuzzyAlgo
 	/**
 	 * Utility function to transform a sequence of string to the expected output
 	 * type.
-	 * 
+	 *
 	 * @param words a sequence of words produced by the algorithm. Ex:
 	 *              words=['insuffisance', 'cardiaque'] for the token 'ic'.
 	 * @return a list of {@link SynAlgo}.

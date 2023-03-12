@@ -13,7 +13,7 @@ public class BratWriter
 
 	/**
 	 * Serialize a Brat document.
-	 * 
+	 *
 	 * @param document A BratDocument containing iamsystem annotations converting to
 	 *                 brat entities.
 	 * @param writer   Any writer.
@@ -25,7 +25,7 @@ public class BratWriter
 
 	/**
 	 * Serialize Brat entities.
-	 * 
+	 *
 	 * @param entities Brat entities.
 	 * @param writer   Any writer.
 	 */
@@ -40,7 +40,7 @@ public class BratWriter
 
 	/**
 	 * Serialize Brat notes.
-	 * 
+	 *
 	 * @param notes  Brat notes.
 	 * @param writer Any writer.
 	 */

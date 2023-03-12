@@ -22,7 +22,7 @@ public class SimpleWords2ignore implements IWord2ignore
 
 	/**
 	 * Create a new instance with words to be ignored.
-	 * 
+	 *
 	 * @param words2ignore words to ignore.
 	 */
 	public SimpleWords2ignore(Collection<String> words2ignore)
@@ -32,7 +32,7 @@ public class SimpleWords2ignore implements IWord2ignore
 
 	/**
 	 * Add word to be ignored.
-	 * 
+	 *
 	 * @param word2ignore a word to ignore.
 	 */
 	public void addWord2ignore(String word2ignore)
@@ -42,7 +42,7 @@ public class SimpleWords2ignore implements IWord2ignore
 
 	/**
 	 * Add words to be ignored.
-	 * 
+	 *
 	 * @param words2ignore words to ignore.
 	 */
 	public void addWords2ignore(Collection<String> words2ignore)

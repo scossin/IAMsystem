@@ -14,7 +14,7 @@ import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.StringEncoder;
 
 import fr.erias.iamsystem_java.fuzzy.base.FuzzyAlgo;
-import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
+import fr.erias.iamsystem_java.fuzzy.base.StringDistance;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 
 /**
@@ -28,7 +28,7 @@ import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
  * @author Sebastien Cossin
  *
  */
-public class StringEncoderSyn extends NormLabelAlgo
+public class StringEncoderSyn extends StringDistance
 {
 
 	private Map<String, Set<String>> encoding2tokens = new HashMap<String, Set<String>>();
@@ -38,44 +38,49 @@ public class StringEncoderSyn extends NormLabelAlgo
 
 	/**
 	 * Create a new fuzzy algorithm that uses a string encoder algorithm.
-	 * @param name the algorithm name.
+	 * 
+	 * @param name          the algorithm name.
 	 * @param stringEncoder a {@link StringEncoder}.
-	 * @param minNbChar the minimum number of characters a word must have in order
-	 *                  not to be ignored.
+	 * @param minNbChar     the minimum number of characters a word must have in
+	 *                      order not to be ignored.
 	 */
 	public StringEncoderSyn(String name, StringEncoder stringEncoder, int minNbChar)
 	{
-		super(name);
+		super(name, minNbChar);
 		this.stringEncoder = stringEncoder;
 		this.minNbChar = minNbChar;
 	}
 
 	/**
-	 * Encode all the unique tokens of your terminology for approximate string
-	 * matching
+	 * Create a new fuzzy algorithm that uses a string encoder algorithm.
 	 *
-	 * @param stringEncoder     an method that implements {@link StringEncoder} <br>
-	 *                          https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
-	 * @param minNbChar         don't encode token less than this length (0 if you
-	 *                          want to include them all)
-	 * @param encodedStrSpliter if the algorithm outputs a concatenated string, you
-	 *                          want to split it with this separator
+	 * @param stringEncoder an class that implements {@link StringEncoder} interface
+	 *                      <br>
+	 *                      https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
+	 * @param minNbChar     don't encode token less than this length (0 if you want
+	 *                      to include them all)
 	 */
 	public StringEncoderSyn(StringEncoder stringEncoder, int minNbChar)
 	{
 		this(stringEncoder.getClass().getSimpleName(), stringEncoder, minNbChar);
 	}
 
-	public void add(Collection<String> tokens) throws EncoderException
+	/**
+	 * Add words to encode (in general unigrams of the dictionary).
+	 * 
+	 * @param unigrams A collection of string.
+	 * @throws EncoderException if the algorithm can't encode a word.
+	 */
+	public void add(Collection<String> unigrams) throws EncoderException
 	{
-		for (String token : tokens)
+		for (String word : unigrams)
 		{
-			String encoded = stringEncoder.encode(token);
-			add(token, encoded);
+			String encoded = stringEncoder.encode(word);
+			add(word, encoded);
 		}
 	}
 
-	private void add(String token, String encoded)
+	private void add(String word, String encoded)
 	{
 		for (String encodedString : encodedStrSplit(encoded))
 		{
@@ -84,7 +89,7 @@ public class StringEncoderSyn extends NormLabelAlgo
 				Set<String> temp = new HashSet<String>();
 				encoding2tokens.put(encodedString, temp);
 			}
-			encoding2tokens.get(encodedString).add(token);
+			encoding2tokens.get(encodedString).add(word);
 		}
 	}
 
@@ -136,9 +141,15 @@ public class StringEncoderSyn extends NormLabelAlgo
 		}
 	}
 
-	public void setEncodedStrSpliter(String encodedStrSpliter)
+	/**
+	 * In case the string encoder returns multiple encoded string, the default
+	 * separator is |.
+	 * 
+	 * @param encodedStringSeparator
+	 */
+	public void setEncodedStrSpliter(String encodedStringSeparator)
 	{
-		this.encodedStrSpliter = encodedStrSpliter;
+		this.encodedStrSpliter = encodedStringSeparator;
 	}
 
 	private boolean tokenLengthLessThanMinSize(String token)
