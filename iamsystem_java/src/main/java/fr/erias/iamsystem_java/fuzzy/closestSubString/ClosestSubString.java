@@ -13,6 +13,13 @@ import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.tree.EmptyNode;
 import fr.erias.iamsystem_java.tree.INode;
 
+/**
+ * A fuzzy algorithm that returns the closest token substring. 
+ * Ex: If a keyword is "high blood pressure", for token 'pressures' it returns 'pressure'.
+ * 
+ * @author Sebastien Cossin
+ *
+ */
 public class ClosestSubString extends NormLabelAlgo
 {
 
@@ -20,9 +27,7 @@ public class ClosestSubString extends NormLabelAlgo
 	private final int maxDistance;
 
 	/**
-	 * Fuzzy matching algorithm that finds the closest token substring, in the all
-	 * terminology, of a token in a document Ex: term is "high blood pressure" ;
-	 * token is 'pressures' ; the closest substring is 'pressure' Complexity is O(1)
+	 * Create a new ClosestSubString instance.
 	 *
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
 	 *                    unique tokens in the terminology in a trie
@@ -50,9 +55,9 @@ public class ClosestSubString extends NormLabelAlgo
 	private Set<String> getTokenStartingWith(String token)
 	{
 		// algorithm: go deep in the trie character by character and record the node of
-		// the last final state
+		// the last final state.
 		// compare the node depth with maxDistance value: this is the number of
-		// characters between the closest substring and the token
+		// characters between the closest substring and the token.
 		Set<String> startsWith = new HashSet<String>();
 		List<String> chars = this.prefixTrie.getCharTokenizer()
 				.tokenize(token)

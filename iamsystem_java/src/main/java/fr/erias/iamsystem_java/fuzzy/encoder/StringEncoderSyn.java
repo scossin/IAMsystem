@@ -33,14 +33,21 @@ public class StringEncoderSyn extends NormLabelAlgo
 
 	private Map<String, Set<String>> encoding2tokens = new HashMap<String, Set<String>>();
 	private final StringEncoder stringEncoder;
-	private final int minTokenLength;
+	private final int minNbChar;
 	private String encodedStrSpliter = "\\|";
 
-	public StringEncoderSyn(String name, StringEncoder stringEncoder, int minTokenLength)
+	/**
+	 * Create a new fuzzy algorithm that uses a string encoder algorithm.
+	 * @param name the algorithm name.
+	 * @param stringEncoder a {@link StringEncoder}.
+	 * @param minNbChar the minimum number of characters a word must have in order
+	 *                  not to be ignored.
+	 */
+	public StringEncoderSyn(String name, StringEncoder stringEncoder, int minNbChar)
 	{
 		super(name);
 		this.stringEncoder = stringEncoder;
-		this.minTokenLength = minTokenLength;
+		this.minNbChar = minNbChar;
 	}
 
 	/**
@@ -136,6 +143,6 @@ public class StringEncoderSyn extends NormLabelAlgo
 
 	private boolean tokenLengthLessThanMinSize(String token)
 	{
-		return token.length() < this.minTokenLength;
+		return token.length() < this.minNbChar;
 	}
 }

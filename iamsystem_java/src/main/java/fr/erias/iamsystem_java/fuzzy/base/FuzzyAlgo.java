@@ -42,7 +42,7 @@ public abstract class FuzzyAlgo
 	}
 
 	/**
-	 * "Main fuzzy algorithm function that is called to retrieve synonyms.
+	 * Main fuzzy algorithm function that is called to retrieve synonyms.
 	 * 
 	 * @param tokens      the sequence of tokens of the document. Useful when the
 	 *                    fuzzy algorithm needs context, namely the tokens around
