@@ -1,56 +1,59 @@
 # IAMsystem
 
-A fast dictionary-based approach for semantic annotation, a.k.a [entity linking](https://en.wikipedia.org/wiki/Entity_linking). Semantic annotation is the process of mapping a sequence of tokens in a document to concepts of a terminology. 
-IAMsystem is efficient at annotating documents with large dictionaries (> 300K keywords) and [approximate string matching algorithms](https://en.wikipedia.org/wiki/Approximate_string_matching) (a.k.a fuzzy string matching). 
+A Java implementation of IAMsystem algorithm, a fast dictionary-based approach for semantic annotation, a.k.a entity linking.
 
-You provide a list of terms (keywords) you want to detect, you choose and configure some approximate string matching algorithms, IAMsystem does the rest. 
-Brat output is available.
 
-## Getting started
+## Installation
 
-Add the dependency to your pom.xml to download it from the Maven Repository:
+Add the dependency to your pom.xml:
 
 ```XML
 <dependency>
  	<groupId>fr.erias</groupId>
 	<artifactId>IAMsystem</artifactId>
-	<version>1.3.1</version>
+	<version>2.1.0</version>
 </dependency>
 ```
 
-Quick example:
+## Usage
+You provide a list of keywords you want to detect in a document,
+you can add and combine abbreviations, normalization methods (lemmatization, stemming) and approximate string matching algorithms,
+IAMsystem algorithm performs the semantic annotation.
+
+See the [documentation](https://iamsystem-python.readthedocs.io/en/latest/) for the configuration details. Although the documentation is for the [python implementation](https://github.com/scossin/iamsystem_python), the Java implementation offers the same functionalities and uses the same variable names.
+
+### Quick example
 
 ```java
-TermDetector termDetector = new TermDetector();
-Term term = new Term("high blood pressure", "I10"); // you can also load a terminology (set of terms) 
-termDetector.addTerm(term); 
-String document = "The patient has a very highhhh BP.";
-// We want IAMsystem to detect: highhhh=high and BP=blood pressure
-// To do so, we configure IAMsystem with 2 approximate string matching algorithms:
-Abbreviations abbreviations = new Abbreviations();
-abbreviations.addAbbreviation("blood pressure", "bp");
-StringEncoderSyn soundex = new StringEncoderSyn(new Soundex(), -1);
-termDetector.addFuzzyAlgorithm(abbreviations);
-termDetector.addFuzzyAlgorithm(soundex);
-soundex.addTerm(term, termDetector.getTokenizerNormalizer()); // stores in cache encoded string of each token
-DetectOutput detectOutput = termDetector.detect(document);
-System.out.println(detectOutput.toString());
-// 1 terms detected.
-// term number 1:
-// 	 label in terminology: 'high blood pressure'
-// 	 written exactly like this in the sentence: 'highhhh BP'
-// 	 code in terminology: I10
-// 	 starting at position:23
-// 	 end at position:32
-// 	 first token number 5
-// 	 last token number 6
+Matcher matcher = new MatcherBuilder()
+		.keywords("North America", "South America")
+		.stopwords("and")
+		.abbreviations("amer", "America")
+		.levenshtein(5, 1, Algorithm.TRANSPOSITION)
+		.w(2)
+		.build();
+List<IAnnotation> annots = matcher.annot("Northh and south Amer.");
+for (IAnnotation annot : annots) {
+	System.out.println(annot);
+}
+// Northh Amer	0 6;17 21	North America
+// south Amer	11 21	South America
 ```
 
-Have a look at more examples by loading the Maven project in the **example folder** using your favorite IDE.  
+## Algorithm
+The algorithm was developed in the context of a [PhD thesis](https://theses.hal.science/tel-03857962/).
+It proposes a solution to quickly annotate documents using a large dictionary (> 300K keywords) and fuzzy matching algorithms.
+No string distance algorithm is implemented in this package, it imports and leverages external libraries. 
+Its algorithmic complexity is *O(n(log(m)))* with n the number of tokens in a document and m the size of the dictionary.
+The formalization of the algorithm is available in this [paper](https://ceur-ws.org/Vol-3202/livingner-paper11.pdf).
 
-## How it works
+It has participated in several semantic annotation competitions in the medical field where it has obtained satisfactory results,
+for example by obtaining the best results in the [Codiesp shared task](https://temu.bsc.es/codiesp/index.php/2019/09/19/awards/).
+A dictionary-based model can achieve close performance to a transformer-based model when the task is simple or when the training set is small.
+Its main advantage is its speed, which allows a baseline to be generated quickly.
+### How it works
 
-Like [FlashText](https://github.com/vi3k6i5/flashtext) and [Spacy's phrasematcher](https://spacy.io/api/phrasematcher) algorithms it stores a terminology in a tree data structure (called [a trie](https://en.wikipedia.org/wiki/Trie)) for low memory storage and fast lookup (O(1)): 
+Like [FlashText](https://github.com/vi3k6i5/flashtext) and [Spacy's phrasematcher](https://spacy.io/api/phrasematcher) algorithms it stores a terminology in a tree data structure (called [a trie](https://en.wikipedia.org/wiki/Trie)) for low memory storage and fast lookup. 
 
 <img src="./trie_datastructure.png"/>
 
@@ -59,15 +62,17 @@ In the example below, it detects the term "insuffisance cardiaque aigue" in a do
 
 <img src="./search_algorithm.png" width="525" height="360"/>
 
-## Approximate string matching
+### Approximate string matching
 By default, IAMsystem performs exact match only.
 The following string matching algorithms are available in IAMsystem:
 * [Apache common StringEncoders](https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language) (Metaphone, Soundex, Caverphone...)
-* Levenshtein distance (by [Lucene](https://lucene.apache.org/))
+* Levenshtein distance (by https://github.com/universal-automata/liblevenshtein-java)
 * Abbreviations (a dictionary must be provided)
-* Troncation 
+* Truncation 
 * ClosestSubString
+* Regex
 
+You can also add your own fuzzy matching algorithm. 
 Examples of token matching with different algorithms: 
 
 
@@ -75,17 +80,9 @@ Examples of token matching with different algorithms:
 |----------------------|---------------------------------|------------------------------------------|
 |   amocssicilllline   | amoxicilline                    |  Soundex                                 |
 |   amoicilline        | amoxicilline                    |  Levenshtein (edit distance of 1)        | 
-|   amoxicil.          | amoxicilline                    |  Troncation                              | 
-|   amoxicillinesssss  | amoxicilline                    |  ClosestSubString                        |
-|   bloodpressure      | blood pressure                  |  Levenshtein (edit distance of 1)        | 
+|   amoxicil.          | amoxicilline                    |  Truncation                              | 
+|   amoxicillinesssss  | amoxicilline                    |  ClosestSubString                        | 
 |   bp                 | blood pressure                  |  Abbreviations                           |
-
-
-
-You can add your own string matching algorithm by implementing the ISynonym interface. 
-
-There are no stemmer because they use language-specific rules.
-IAMsystemFR (IAMsystem for French language) is another repository that contains French-specific fuzzy mathing algorithms like a FrenchStemmer and a French Soundex. 
 
 
 ## References
@@ -93,6 +90,7 @@ Performance (recall, precision, F-measure) of IAMsystem were evaluated on two in
 
 *    Cossin S, Jouhet V, Mougin F, Diallo G, Thiessard F. IAM at CLEF eHealth 2018: Concept Annotation and Coding in French Death Certificates. https://arxiv.org/abs/1807.03674 
 *    Cossin S and Jouhet V. IAM at CLEF eHealth 2020: Concept Annotation in Spanish Electronic Health Records. http://ceur-ws.org/Vol-2696/paper_198.pdf
+* Cossin S, Diallo G, Jouhet V. IAM at IberLEF 2022: NER of Species Mentions. CEUR workshop proceedings [Internet]. sept 2022. https://ceur-ws.org/Vol-3202/livingner-paper11.pdf
 
 
 Organizers' papers:
@@ -101,6 +99,7 @@ Organizers' papers:
 
 *  Miranda-Escalada A, Gonzalez-Agirre A, Armengol-Estapé J, Krallinger M. Overview of automatic clinical coding: annotations, guidelines, and solutions for non-English clinical cases at CodiEsp track of eHealth CLEF 2020. CEUR-WS. 2020; http://ceur-ws.org/Vol-2696/paper_263.pdf
 
+* A. Miranda-Escalada, E. Farré-Maduell, S. Lima-López, D. Estrada, L. Gascó, M. Krallinger, Mention detection, normalization & classification of species, pathogens, humans and food in clinical documents: Overview of livingner shared task and resources, Procesamiento del Lenguaje Natural (2022)
 
 ### Release note:
 
@@ -110,16 +109,8 @@ Organizers' papers:
 |   1.0.0    | First major modification. Change the output object of the detector (December 2020), add TermDetector   |
 |   1.2.0    | Re-implement the trie and add a cache mechanism to improve performance                     		      |
 |   1.3.0    | Add support to the Apache common StringEncoder library, add Troncation and ClosestSubString algorithms |
+|   2.1.0    | Complete re-write of the library to be in sync with the Python implementation and its documentation. The core algorithm, aka the matching strategy, changed to the *Window Strategy* which allows detection of discontinuous sequences of tokens in a document. The strategy used in previous versions (<2.1.0) is called the *NoOverlap* strategy.|
 
-## Demo
-*    Detect French UMLS concepts: https://www.erias.fr/detectUMLS/
-*    Detect Spanish ICD-10 diagnosis and procedure: https://www.erias.fr/codiesp/
-
-## Call it from R
-See https://github.com/scossin/RIAMsystem
-
-## Handles context (negation...) with FastContext
-See https://github.com/scossin/IAMsystemFastContext
 
 
 ## Acknowledgement
