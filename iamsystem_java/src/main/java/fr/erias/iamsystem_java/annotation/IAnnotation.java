@@ -42,9 +42,10 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	public List<Collection<String>> getAlgos();
 
 	/**
-	 * Keywords linked to this annotation
+	 * Keywords linked to this annotation.
 	 *
-	 * @return
+	 * @return in general a single keyword. Multiple keywords if their tokenization
+	 *         and normalization have the same output.
 	 */
 	public Collection<IKeyword> getKeywords();
 
@@ -64,13 +65,15 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 
 	/**
 	 * Set the annotated text.
+	 * 
+	 * @param text the text that was annotated.
 	 */
 	public void setText(String text);
 
 	/**
 	 * Stopwords tokens detected by the Matcher's {@link IStopwords} instance.
 	 *
-	 * @return
+	 * @return a list of {@link IToken} tagged as stopwords.
 	 */
 	public List<IToken> stopTokens();
 }

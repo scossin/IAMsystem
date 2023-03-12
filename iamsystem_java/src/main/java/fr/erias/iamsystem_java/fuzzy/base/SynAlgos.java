@@ -77,8 +77,8 @@ public class SynAlgos
 	}
 
 	/**
-	 * In case the synonym is composed of multiple tokens (ex: 'ic' -> 'insuffisance
-	 * cardiaque'), split the tokens.
+	 * In case the synonym is composed of multiple tokens (ex: a synonym of 'ic' is
+	 * 'insuffisance cardiaque'), split the tokens.
 	 *
 	 * @return the synonym in an array.
 	 */

@@ -24,6 +24,7 @@ public class Token implements IToken
 	 * @param label      the label as it is in the document/keyword.
 	 * @param norm_label the normalized label (used by iamsystem's algorithm to
 	 *                   perform entity linking).
+	 * @param i          the index of the token within the parent document.
 	 */
 	public Token(int start, int end, String label, String norm_label, int i)
 	{

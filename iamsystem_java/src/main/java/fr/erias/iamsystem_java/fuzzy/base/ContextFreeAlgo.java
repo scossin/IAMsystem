@@ -8,7 +8,7 @@ import fr.erias.iamsystem_java.tokenize.IToken;
 /**
  * Base class of fuzzy algorithms that doesn't take into account context, only
  * the current token.
- * 
+ *
  * @author Sebastien Cossin
  *
  */
@@ -17,7 +17,7 @@ public abstract class ContextFreeAlgo extends FuzzyAlgo
 
 	/**
 	 * Create a new instance.
-	 * 
+	 *
 	 * @param name A name given to this algorithm.
 	 */
 	public ContextFreeAlgo(String name)
@@ -27,7 +27,7 @@ public abstract class ContextFreeAlgo extends FuzzyAlgo
 
 	/**
 	 * Retrieve synonyms based on the current token.
-	 * 
+	 *
 	 * @param token the token for which synonyms are expected.
 	 * @return 0 to many synonyms.
 	 */

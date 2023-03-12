@@ -6,7 +6,6 @@ import fr.erias.iamsystem_java.tokenize.IToken;
  * Stopword interface.
  *
  * @author Sebastien Cossin
- * @param <T> a generic Token.
  */
 public interface IStopwords
 {

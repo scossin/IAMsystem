@@ -47,7 +47,7 @@ public abstract class StringDistance extends NormLabelAlgo
 
 	/**
 	 * Change words2ignore instance.
-	 * 
+	 *
 	 * @param word2ignore a class that checks if a word should be ignored.
 	 */
 	public void setWords2ignore(IWord2ignore word2ignore)

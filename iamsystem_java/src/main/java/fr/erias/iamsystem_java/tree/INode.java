@@ -16,9 +16,9 @@ public interface INode
 	public void addChildNode(INode node);
 
 	/**
-	 * Add a term to this node.
+	 * Add a keyword to this node.
 	 *
-	 * @param term a {@link Term} of a terminology
+	 * @param keyword a {@link IKeyword}.
 	 */
 	public void addKeyword(IKeyword keyword);
 
@@ -68,7 +68,7 @@ public interface INode
 	 * From this node go to another node with child relations.
 	 *
 	 * @param tokens An ordered sequence of tokens.
-	 * @return
+	 * @return a {@link Node} if a path exists in the trie or the {@link EmptyNode}.
 	 */
 	public INode gotoNode(List<String> tokens);
 

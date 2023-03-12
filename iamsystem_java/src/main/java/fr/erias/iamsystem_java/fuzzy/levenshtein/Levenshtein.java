@@ -26,6 +26,15 @@ import fr.erias.iamsystem_java.matcher.Matcher;
 public class Levenshtein extends StringDistance
 {
 
+	/**
+	 * Create a {@link ITransducer} to compute the Levenshtein distanc.
+	 * 
+	 * @param maxDistance Levenshtein distance.
+	 * @param unigrams    a collection of unigrams (in general from the dictionary
+	 *                    of keywords).
+	 * @param algorithm   one of the avaiable Levenshtein {@link Algorithm}.
+	 * @return a {@link ITransducer}
+	 */
 	public static ITransducer<Candidate> buildTransuder(int maxDistance, Collection<String> unigrams,
 			Algorithm algorithm)
 	{
@@ -39,6 +48,14 @@ public class Levenshtein extends StringDistance
 		return transducer;
 	}
 
+	/**
+	 * Create a {@link ITransducer} to compute the Levenshtein distance.
+	 * 
+	 * @param maxDistance Levenshtein distance.
+	 * @param matcher     the IAMsystem {@link Matcher}.
+	 * @param algorithm   one of the avaiable Levenshtein {@link Algorithm}.
+	 * @return a {@link ITransducer}
+	 */
 	public static ITransducer<Candidate> buildTransuder(int maxDistance, Matcher matcher, Algorithm algorithm)
 	{
 		return buildTransuder(maxDistance, matcher.getUnigrams(), algorithm);
@@ -47,10 +64,12 @@ public class Levenshtein extends StringDistance
 	private final ITransducer<Candidate> transducer;
 
 	/**
-	 *
-	 * @param name
-	 * @param minNbChar
-	 * @param transducer
+	 * Create a fuzzy algorithm based on the Levenshtein distance.
+	 * 
+	 * @param name       A name given to this algorithm.
+	 * @param minNbChar  the minimum number of characters a word must have in order
+	 *                   not to be ignored.
+	 * @param transducer a {@link ITransducer} to compute the Levenshtein distance.
 	 */
 	public Levenshtein(String name, int minNbChar, ITransducer<Candidate> transducer)
 	{

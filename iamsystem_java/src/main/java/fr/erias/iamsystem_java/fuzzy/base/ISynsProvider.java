@@ -29,5 +29,5 @@ public interface ISynsProvider
 	 *                    possible transitions.
 	 * @return 0 to many synonyms.
 	 */
-	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> states);
+	public Collection<SynAlgos> getSynonyms(List<IToken> tokens, IToken token, Iterable<StateTransition> transitions);
 }

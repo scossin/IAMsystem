@@ -56,9 +56,9 @@ public class NegativeStopwords implements IStopwords
 	}
 
 	/**
-	 * Check if a word is not a stopword.
+	 * Check if a token is not a stopword.
 	 *
-	 * @param word a word to check.
+	 * @param token a token to check.
 	 * @return False if it's not known (so it's a stopword).
 	 */
 	public boolean isAtoken2keep(IToken token)

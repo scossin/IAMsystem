@@ -29,6 +29,7 @@ public class ClosestSubString extends NormLabelAlgo
 	/**
 	 * Create a new ClosestSubString instance.
 	 *
+	 * @param name        a name given to this algorithm.
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
 	 *                    unique tokens in the terminology in a trie
 	 * @param maxDistance the maximum number of characters between the closest

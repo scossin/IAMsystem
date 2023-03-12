@@ -25,7 +25,7 @@ public class WordNormalizer extends NormLabelAlgo
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param name    a name given to this algorithm (ex: 'english stemmer').
 	 * @param normfun a normalizing function, for example a stemming function or
 	 *                lemmatization function.
@@ -38,7 +38,7 @@ public class WordNormalizer extends NormLabelAlgo
 
 	/**
 	 * A list of possible word synonyms, in general all the tokens of your keywords.
-	 * 
+	 *
 	 * @param unigrams A list of words to normalize and store.
 	 */
 	public void addWords(Iterable<String> unigrams)

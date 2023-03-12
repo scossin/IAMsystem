@@ -57,13 +57,13 @@ class PrefixFounder
 /**
  * A fuzzy algorithm based on the prefix of a token: it returns all the unigrams
  * of the dictionary that begins with the same prefix. Ex: 'diabet' is the
- * troncation of 'diabete'. Ex: 'ins' is the troncation of 'insuffisance' and
+ * truncation of 'diabete'. Ex: 'ins' is the truncation of 'insuffisance' and
  * maxDistance must be greater than 9 (12 - 3).
  *
  * @author Sebastien Cossin
  *
  */
-public class Troncation extends NormLabelAlgo
+public class Truncation extends NormLabelAlgo
 {
 
 	private final PrefixTrie prefixTrie;
@@ -72,12 +72,13 @@ public class Troncation extends NormLabelAlgo
 	/**
 	 * A fuzzy matching algorithm to handle word troncation in a document.
 	 *
+	 * @param name        a name given to this algorithm.
 	 * @param prefixTrie  a {@link PrefixTrie} that stores all the characters of
 	 *                    unique tokens in the terminology in a trie.
 	 * @param maxDistance maximum number of character between the prefix and a
 	 *                    string (ex: diabet --- diabetes ; 2 char)
 	 */
-	public Troncation(String name, PrefixTrie prefixTrie, int maxDistance)
+	public Truncation(String name, PrefixTrie prefixTrie, int maxDistance)
 	{
 		super(name);
 		this.prefixTrie = prefixTrie;

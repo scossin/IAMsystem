@@ -7,8 +7,9 @@ public interface IPrintAnnot
 
 	/**
 	 * Utility function to retrieve keywords' label.
-	 *
-	 * @return
+	 * 
+	 * @param annotation an {@link IAnnotation} produced by IAMsystem.
+	 * @return keywords to string concatenated with ';'.
 	 */
 	public static String keywords2Str(IAnnotation annotation)
 	{

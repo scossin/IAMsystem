@@ -38,7 +38,7 @@ public class StringEncoderSyn extends StringDistance
 
 	/**
 	 * Create a new fuzzy algorithm that uses a string encoder algorithm.
-	 * 
+	 *
 	 * @param name          the algorithm name.
 	 * @param stringEncoder a {@link StringEncoder}.
 	 * @param minNbChar     the minimum number of characters a word must have in
@@ -67,7 +67,7 @@ public class StringEncoderSyn extends StringDistance
 
 	/**
 	 * Add words to encode (in general unigrams of the dictionary).
-	 * 
+	 *
 	 * @param unigrams A collection of string.
 	 * @throws EncoderException if the algorithm can't encode a word.
 	 */
@@ -144,8 +144,8 @@ public class StringEncoderSyn extends StringDistance
 	/**
 	 * In case the string encoder returns multiple encoded string, the default
 	 * separator is |.
-	 * 
-	 * @param encodedStringSeparator
+	 *
+	 * @param encodedStringSeparator a string separator.
 	 */
 	public void setEncodedStrSpliter(String encodedStringSeparator)
 	{

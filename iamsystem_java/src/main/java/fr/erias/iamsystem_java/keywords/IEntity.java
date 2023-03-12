@@ -9,7 +9,9 @@ public interface IEntity extends IKeyword
 {
 
 	/**
-	 * @return
+	 * Get the entity id.
+	 * 
+	 * @return the knowledge base id of this entity.
 	 */
 	public String kbid();
 }

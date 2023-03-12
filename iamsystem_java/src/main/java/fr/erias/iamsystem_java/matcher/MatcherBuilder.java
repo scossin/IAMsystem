@@ -22,7 +22,7 @@ import fr.erias.iamsystem_java.fuzzy.encoder.StringEncoderSyn;
 import fr.erias.iamsystem_java.fuzzy.levenshtein.Levenshtein;
 import fr.erias.iamsystem_java.fuzzy.normfun.WordNormalizer;
 import fr.erias.iamsystem_java.fuzzy.troncation.PrefixTrie;
-import fr.erias.iamsystem_java.fuzzy.troncation.Troncation;
+import fr.erias.iamsystem_java.fuzzy.troncation.Truncation;
 import fr.erias.iamsystem_java.keywords.IKeyword;
 import fr.erias.iamsystem_java.keywords.Keyword;
 import fr.erias.iamsystem_java.matcher.strategy.EMatchingStrategy;
@@ -94,7 +94,7 @@ public class MatcherBuilder
 	}
 
 	/**
-	 * Call this function to construct a new {@link Matcher} instance.
+	 * Construct a new {@link Matcher} instance.
 	 *
 	 * @return a Matcher to annotate a document.
 	 */
@@ -152,7 +152,7 @@ public class MatcherBuilder
 		{
 			PrefixTrie trie = new PrefixTrie(minPrefixLengthClosest);
 			trie.addToken(matcher.getUnigrams());
-			Troncation troncation = new Troncation("troncation", trie, this.maxDistanceTroncation);
+			Truncation troncation = new Truncation("troncation", trie, this.maxDistanceTroncation);
 			cache.addFuzzyAlgo(troncation);
 		}
 
@@ -254,7 +254,7 @@ public class MatcherBuilder
 	/**
 	 * Add {@link IKeyword} labels you want to detect in a document.
 	 *
-	 * @param keywords a collection of {@link IKeyword}.
+	 * @param labels a collection of keywords labels.
 	 * @return the builder instance.
 	 */
 	public MatcherBuilder keywords(String... labels)
@@ -401,10 +401,10 @@ public class MatcherBuilder
 	 * Add an Apache string encoder like Soundex.
 	 *
 	 * @param stringEncoder an apache {@link StringEncoder}. For example
-	 *                      {@link org.apache.commons.codec.language.Soundex}.
+	 *                      {@link org.apache.commons.codec.language.Soundex}. <br>
+	 *                      https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
 	 * @param minNbChar     ignore tokens less than this length.
 	 * @return the builder instance.
-	 * @see https://commons.apache.org/proper/commons-codec/apidocs/org/apache/commons/codec/class-use/StringEncoder.html#org.apache.commons.codec.language
 	 */
 	public MatcherBuilder stringEncoder(StringEncoder stringEncoder, int minNbChar)
 	{
@@ -427,10 +427,11 @@ public class MatcherBuilder
 	}
 
 	/**
-	 * Add a troncation fuzzy algorithm.
+	 * Add a truncation fuzzy algorithm.
 	 *
 	 * @param minNbChar   ignore tokens less than this length.
-	 * @param maxDistance
+	 * @param maxDistance maximum number of character between the prefix and a
+	 *                    string (ex: diabet --- diabetes ; 2 char)
 	 * @return the builder instance.
 	 */
 	public MatcherBuilder troncation(int minNbChar, int maxDistance)
@@ -440,12 +441,27 @@ public class MatcherBuilder
 		return this;
 	}
 
+	/**
+	 * How much discontinuous keyword's tokens to find can be. By default, w=1 means
+	 * the sequence must be continuous. w=2 means each token can be separated by
+	 * another token.
+	 * 
+	 * @param w window parameter.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder w(int w)
 	{
 		this.w = w;
 		return this;
 	}
 
+	/**
+	 * Add a word normalizer to handle lemmatization or stemming.
+	 * 
+	 * @param name    a name given to this algorithm (ex: "French stemmer").
+	 * @param normfun a normlizing function.
+	 * @return the builder instance.
+	 */
 	public MatcherBuilder wordNormalizer(String name, INormalizeF normfun)
 	{
 		WordNormalizer normalizer = new WordNormalizer(name, normfun);

@@ -48,7 +48,7 @@ public class StateTransition
 	 * @param node             the current state.
 	 * @param token            A document's token.
 	 * @param algos            the algorthim(s) that matched the token to the node.
-	 * @param countNotStopword
+	 * @param countNotStopword token ith position minus the number of stopwords.
 	 */
 	public StateTransition(StateTransition previousTrans, INode node, IToken token, Collection<String> algos,
 			int countNotStopword)

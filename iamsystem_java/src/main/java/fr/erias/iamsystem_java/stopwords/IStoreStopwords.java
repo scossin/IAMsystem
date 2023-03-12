@@ -21,7 +21,7 @@ public interface IStoreStopwords extends IStopwords
 	/**
 	 * Add stopword.
 	 *
-	 * @param words A stopword
+	 * @param word A stopword.
 	 */
 	public void add(String word);
 }

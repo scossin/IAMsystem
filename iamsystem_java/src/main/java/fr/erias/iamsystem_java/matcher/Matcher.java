@@ -89,7 +89,7 @@ public class Matcher implements IBaseMatcher, IStoreKeywords, ITokenizerStopword
 	/**
 	 * Add keywords by providing an iterable of labels.
 	 *
-	 * @param keywords A collection of keywords to add.
+	 * @param labels A collection of keywords labels to add.
 	 */
 	public void addKeyword(String... labels)
 	{

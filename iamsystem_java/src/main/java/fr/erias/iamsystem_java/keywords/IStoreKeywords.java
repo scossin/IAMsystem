@@ -19,7 +19,7 @@ public interface IStoreKeywords
 
 	/**
 	 * Return all the unigrams of a dictionary (collection of keywords).
-	 * 
+	 *
 	 * @param keywords  collections of {@link IKeyword}.
 	 * @param tokenizer to tokenize and normalize keywords.
 	 * @param stopwords to remove stopwords.
@@ -41,10 +41,9 @@ public interface IStoreKeywords
 	/**
 	 * Get all the unigrams (single words excluding stopwords) in the keywords.
 	 *
-	 * @param keywords  a collection of {@link IKeyword}
-	 * @param tokenizer a {@link ITokenizer}
-	 * @param stopwords a {@link IStopwords}
-	 * @return
+	 * @param keywords a collection of {@link IKeyword}.
+	 * @param tokstop  a {@link ITokenizerStopwords} instance.
+	 * @return all the unigrams of the dictionary except stopwords.
 	 */
 	public static Set<String> getUnigrams(Iterable<IKeyword> keywords, ITokenizerStopwords tokstop)
 	{
