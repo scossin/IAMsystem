@@ -118,7 +118,7 @@ public class MatcherBuilder
 			negativeStopwords.add(matcher.getUnigrams());
 			matcher.setStopwords(negativeStopwords);
 		}
-		CacheFuzzyAlgos cache = new CacheFuzzyAlgos("cache");
+		CacheFuzzyAlgos cache = new CacheFuzzyAlgos();
 		matcher.addFuzzyAlgo(cache);
 		if (this.algorithmLeven != null)
 		{

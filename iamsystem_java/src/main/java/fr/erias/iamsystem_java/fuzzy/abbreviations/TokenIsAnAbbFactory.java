@@ -1,5 +1,11 @@
 package fr.erias.iamsystem_java.fuzzy.abbreviations;
 
+/**
+ * An utility class to store the commons to check if a token is an abbreviation.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class TokenIsAnAbbFactory
 {
 

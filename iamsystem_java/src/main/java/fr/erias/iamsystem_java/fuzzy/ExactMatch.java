@@ -5,6 +5,12 @@ import java.util.List;
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 
+/**
+ * The exact match class that returns the token's label.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class ExactMatch extends NormLabelAlgo
 {
 

@@ -8,11 +8,22 @@ import java.util.Map;
 import fr.erias.iamsystem_java.matcher.StateTransition;
 import fr.erias.iamsystem_java.tokenize.IToken;
 
+/**
+ * The default {@link ISynsProvider} implementation.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class SynsProvider implements ISynsProvider
 {
 
 	private List<? extends FuzzyAlgo> fuzzyAlgos;
 
+	/**
+	 * A list of fuzzy algorithms stored by this provider.
+	 * 
+	 * @param fuzzyAlgos multiple {@link FuzzyAlgo}.
+	 */
 	public SynsProvider(List<? extends FuzzyAlgo> fuzzyAlgos)
 	{
 		this.fuzzyAlgos = fuzzyAlgos;

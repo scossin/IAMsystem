@@ -9,24 +9,37 @@ import java.util.stream.Collectors;
 import fr.erias.iamsystem_java.fuzzy.base.NormLabelAlgo;
 import fr.erias.iamsystem_java.fuzzy.base.SynAlgo;
 
+/**
+ * A class to stores fuzzy algorithms output in cache.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class CacheFuzzyAlgos extends NormLabelAlgo
 {
 
 	private List<NormLabelAlgo> fuzzyAlgos;
-
 	private Map<String, List<SynAlgo>> cache = new HashMap<String, List<SynAlgo>>();
 
+	/**
+	 * Create a new instance called 'Cache'.
+	 */
 	public CacheFuzzyAlgos()
 	{
 		this("Cache");
 	}
 
-	public CacheFuzzyAlgos(String name)
+	private CacheFuzzyAlgos(String name)
 	{
 		super(name);
 		this.fuzzyAlgos = new ArrayList<NormLabelAlgo>();
 	}
 
+	/**
+	 * Add a fuzzy algorithm in cache.
+	 * 
+	 * @param fuzzyAlgo a {@link NormLabelAlgo} algorithm.
+	 */
 	public void addFuzzyAlgo(NormLabelAlgo fuzzyAlgo)
 	{
 		this.fuzzyAlgos.add(fuzzyAlgo);

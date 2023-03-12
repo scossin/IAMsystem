@@ -74,7 +74,7 @@ class BratDocumentTest
 		assertEquals(1, annots.size());
 		BratDocument<Entity> document = new BratDocument<Entity>();
 		document.addAnnots(annots, "CONTINENT");
-		BratWriter.saveDocuentNotes(document, writer);
+		BratWriter.saveDocument(document, writer);
 		String filecontent = writer.annLines.stream().collect(Collectors.joining("\n"));
 		assertEquals(filecontent, "T1\tCONTINENT 0 5;16 23\tNorth America\n#1\tIAMSYSTEM T1\tNorth America (NA)");
 	}

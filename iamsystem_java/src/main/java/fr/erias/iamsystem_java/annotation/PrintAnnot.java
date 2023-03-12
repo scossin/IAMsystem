@@ -4,16 +4,30 @@ import fr.erias.iamsystem_java.brat.BratFormat;
 import fr.erias.iamsystem_java.brat.BratFormatters;
 import fr.erias.iamsystem_java.brat.IBratFormatterF;
 
+/**
+ * Default IPrintAnnot implementation.
+ * 
+ * @author Sebastien Cossin
+ *
+ */
 public class PrintAnnot implements IPrintAnnot
 {
 
 	private IBratFormatterF bratFormatter;
 
+	/**
+	 * Create an instance with the default BratFormatter.
+	 */
 	public PrintAnnot()
 	{
-		this.bratFormatter = BratFormatters.contSeqFormatter;
+		this.bratFormatter = BratFormatters.defaultFormatter;
 	};
 
+	/**
+	 * Create an instance with a custom BratFormatter.
+	 * 
+	 * @param bratFormatter A {@link IBratFormatterF}.
+	 */
 	public PrintAnnot(IBratFormatterF bratFormatter)
 	{
 		this.bratFormatter = bratFormatter;

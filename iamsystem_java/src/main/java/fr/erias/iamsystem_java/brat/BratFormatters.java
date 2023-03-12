@@ -11,6 +11,12 @@ import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.Offsets;
 
+/**
+ * {@link IBratFormatterF} implementations.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class BratFormatters
 {
 
@@ -77,8 +83,9 @@ public class BratFormatters
 	/**
 	 * Group continuous sequences. From a sequence of tokens, group tokens that
 	 * follow each other by their indice. Ex: [1,2,3,5,6] => [[1,2,3], [5,6]]
-	 *
-	 * @return
+	 * 
+	 * @param tokens the tokens to group.
+	 * @return multiple continuous sequences.
 	 */
 	protected static List<List<IToken>> groupContinuousSeq(List<? extends IToken> tokens)
 	{
@@ -111,7 +118,7 @@ public class BratFormatters
 	 * of the first token in the sequence and end being the end offset of the last
 	 * token in the sequence.
 	 *
-	 * @param sequences multiple continuous sequences
+	 * @param sequences multiple continuous sequences.
 	 * @return a list of {@link Offsets}.
 	 */
 	protected static List<IOffsets> multipleSeqToOffsets(List<List<IToken>> sequences)
@@ -125,6 +132,14 @@ public class BratFormatters
 		}).collect(Collectors.toList());
 	}
 
+	/**
+	 * In each continuous sequence, we want to remove trailing stopwords. Ex:
+	 * [['North', 'and'], ['America']] -> [['North'], ['America']]
+	 * 
+	 * @param sequences   : multiple continuous sequences.
+	 * @param stopIndices stopwords indices.
+	 * @return sequences without trailing stopwords.
+	 */
 	protected static List<List<IToken>> removeTrailingStopwords(List<List<IToken>> sequences, Set<Integer> stopIndices)
 	{
 		List<List<IToken>> outSeq = new ArrayList<List<IToken>>();

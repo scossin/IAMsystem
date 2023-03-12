@@ -17,7 +17,7 @@ public interface IPrintAnnot
 
 	/**
 	 * Return a string representation of an annotation.
-	 *
+	 * 
 	 * @param annotation an {@link IAnnotation} produced by IAMsystem.
 	 * @return a human readable string.
 	 */

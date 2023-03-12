@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.util.Iterator;
@@ -80,37 +82,40 @@ public class Main
 
 	public Main() throws IOException, EncoderException
 	{
-		matcher = new MatcherBuilder()
-				// .levenshtein(50, 1, Algorithm.TRANSPOSITION)
-				// .wordNormalizer("stemmer", new FrenchStemmer())
-				.tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+		matcher = new MatcherBuilder().tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
 				.keywords(getTerminology(Main.filename))
-				.removeNestedAnnot(false)
-				.strategy(EMatchingStrategy.NoOverlapStrategy)
-				.w(1)
+				.removeNestedAnnot(true)
+				.strategy(EMatchingStrategy.WindowStrategy)
+				.w(3)
 				.build();
 	}
 
-	// syndrome Triple X
 	public void speedTest() throws IOException
 	{
 		File inputFolder = new File(
 				"/media/cossin/5980c25d-cf59-4fca-b649-c8c2f241fb1c/workspace/DBpedia/wikipedia_articles");
 		TxtFiles txtFiles = new TxtFiles(inputFolder);
 		Iterator<File> iter = txtFiles.getFileIterator();
-		iter.next();
 		int count = 0;
-		// Writer w = new PrintWriter(new File("output.txt"));
+		Writer w = new PrintWriter(
+				new File("/home/cossin/workspace/iamsystem_python/examples/wikipedia/java_window.txt"));
 		long startTimeAll = System.nanoTime();
 		System.out.println(startTimeAll);
 		while (iter.hasNext())
 		{
 			File file = iter.next();
+			// if (!file.getName().equals("Leucodermie.txt")) continue;
 			String content = Files.readString(file.toPath(), Charset.defaultCharset());
 			List<IAnnotation> anns = matcher.annot(content);
+			for (IAnnotation annot : anns)
+			{
+				w.write(file.getName() + "\t" + annot.toString());
+				w.write("\n");
+			}
 			System.out.println(file.getName() + "\t" + anns.size());
 			count += anns.size();
 		}
+		w.close();
 		System.out.println("Number of annotations: " + count);
 		long endTimeAll = System.nanoTime();
 		long totalTime = endTimeAll - startTimeAll;

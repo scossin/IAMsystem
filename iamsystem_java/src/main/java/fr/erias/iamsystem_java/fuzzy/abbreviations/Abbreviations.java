@@ -14,17 +14,35 @@ import fr.erias.iamsystem_java.matcher.Matcher;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 
+/**
+ * A class to handle abbreviations and synonyms.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class Abbreviations extends ContextFreeAlgo
 {
 
 	private TokenIsAnAbbreviation abbsChecker;
 	private Map<String, Set<String>> short2longForms;
 
+	/**
+	 * Create a new Abbreviations instance.
+	 * 
+	 * @param name a name given to these abbreviations.
+	 */
 	public Abbreviations(String name)
 	{
 		this(name, TokenIsAnAbbFactory.alwaysTrue);
 	}
 
+	/**
+	 * Create a new Abbreviations instance.
+	 * 
+	 * @param name        a name given to these abbreviations.
+	 * @param abbsChecker a function that checks if a token is an abbreviation
+	 *                    before searching and returning long forms.
+	 */
 	public Abbreviations(String name, TokenIsAnAbbreviation abbsChecker)
 	{
 		super(name);

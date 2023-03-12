@@ -6,6 +6,12 @@ import fr.erias.iamsystem_java.tokenize.IOffsets;
 import fr.erias.iamsystem_java.tokenize.IToken;
 import fr.erias.iamsystem_java.tokenize.ITokenizer;
 
+/**
+ * The default ISpan implementation.
+ *
+ * @author Sebastien Cossin
+ *
+ */
 public class Span implements IOffsets, ISpan
 {
 

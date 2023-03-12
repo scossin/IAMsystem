@@ -68,8 +68,7 @@ public interface IAnnotation extends ISpan, Comparable<IAnnotation>
 	public void setText(String text);
 
 	/**
-	 * The list of stopwords tokens inside the annotation detected by the Matcher's
-	 * {@link IStopwords} instance.
+	 * Stopwords tokens detected by the Matcher's {@link IStopwords} instance.
 	 *
 	 * @return
 	 */
