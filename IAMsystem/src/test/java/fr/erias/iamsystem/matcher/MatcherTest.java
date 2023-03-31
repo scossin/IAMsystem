@@ -181,7 +181,16 @@ class MatcherTest
 		List<IAnnotation> anns = matcher.annot("nævus anemique");
 		assertEquals(anns.size(), 1);
 	}
-//
-//	Leucodermie.txt	nævus anémique	616 630	naevus anemique (C0265982)
-//	Leucodermie.txt	anémique	622 630	anemique (C0857322)
+	
+	@Test
+	void testRepeatedWords()
+	{
+		Matcher matcher = new MatcherBuilder().tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords("cancer")
+				.strategy(EMatchingStrategy.WindowStrategy)
+				.w(3)
+				.build();
+		List<IAnnotation> anns = matcher.annot("cancer cancer");
+		assertEquals(anns.size(), 2);
+	}
 }
