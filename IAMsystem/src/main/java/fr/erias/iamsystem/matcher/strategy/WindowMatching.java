@@ -71,7 +71,7 @@ public class WindowMatching implements IMatchingStrategy
 					StateTransition nextTrans = new StateTransition(trans, node, token, synAlgo.getAlgos(),
 							countNotStopword);
 					newTransitions.add(nextTrans);
-					if (node.isAfinalState() && !transitions.contains(nextTrans))
+					if (node.isAfinalState())
 					{
 						IAnnotation annotation = StrategyUtils.createAnnot(nextTrans, stopTokens);
 						annots.add(annotation);

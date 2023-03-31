@@ -106,7 +106,7 @@ class MatcherTest
 	{
 		Matcher matcher = new MatcherBuilder().keywords("cancer de la prostate").w(3).build();
 		List<IAnnotation> anns = matcher.annot("cancer cancer de de la la prostate prostate");
-		assertEquals(anns.size(), 1);
+		assertEquals(anns.size(), 2);
 	}
 
 	@Test
@@ -192,5 +192,28 @@ class MatcherTest
 				.build();
 		List<IAnnotation> anns = matcher.annot("cancer cancer");
 		assertEquals(anns.size(), 2);
+	}
+	
+	@Test
+	void testRepeatedWordsLargeWindow()
+	{
+		Matcher matcher = new MatcherBuilder().tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords("cancer")
+				.strategy(EMatchingStrategy.LargeWindowStrategy)
+				.w(3)
+				.build();
+		List<IAnnotation> anns = matcher.annot("cancer cancer");
+		assertEquals(anns.size(), 2);
+	}
+	
+	@Test
+	void testStatesOverriding()
+	{
+		Matcher matcher = new MatcherBuilder().tokenizer(TokenizerFactory.getTokenizer(ETokenizer.FRENCH))
+				.keywords("cancer", "cancer de la prostate")
+				.w(10)
+				.build();
+		List<IAnnotation> anns = matcher.annot("cancer cancer cancer de la prostate");
+		assertEquals(anns.size(), 3);
 	}
 }

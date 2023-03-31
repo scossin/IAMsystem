@@ -106,12 +106,8 @@ public class LargeWindowMatching implements IMatchingStrategy
 			{
 				if (trans.getNode().isAfinalState())
 				{
-					StateTransition oldtrans = transitionsCopy.get(trans.getId());
-					if (oldtrans == null || oldtrans.isObsolete(countNotStopWord, w))
-					{
-						IAnnotation annot = StrategyUtils.createAnnot(trans, stopTokens);
-						annots.add(annot);
-					}
+					IAnnotation annot = StrategyUtils.createAnnot(trans, stopTokens);
+					annots.add(annot);
 				}
 				this.addTransition(trans, availableTransitionsCopy);
 				transitionsCopy.put(trans.getId(), trans);
