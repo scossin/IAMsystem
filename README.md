@@ -110,6 +110,8 @@ Organizers' papers:
 |   1.2.0    | Re-implement the trie and add a cache mechanism to improve performance                     		      |
 |   1.3.0    | Add support to the Apache common StringEncoder library, add Troncation and ClosestSubString algorithms |
 |   2.1.0    | Complete re-write of the library to be in sync with the Python implementation and its documentation. The core algorithm, aka the matching strategy, changed to the *Window Strategy* which allows detection of discontinuous sequences of tokens in a document. The strategy used in previous versions (<2.1.0) is called the *NoOverlap* strategy.|
+|   2.2.0    | Fix [issue 18](https://github.com/scossin/iamsystem_python/issues/18): create multiple annotations when a keyword is repeated in the same window.|
+
 
 
 
